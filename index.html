@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+      (function(){
+        var t = localStorage.getItem('civicnest-theme');
+        var d = window.matchMedia('(prefers-color-scheme:dark)').matches;
+        if (t === 'dark' || (!t && d)) document.documentElement.classList.add('dark');
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CivicNest — report civic issues, find lost items, rescue animals, and organize cleanup drives in your community." />
+    <meta property="og:title" content="CivicNest" />
+    <meta property="og:description" content="Report civic issues, find lost items, and volunteer in your community." />
+    <meta property="og:image" content="/og-default.png" />
+    <meta property="og:type" content="website" />
+    <title>CivicNest</title>
+    <style>
+      /* Prevent white flash before React hydrates */
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #fafafa; /* Light mode default background */
+      }
+      
+      html.dark, html.dark body {
+        background-color: #050a08; /* Dark theme default background */
+      }
+      
+      .initial-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(135deg, #0f766e 0%, #0d5f58 100%);
+        transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
+      }
+      
+      .dark .initial-loader {
+        background: linear-gradient(135deg, #050a08 0%, #0a120e 100%);
+      }
+      
+      .loader-content {
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+      
+      .logo-text {
+        font-family: 'Outfit', 'Montserrat', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: #ffffff;
+        margin: 0 0 1.5rem 0;
+        letter-spacing: 0.05em;
+        line-height: 1;
+      }
+      
+      .logo-text span {
+        color: #2dd4bf; /* Teal accent */
+        text-shadow: 0 0 15px rgba(45, 212, 191, 0.4);
+      }
+      
+      .spinner-box {
+        width: 160px;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 99px;
+        overflow: hidden;
+        margin: 0 auto;
+      }
+      
+      .spinner-bar {
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(90deg, #2dd4bf, #14b8a6);
+        border-radius: 99px;
+        animation: initialLoading 1.6s infinite ease-in-out;
+        box-shadow: 0 0 8px rgba(45, 212, 191, 0.8);
+      }
+      
+      @keyframes initialLoading {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(250%); }
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .initial-loader.fade-out {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+    <div id="initial-loader" class="initial-loader">
+      <div class="loader-content">
+        <h1 class="logo-text">Civic<span>Nest</span></h1>
+        <div class="spinner-box">
+          <div class="spinner-bar"></div>
+        </div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
