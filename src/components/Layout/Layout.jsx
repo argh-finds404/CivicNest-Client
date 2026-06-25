@@ -13,6 +13,8 @@ import FloatingCivicBot from '../AI/FloatingCivicBot';
 import PageTitle from '../common/PageTitle';
 import TourOverlay from '../common/TourOverlay';
 import HelpNotification from '../common/HelpNotification';
+import ConnectionStatusBanner from '../common/ConnectionStatusBanner';
+import ScrollProgressButton from '../common/ScrollProgressButton';
 
 const getPageTitle = (pathname) => {
  if (pathname ==='/'|| pathname ==='/home') return'Home';
@@ -234,6 +236,8 @@ const Layout = () => {
  </AnimatePresence>
 
  <FloatingCivicBot />
+ <ScrollProgressButton />
+ <ConnectionStatusBanner />
  <TourOverlay />
  <HelpNotification />
  <Toaster 
