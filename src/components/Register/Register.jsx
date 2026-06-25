@@ -282,10 +282,14 @@ export default function Register() {
  setTimeout(() => navigate("/"), 4600);
 
  } catch (err) {
- console.error("[Register] Google error:", err);
- if (err.code !=="auth/popup-closed-by-user") {
- showError(err.message ??"Google sign-up failed. Please try again.");
- }
+    console.error("[Register] Google error:", err);
+    if (err.code !== "auth/popup-closed-by-user") {
+      if (err.code === "auth/unauthorized-domain") {
+        showError("Firebase Setup Error: This domain is not authorized for OAuth. Please log in to your Firebase Console, navigate to Authentication -> Settings -> Authorized Domains, and add your production domain to the list.");
+      } else {
+        showError(err.message ?? "Google sign-up failed. Please try again.");
+      }
+    }
  } finally {
  setGoogleLoading(false);
  }

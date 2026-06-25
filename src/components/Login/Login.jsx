@@ -165,8 +165,12 @@ const Login = () => {
  setTimeout(() => navigate("/"), 1500);
  } catch (err) {
  /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
- if (err.code !=="auth/popup-closed-by-user") {
- showToastMessage("error","Google Sign-In Failed", err.message ??"Please try again.");
+ if (err.code !== "auth/popup-closed-by-user") {
+ if (err.code === "auth/unauthorized-domain") {
+ showToastMessage("error", "Google Sign-In Failed", "Firebase Setup Error: This domain is not authorized. Please add this website's domain in your Firebase Console under Authentication -> Settings -> Authorized Domains.");
+ } else {
+ showToastMessage("error", "Google Sign-In Failed", err.message ?? "Please try again.");
+ }
  }
  } finally {
  setGoogleLoading(false);
