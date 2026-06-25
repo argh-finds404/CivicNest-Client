@@ -26,7 +26,6 @@ export default function Noticeboard() {
  staleTime: 5 * 60 * 1000,
  });
 
- // Calculate Stats
  const activeCount = notices.length;
  const pinnedCount = notices.filter((n) => n.isPinned).length;
  const oneWeekAgo = new Date();
@@ -36,7 +35,6 @@ export default function Noticeboard() {
     return d && !isNaN(new Date(d).getTime()) && new Date(d) >= oneWeekAgo;
   }).length;
 
- // Filter Notices
  const filteredNotices = notices.filter((notice) => {
  const matchesType =
  selectedType ==="All"||
@@ -121,7 +119,7 @@ export default function Noticeboard() {
  </div>
  </div>
  </div>
- {/* Bell Icon Design */}
+ {}
  <div className="w-40 h-40 shrink-0 select-none z-10 mt-6 md:mt-0 flex items-center justify-center relative">
  <div className="absolute inset-0 bg-emerald-400/20 rounded-full animate-ping opacity-30 scale-75"/>
  <div className="w-28 h-28 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-lg">
@@ -132,9 +130,9 @@ export default function Noticeboard() {
  </div>
  </div>
 
- {/* Filter Controls Bar */}
+ {}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-lg p-5 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 shadow-sm">
- {/* Type Filters */}
+ {}
  <div className="flex flex-wrap gap-2">
  {["All","General","Announcement","Event","Warning","Maintenance"].map((type) => (
  <button
@@ -149,7 +147,7 @@ export default function Noticeboard() {
  ))}
  </div>
 
- {/* Urgency/Priority Filters */}
+ {}
  <div className="flex items-center gap-3">
  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Urgency:</span>
  <div className="flex gap-1.5">
@@ -172,14 +170,14 @@ export default function Noticeboard() {
  </div>
  </div>
 
- {/* Notice List */}
+ {}
  {isLoading ? (
  <div className="space-y-4">
  {[1, 2, 3].map(i => <NoticeSkeleton key={i} />)}
  </div>
  ) : filteredNotices.length === 0 ? (
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-16 text-center border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm flex flex-col items-center">
- {/* Lottie checkmark animation (tick sign) used strictly once here */}
+ {}
  <div className="w-32 h-32 shrink-0 select-none flex items-center justify-center">
  <Player autoplay loop src={emptyAnimation} style={{ width: 120, height: 120 }} />
  </div>

@@ -19,10 +19,6 @@ import {
 } from"./styleInfo";
 import { AuthContext } from"../contexts/AuthContext";
 
-/* ── Backend ─────────────────────────────────────
- POST /users — server deduplicates by email,
- so calling this after Google sign-in is safe.
-─────────────────────────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL ||"http://localhost:3000";
 
 const saveUserToDB = (name, email, photoURL, token) =>
@@ -47,8 +43,6 @@ const saveUserToDB = (name, email, photoURL, token) =>
  }
  return r.json();
  });
-
-/* ─── Inline SVG components ──────────────────── */
 
 const EyeIcon = ({ open }) => (
  <svg width="18"height="18"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2"strokeLinecap="round"strokeLinejoin="round">
@@ -78,7 +72,6 @@ const CheckIcon = ({ filled }) => (
  </svg>
 );
 
-/* ─── Toast sub-component ────────────────────── */
 const Toast = ({ toast, onClose }) => (
  <AnimatePresence>
  {toast.show && (
@@ -123,15 +116,12 @@ const Toast = ({ toast, onClose }) => (
  </AnimatePresence>
 );
 
-/* ═══════════════════════════════════════════════
- MAIN COMPONENT
-═══════════════════════════════════════════════ */
 export default function Register() {
  const { registerUser, googleSignIn } = useContext(AuthContext);
  const navigate = useNavigate();
  const location = useLocation();
 
- /* ── UI state ─── */
+ 
  const [currentStep, setCurrentStep] = useState(0);
  const [formData, setFormData] = useState({
  fullName:"", email:"", photoURL:"", password:"",
@@ -160,7 +150,7 @@ export default function Register() {
  return () => clearInterval(id);
  }, []);
 
- /* ── Toast ─── */
+ 
  const showToast = (type, message, description) => {
  setToast({ show: true, type, message, description });
  setTimeout(() => setToast((t) => ({ ...t, show: false })), 4500);
@@ -168,7 +158,7 @@ export default function Register() {
  const showError = (msg) => showToast("error","Error", msg);
  const showSuccess = (msg) => showToast("success","Account Created!", msg);
 
- /* ── Step navigation ─── */
+ 
  const handleChange = (val) => {
  const key = STEPS[currentStep];
  setFormData((fd) => ({ ...fd, [key]: val }));
@@ -191,15 +181,7 @@ export default function Register() {
  else handleEmailPasswordSubmit();
  };
 
- /* ══════════════════════════════════════════════
- EMAIL / PASSWORD REGISTRATION
- Flow:
- 1. createUserWithEmailAndPassword (Firebase Auth)
- 2. updateProfile (displayName + photoURL)
- 3. sendEmailVerification (Firebase email)
- 4. POST /users (MongoDB)
- 5. Show success toast → navigate to /Login
- ══════════════════════════════════════════════ */
+ 
  const handleEmailPasswordSubmit = async () => {
  const { hasMin, hasUpper, hasLower } = checks;
  if (!hasMin || !hasUpper || !hasLower) {
@@ -258,13 +240,7 @@ export default function Register() {
   }
   };
 
- /* ══════════════════════════════════════════════
- GOOGLE SIGN-UP
- Flow:
- 1. signInWithPopup (Firebase Auth)
- 2. POST /users (MongoDB — server deduplicates)
- 3. Show success toast → navigate to /Login
- ══════════════════════════════════════════════ */
+ 
  const handleGoogleSignIn = async () => {
  setGoogleLoading(true);
  try {
@@ -301,7 +277,7 @@ export default function Register() {
   }
   };
 
- /* ── Derived class helpers (no inline styles) ─── */
+ 
  const isPasswordStep = currentStep === 3;
  const isPasswordValid = checks.hasMin && checks.hasUpper && checks.hasLower;
 
@@ -324,15 +300,13 @@ export default function Register() {
  return"Create Free Account →";
  };
 
- /* ══════════════════════════════════════════════
- RENDER
- ══════════════════════════════════════════════ */
+ 
  return (
  <div className="reg-root">
  <PageTitle title="Register"/>
  <Toast toast={toast} onClose={() => setToast((t) => ({ ...t, show: false }))} />
 
- {/* ── LEFT VISUAL PANEL ── */}
+ {}
  <div className="reg-left-panel">
 
  {/* Slideshow images */}
@@ -441,7 +415,7 @@ export default function Register() {
  </div>
  </div>
 
- {/* ── RIGHT FORM PANEL ── */}
+ {}
  <div className="reg-right-panel">
  <div className="reg-topbar">
  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}

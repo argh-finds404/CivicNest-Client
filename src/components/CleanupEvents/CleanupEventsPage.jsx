@@ -109,7 +109,7 @@ export default function CleanupEventsPage() {
  return (
  <div className="min-h-screen">
  <SEO title="Cleanup Drives" canonical={`${window.location.origin}/cleanup-events`} />
- {/* Hero Banner Section */}
+ {}
  <div className="relative pt-28 pb-16 px-[5%] bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-800 overflow-hidden">
  {/* Background Pattern */}
  <div className="absolute inset-0 opacity-10">

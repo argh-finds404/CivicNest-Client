@@ -12,7 +12,6 @@ import toast from'react-hot-toast';
 import PaymentGatewaySelector from'../Payment/PaymentGatewaySelector';
 import SEO from'../common/SEO';
 
-
 const NGOProfile = () => {
  const { id } = useParams();
  const axiosSecure = useAxiosSecure();

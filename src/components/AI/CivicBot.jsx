@@ -15,7 +15,6 @@ import { LuSparkles } from "react-icons/lu";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
-// Helper to replace **bold** text with <strong> JSX elements
 const parseBoldText = (text) => {
   if (!text) return "";
   const parts = text.split(/\*\*([\s\S]*?)\*\*/g);
@@ -27,7 +26,6 @@ const parseBoldText = (text) => {
   });
 };
 
-// Helper to parse and render simple markdown block
 const renderMarkdown = (text) => {
   if (!text) return null;
   const lines = text.split("\n");
@@ -74,7 +72,6 @@ const renderMarkdown = (text) => {
   });
 };
 
-// Helper to extract clean description narrative (no markdown, intro, or priority/cost tags)
 const extractCleanDescription = (text) => {
   if (!text) return "";
   let descMatch = text.match(/(?:\*\*Description:\*\*|Description:)\s*([\s\S]*?)(?:\r?\n\r?\n|\r?\n\d\.\s*|$)/i);
@@ -378,7 +375,7 @@ const CivicBot = () => {
               </div>
             </div>
 
-            {/* Generated Draft */}
+            {}
             <div className="bg-white/95 dark:bg-slate-800/40 backdrop-blur-xl border border-slate-200 dark:border-teal-500/20 rounded-xl p-5 hover:border-teal-500/40 shadow-sm transition-all duration-500">
               <h3 className="text-2xl text-teal-600 dark:text-teal-400 font-extrabold mb-4 flex items-center gap-3">
                 <FiFileText /> Recommended Description

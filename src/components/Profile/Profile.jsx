@@ -80,8 +80,6 @@ const OverviewTab = ({
  enabled: !!user && (role ==="guest"|| !role),
  });
 
-
-
  return (
  <motion.div 
  initial={{ opacity: 0, y: 10 }}
@@ -89,7 +87,7 @@ const OverviewTab = ({
  exit={{ opacity: 0, y: -10 }}
  transition={{ duration: 0.3 }}
  className="flex flex-col gap-4 w-full">
- {/* ── HERO BANNER ── */}
+ {}
  <div className="w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-100 shadow-sm relative overflow-hidden flex flex-col">
  {/* Cover Photo Area */}
  <div className="w-full h-48 md:h-64 bg-slate-200 relative group">
@@ -169,7 +167,7 @@ const OverviewTab = ({
  </div>
  </div>
 
- {/* ── SETTINGS GRID ── */}
+ {}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
  
  {/* Main Details */}
@@ -393,7 +391,7 @@ const OverviewTab = ({
 
  </div>
 
- {/* ── MEMBERSHIP BANNER ── */}
+ {}
  {!isRoleLoading && (!role || role.toLowerCase() === 'guest') && membershipStatus?.status !== 'approved' && (
  <div className="w-full relative overflow-hidden rounded-xl mt-4 p-5 border border-slate-700/50 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] group">
  {/* Main Background */}
@@ -443,7 +441,7 @@ const OverviewTab = ({
  </div>
  )}
 
- {/* ── CUSTOM COVER URL MODAL ── */}
+ {}
  <AnimatePresence>
  {showCoverModal && (
  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -1109,7 +1107,6 @@ const Profile = () => {
     );
   };
 
-
  if (loading) {
  return (
  <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC]">
@@ -1138,7 +1135,7 @@ const Profile = () => {
 
  return (
  <div className="min-h-screen bg-[#F8FAFC] pb-16 font-body">
- {/* ── PAGE HEADER ── */}
+ {}
  <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-10 pb-2">
  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] p-4 rounded-xl border border-slate-100 shadow-sm">
  <div className="flex items-center gap-4">
@@ -1186,7 +1183,7 @@ const Profile = () => {
 
  <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-6 flex flex-col lg:flex-row gap-5">
  
- {/* ── SIDEBAR NAVIGATION ── */}
+ {}
  <div className="lg:w-72 flex-shrink-0">
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100 sticky top-28">
  
@@ -1237,7 +1234,7 @@ const Profile = () => {
  </div>
  </div>
 
- {/* ── MAIN CONTENT AREA ── */}
+ {}
  <div className="flex-grow min-w-0 min-h-[600px] relative">
  <AnimatePresence mode="wait">
  {activeTab ==='overview'&& (

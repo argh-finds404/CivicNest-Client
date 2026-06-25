@@ -3,9 +3,7 @@ import { NavLink, useNavigate } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
 
-const loginStyles =`/* ─────────────────────────────────────────────
- Login styles in JSX
-───────────────────────────────────────────── */
+const loginStyles =`
 .login-checkbox {
  width: 18px;
  height: 18px;
@@ -54,9 +52,6 @@ const loginStyles =`/* ───────────────────
  flex-shrink: 0;
 }`;
 
-
-
-/* ── Backend base URL ─────────────────────────── */
 const API_BASE = import.meta.env.VITE_API_URL ||"http://localhost:3000";
 
 /** Save/upsert user to MongoDB after Google sign-in */
@@ -66,8 +61,6 @@ const saveUserToDB = (name, email, photoURL, token) =>
  headers: {"Content-Type":"application/json","Authorization":`Bearer ${token}`},
  body: JSON.stringify({ name, email, photoURL }),
  }).then((r) => r.json());
-
-/* ─────────────────────────────────────────────── */
 
 const Login = () => {
  const { signInUser, googleSignIn } = useAuth();
@@ -86,7 +79,7 @@ const Login = () => {
  });
  const [isToastVisible, setIsToastVisible] = useState(false);
 
- /* ── Toast helpers ─── */
+ 
  const showToastMessage = (type, message, description) => {
  setToast({ show: true, type, message, description });
  setTimeout(() => setIsToastVisible(true), 50);
@@ -107,7 +100,7 @@ const Login = () => {
  );
  };
 
- /* ── Email / Password sign-in ─── */
+ 
  const handleSubmit = async (e) => {
  e.preventDefault();
  const email = e.target.email.value.trim();
@@ -149,7 +142,7 @@ const Login = () => {
  }
  };
 
- /* ── Google sign-in ─── */
+ 
  const handleGoogleSignIn = async () => {
  setGoogleLoading(true);
  try {

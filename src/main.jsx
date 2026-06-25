@@ -6,12 +6,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import AuthProvider from './components/contexts/AuthProvider';
 import { HelmetProvider } from 'react-helmet-async';
 
-
-
-/* ── Pages ─────────────────────────────────────────
-   Import every page component here.
-   Add new routes below — no need to touch AuthProvider.
-─────────────────────────────────────────────────── */
 import React, { Suspense, lazy } from 'react';
 import ChunkErrorBoundary from './components/common/ChunkErrorBoundary';
 
@@ -89,16 +83,8 @@ const CommunityGuidelines = lazy(() => import('./components/FooterPages/Communit
 const GoalsVision = lazy(() => import('./components/FooterPages/GoalsVision'));
 const RecentActivities = lazy(() => import('./components/RecentActivities/RecentActivities'));
 const UserManual = lazy(() => import('./components/FooterPages/UserManual'));
+const NotFound = lazy(() => import('./components/common/NotFound'));
 
-/* ── Router ────────────────────────────────────────
-   / and /home  → Community dashboard (Home)
-   /Login       → Sign-in page
-   /Register    → Multi-step registration
-   
-   To add a protected route later:
-     1. Create a PrivateRoute wrapper that reads useAuth().user
-     2. Wrap the element: element: <PrivateRoute><Home /></PrivateRoute>
-─────────────────────────────────────────────────── */
 const router = createBrowserRouter([
   {
     path: '/',
@@ -350,6 +336,10 @@ const router = createBrowserRouter([
       {
         path: "/user-manual",
         element: <UserManual />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ]
   },

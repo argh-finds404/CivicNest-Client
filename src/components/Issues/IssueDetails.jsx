@@ -17,7 +17,6 @@ import { jsPDF } from'jspdf';
 import CommentList from'./CommentList';
 import SEO from'../common/SEO';
 
-
 const ImageCarousel = ({ images }) => {
  const [currentIndex, setCurrentIndex] = useState(0);
 

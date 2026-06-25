@@ -6,7 +6,6 @@ import MinimalLoader from'../common/MinimalLoader';
 import BackButton from'../common/BackButton';
 import PageTitle from'../common/PageTitle';
 
-
 const PublicProfile = () => {
  const { id } = useParams();
  const navigate = useNavigate();
@@ -166,7 +165,7 @@ const PublicProfile = () => {
  </div>
 
  <div className="mt-8 flex flex-col lg:flex-row gap-5">
- {/* Main Feed Column */}
+ {}
  <div className="lg:w-2/3"ref={feedRef}>
  <div className="flex items-center gap-3 mb-6 px-2">
  <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 dark:text-slate-300">

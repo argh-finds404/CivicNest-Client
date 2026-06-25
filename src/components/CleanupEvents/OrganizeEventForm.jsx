@@ -26,7 +26,6 @@ L.Icon.Default.mergeOptions({
  shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Component to handle map clicks for location selection
 function LocationMarker({ position, setPosition }) {
  useMapEvents({
  click(e) {

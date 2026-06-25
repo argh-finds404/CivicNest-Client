@@ -6,7 +6,6 @@ import { LuSparkles } from "react-icons/lu";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
-// Helper to replace **bold** text with <strong> JSX elements
 const parseBoldText = (text) => {
   if (!text) return "";
   const parts = text.split(/\*\*([\s\S]*?)\*\*/g);
@@ -18,7 +17,6 @@ const parseBoldText = (text) => {
   });
 };
 
-// Helper to parse and render simple markdown block
 const renderMarkdown = (text) => {
   if (!text) return null;
   const lines = text.split("\n");
@@ -65,7 +63,6 @@ const renderMarkdown = (text) => {
   });
 };
 
-// Helper to extract clean description narrative (no markdown, intro, or priority/cost tags)
 const extractCleanDescription = (text) => {
   if (!text) return "";
   let descMatch = text.match(/(?:\*\*Description:\*\*|Description:)\s*([\s\S]*?)(?:\r?\n\r?\n|\r?\n\d\.\s*|$)/i);
@@ -328,7 +325,7 @@ const FloatingCivicBot = () => {
             {/* Body */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {activeTab === "chat" ? (
-                /* ── TAB 1: GENERAL AI CHAT ── */
+                
                 <>
                   {chatMessages.map((msg, idx) => (
                     <div 
@@ -364,7 +361,7 @@ const FloatingCivicBot = () => {
                   <div ref={chatEndRef} />
                 </>
               ) : (
-                /* ── TAB 2: GUIDED REPORT WIZARD ── */
+                
                 <div className="space-y-4">
                   {wizardStep === 0 && (
                     <div className="space-y-4">

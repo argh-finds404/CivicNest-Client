@@ -12,7 +12,6 @@ const useAxiosSecure = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Request Interceptor: add the firebase id token
     const requestInterceptor = axiosSecure.interceptors.request.use(
       async (config) => {
         const auth = await import("../firebase/firebase.init").then((m) => m.auth);
@@ -27,7 +26,6 @@ const useAxiosSecure = () => {
       }
     );
 
-    // Response Interceptor: handle 401 and 403
     const responseInterceptor = axiosSecure.interceptors.response.use(
       (response) => {
         return response;

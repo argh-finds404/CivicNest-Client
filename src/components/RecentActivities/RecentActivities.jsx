@@ -375,7 +375,6 @@ export default function RecentActivities() {
  }
  };
 
- // Helper to extract all searchable text from an item
  const extractSearchText = useCallback((item, meta) => {
  const d = item.data || {};
  return [

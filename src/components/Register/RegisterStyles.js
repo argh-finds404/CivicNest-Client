@@ -1,12 +1,5 @@
 export const registerStyles = `
-/* ─────────────────────────────────────────────
-   Register.css  –  ALL styles for the Register page.
-   No inline style={} objects exist in Register.jsx.
-   State-driven variations use BEM modifier classes
-   applied conditionally via className in the JSX.
-───────────────────────────────────────────── */
 
-/* ── Page Root ───────────────────────────────── */
 .reg-root {
   display: flex;
   height: 100vh;
@@ -17,7 +10,6 @@ export const registerStyles = `
   background: #f8fafc;
 }
 
-/* ── Left Visual Panel ───────────────────────── */
 .reg-left-panel {
   width: 45%;
   position: relative;
@@ -67,7 +59,6 @@ export const registerStyles = `
   padding: 40px 44px;
 }
 
-/* ── Middle section wrapper ──────────────────── */
 /* position:relative lets the badge be anchored    */
 /* absolutely, completely outside animation flow.  */
 .reg-middle-section {
@@ -75,7 +66,6 @@ export const registerStyles = `
   padding-top: 50px; /* visual gap for the absolute badge (~30px tall + 20px gap) */
 }
 
-/* ── "Join the Movement" badge ───────────────── */
 .reg-badge {
   position: absolute;
   top: 0;
@@ -107,7 +97,6 @@ export const registerStyles = `
   text-transform: uppercase;
 }
 
-/* ── Animated slide text ─────────────────────── */
 .reg-slide-text-container {
   position: relative;
   min-height: 220px;
@@ -139,7 +128,6 @@ export const registerStyles = `
   max-width: 340px;
 }
 
-/* ── Stats row ───────────────────────────────── */
 .reg-stats-row {
   display: flex;
   gap: 28px;
@@ -163,7 +151,6 @@ export const registerStyles = `
   letter-spacing: 0.08em;
 }
 
-/* ── Social proof card ───────────────────────── */
 .reg-social-proof {
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(16px);
@@ -222,7 +209,6 @@ export const registerStyles = `
   margin: 2px 0 0;
 }
 
-/* ── Image indicator dots ────────────────────── */
 .reg-indicators {
   position: absolute;
   bottom: 24px;
@@ -249,7 +235,6 @@ export const registerStyles = `
   background: #6EE7B7;
 }
 
-/* ── Right Form Panel ────────────────────────── */
 .reg-right-panel {
   flex: 1;
   display: flex;
@@ -289,7 +274,6 @@ export const registerStyles = `
   max-width: 560px;
 }
 
-/* ── Form header ─────────────────────────────── */
 .reg-form-header {
   margin-bottom: 32px;
 }
@@ -309,7 +293,6 @@ export const registerStyles = `
   margin: 0;
 }
 
-/* ── Step progress ───────────────────────────── */
 .reg-progress-wrapper {
   margin-bottom: 28px;
 }
@@ -392,7 +375,6 @@ export const registerStyles = `
   font-weight: 600;
 }
 
-/* ── Form field ──────────────────────────────── */
 .reg-field-wrapper {
   margin-bottom: 20px;
 }
@@ -451,7 +433,6 @@ export const registerStyles = `
   margin: 8px 0 0 2px;
 }
 
-/* ── Password checklist ──────────────────────── */
 .reg-pw-checks {
   display: flex;
   gap: 18px;
@@ -474,7 +455,6 @@ export const registerStyles = `
 .reg-pw-check-label--valid   { color: #0f766e; }
 .reg-pw-check-label--invalid { color: #94a3b8; }
 
-/* ── Previous steps preview card ─────────────── */
 .reg-preview-card {
   background: #f8fafc;
   border-radius: 14px;
@@ -529,7 +509,6 @@ export const registerStyles = `
   border-radius: 6px;
 }
 
-/* ── CTA button ──────────────────────────────── */
 .reg-cta-btn {
   width: 100%;
   height: 54px;
@@ -563,8 +542,6 @@ export const registerStyles = `
 /* Arrow icon sits after the label text */
 .reg-cta-arrow { flex-shrink: 0; }
 
-
-/* ── Divider ─────────────────────────────────── */
 .reg-divider {
   display: flex;
   align-items: center;
@@ -586,7 +563,6 @@ export const registerStyles = `
   letter-spacing: 0.05em;
 }
 
-/* ── Google sign-up button ───────────────────── */
 .reg-google-btn {
   width: 100%;
   height: 54px;
@@ -612,7 +588,6 @@ export const registerStyles = `
   transform: translateY(-1px);
 }
 
-/* ── Sign-in link ────────────────────────────── */
 .reg-signin-text {
   text-align: center;
   font-size: 14px;
@@ -626,7 +601,6 @@ export const registerStyles = `
   text-decoration: none;
 }
 
-/* ── Toast component ─────────────────────────── */
 .reg-toast-wrapper {
   position: fixed;
   top: 24px;

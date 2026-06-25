@@ -16,13 +16,11 @@ const AllIssues = () => {
  const [issues, setIssues] = useState([]);
  const [isLoading, setIsLoading] = useState(true);
  
- // Filters state
  const [search, setSearch] = useState("");
  const [category, setCategory] = useState("");
  const [area, setArea] = useState("");
  const [sort, setSort] = useState("newest");
  
- // Pagination
  const [page, setPage] = useState(1);
  const [totalPages, setTotalPages] = useState(1);
 
@@ -93,7 +91,6 @@ const AllIssues = () => {
  { label:"Ward 6", value:"Ward 6"}
  ];
 
- // Helper to handle broken images
  const handleImageError = (e) => {
  e.target.src =`https://picsum.photos/seed/${e.target.alt}/500/400`;
  };
@@ -123,7 +120,7 @@ const AllIssues = () => {
  </p>
  </div>
 
- {/* AI Banner */}
+ {}
  <div className="max-w-5xl mx-auto px-4 mb-6">
  <div className="bg-gradient-to-r from-teal-50/70 to-emerald-50/70 dark:from-teal-950/20 dark:to-emerald-950/20 border border-teal-100 dark:border-teal-900 rounded-xl p-4 flex items-center justify-between flex-wrap gap-3 shadow-sm">
  <div className="flex items-center gap-3">
@@ -147,7 +144,7 @@ const AllIssues = () => {
  </div>
  </div>
 
- {/* Category Quick Filters - Grid Layout */}
+ {}
  <div className="max-w-5xl mx-auto px-4 mb-8">
  <h2 className="text-[13px] font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wider mb-4 px-1">Filter Incidents by Infrastructure Sector</h2>
  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
@@ -190,7 +187,7 @@ const AllIssues = () => {
  ))}
  </div>
 
- {/* Load More Categories Placeholder */}
+ {}
  <div className="flex justify-center mt-4">
  <button className="text-[13px] font-bold text-slate-500 dark:text-slate-300 hover:text-[#40826D] transition-colors flex items-center gap-1 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] px-5 py-2.5 rounded-full shadow-sm">
  Load More Categories
@@ -201,7 +198,7 @@ const AllIssues = () => {
 
  <div className="max-w-2xl mx-auto px-4">
  
- {/* Reddit-Style Create Post Widget */}
+ {}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-3 mb-6 flex gap-3 items-center">
  <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] flex items-center justify-center flex-shrink-0 overflow-hidden">
  <i className="ri-user-smile-line text-[13px] tracking-tight text-slate-400"></i>
@@ -219,7 +216,7 @@ const AllIssues = () => {
  </button>
  </div>
 
- {/* Feed Controls */}
+ {}
  <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6">
  <div className="relative w-full sm:w-auto flex-grow max-w-sm">
  <i className="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -243,7 +240,7 @@ const AllIssues = () => {
  </div>
  </div>
 
- {/* Main Feed */}
+ {}
  <div className="relative z-10 space-y-4">
  {isLoading ? (
  <div className="flex justify-center items-center py-12">
@@ -274,7 +271,7 @@ const AllIssues = () => {
  )}
  </div>
 
- {/* Load More for Feed */}
+ {}
  {page < totalPages && (
  <div className="flex justify-center mt-8 mb-8">
  <motion.button 

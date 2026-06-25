@@ -246,7 +246,7 @@ export default function CleanupEventDetails() {
    image={event?.coverImages?.[0]} 
    type="article" 
  />
- {/* ── HERO SECTION ── */}
+ {}
  <div className="relative w-full h-[320px] md:h-[450px] bg-slate-950 overflow-hidden pt-16">
  <img
  src={event.coverImages?.[0] ||'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=1200&auto=format&fit=crop'}
@@ -289,7 +289,7 @@ export default function CleanupEventDetails() {
  </button>
  </div>
 
- {/* ── MAIN CONTENT ── */}
+ {}
  <div className="max-w-6xl mx-auto px-6 py-12">
  <div className="flex flex-col lg:flex-row gap-10">
 

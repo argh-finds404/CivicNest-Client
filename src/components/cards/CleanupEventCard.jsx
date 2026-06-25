@@ -53,7 +53,7 @@ export default function CleanupEventCard({ event, onInterested, onGoing, userInt
  hover:shadow-[0_20px_40px_rgba(15,118,110,0.08)]
  transition-all duration-500 hover:-translate-y-1">
 
- {/* ── Cover Image ── */}
+ {}
  <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
  <img
  src={event.coverImages?.[0] ||'https://via.placeholder.com/800x400?text=Cleanup+Event'}
@@ -98,7 +98,7 @@ export default function CleanupEventCard({ event, onInterested, onGoing, userInt
  )}
  </div>
 
- {/* ── Card Body ── */}
+ {}
  <div className="relative z-10 -mt-6 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-t-[24px] p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)]">
 
  {/* Slogan */}

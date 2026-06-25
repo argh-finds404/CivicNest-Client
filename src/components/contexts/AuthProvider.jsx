@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
  */
  const [loading, setLoading] = useState(true);
 
- /* ── Auth actions ─────────────────────────────────────────────── */
+ 
 
  /** Create a new user with email + password */
  const registerUser = (email, password) =>
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
  /** Sign out the current user */
  const logOut = () => signOut(auth);
 
- /* ── One-time initial auth state check ───────────────────────── */
+ 
  useEffect(() => {
  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
  setUser(currentUser);

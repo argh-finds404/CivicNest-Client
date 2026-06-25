@@ -12,7 +12,6 @@ import AnimalDonationModal from'./AnimalDonationModal';
 import Swal from'sweetalert2';
 import SEO from'../common/SEO';
 
-
 export default function AnimalDetails() {
  const { id } = useParams();
  const { user } = useAuth();

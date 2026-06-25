@@ -64,7 +64,6 @@ export default function Leaderboard() {
  const secondPlace = users[1];
  const thirdPlace = users[2];
 
- // Helper for dynamic point-based achievements
  const getAchievement = (points) => {
  if (points >= 1000) return { label:"Elite Legend", style:"bg-purple-50 text-purple-700 border-purple-200"};
  if (points >= 500) return { label:"High Contributor", style:"bg-indigo-50 text-indigo-700 border-indigo-200"};

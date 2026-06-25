@@ -1,16 +1,108 @@
-# React + Vite
+# CivicNest - Community Cleanliness & Citizen Engagement Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**CivicNest** is a comprehensive, full-stack community cleanliness, incident-reporting, and volunteer mobilization portal. The platform empowers citizens to report local hazards (like garbage piles, road damage, waterlogging, or safety hazards), coordinate volunteer cleanup drives, support community initiatives through crowdfunding, and interact in real-time.
 
-Currently, two official plugins are available:
+*   **Live Web App:** [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
+*   **Client Repository:** [https://github.com/argh-finds404/CivicNest-Client](https://github.com/argh-finds404/CivicNest-Client)
+*   **Server Repository:** [https://github.com/argh-finds404/CivicNest-Server](https://github.com/argh-finds404/CivicNest-Server)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## What We Have Implemented & Done
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Robust Authentication & Role-Based Authorization (Firebase & JWT)
+*   **Multi-Method Authentication:** Seamless login and register flows using Firebase Authentication, supporting both email/password sign-up (with mandatory email verification checks) and Google One-Tap/Social login.
+*   **JWT Verification:** A secure middleware pipeline that generates JSON Web Tokens (JWT) upon successful authentication. JWTs are passed via request headers to secure API endpoints.
+*   **Role-Based Access Control (RBAC):** Users are dynamically categorized into groups:
+    *   **Guest:** Can browse issues, notices, and NGO lists.
+    *   **Standard User:** Can report issues, comment, and view profiles.
+    *   **Verified Resident:** Earned by submitting address proof (utility bill upload). Unlocks forum posting, cleanup event organization, and issue resolution authority.
+    *   **NGO:** Approved organizations that coordinate city-scale drives and collect focused funds.
+    *   **Admin:** Complete management console over the queue of membership requests, user roles, incident reports, donations, notices, and forums.
 
-## Expanding the ESLint configuration
+### 2. Live Incident Reporting & Verification System (MongoDB)
+*   **Incident Feed:** Citizens can report issues with detailed descriptions, location categories (Wards), images, and priority flags.
+*   **Map Integration:** Interactive OpenStreetMap/Leaflet components visually map out reports based on GPS coordinates.
+*   **Reddit-Style Interaction:** Upvoting system and comment threads on reports, allowing the community to democratically decide which hazards require urgent attention.
+*   **Verification Loop:** Verified residents inspect solved issues, confirm resolutions on-site, and release points to reporters, closing the trust loop.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3. Real-Time Interactions (Socket.io)
+*   **Live Feed Refreshes:** Real-time updates push status changes (e.g., when an issue is marked as "In Progress" or "Resolved" by admins/volunteers) instantly to all connected clients.
+*   **Interactive Forums:** Thread-specific typing indicators and active-user lists in discussion rooms.
+*   **Push Notifications:** Instant popups notify users when their posts receive replies, upvotes, or status modifications.
+
+### 4. Smart CivicBot AI Assistant (Gemini API)
+*   **Report Drafter:** Assists users in structuring detailed, professional incident descriptions from simple bullet points.
+*   **Formal Escalation Letters:** Generates formal complaint templates pre-populated with incident data to send to Ward Commissioners.
+*   **Rescue Manual:** Provides immediate, structured step-by-step assistance when users report stray animals in distress.
+
+### 5. Crowdfunding & Financial Integration (Stripe Payments)
+*   **Direct Support:** Integrated Stripe checkout flows allowing residents to fund specific neighborhood cleanup events or contribute to the general community cleanliness fund.
+*   **Transparency:** Financial logs tracked securely inside MongoDB, displaying progress bars on target goals for each cleanup drive.
+
+### 6. Gamified Leaderboard & Impact Resume
+*   **Activity Points:** Users earn points for reporting hazards, upvoting valid issues, checking into volunteer events, and verifying resolved complaints.
+*   **Citizen Streaks:** Encourages daily civic engagement through a streak-tracking dashboard.
+*   **Impact Resume PDF:** Direct integration with `jspdf` to generate a professional PDF breakdown of a user's contributions, points, verified events attended, and civic status.
+
+### 7. Volunteer Hub & Cleanup Drives
+*   **Event Scheduling:** Allows verified residents and NGOs to organize official cleanup events.
+*   **Geo-Fenced Check-In:** Volunteers check into cleanup drives on-site using a two-factor validation system (OTP generated by the organizer + GPS verification).
+
+---
+
+## Technical Architecture & Stack
+
+### Frontend (Client Side)
+*   **Core:** React 18 with Vite for blazing-fast HMR and build optimizations.
+*   **Styling:** Modern, responsive design system built on top of Tailwind CSS, utilizing HSL palettes, smooth glassmorphism layers, and responsive CSS grids.
+*   **State Management & Data Fetching:** TanStack Query (React Query) for state caching, automatic refetches, and garbage collection of server state, coupled with Axios.
+*   **Animations:** Framer Motion for high-fidelity modal transitions, list re-ordering, and micro-interactions.
+*   **Maps:** Leaflet & React Leaflet for interactive geographical mapping.
+*   **Visual Assets:** Lottie Player integration for delightful loading and empty-state feedback.
+
+### Backend (Server Side)
+*   **Server Framework:** Node.js with Express.js.
+*   **Database:** MongoDB Atlas for flexible, document-based unstructured storage.
+*   **Real-time Layer:** Socket.io for persistent bidirectional WebSocket connections.
+*   **Security:** Firebase Admin SDK for user token verification and customized middleware.
+*   **Payment Processor:** Stripe API, including a raw-body webhook listener to secure payment verification.
+
+---
+
+## Getting Started (Local Setup)
+
+### Prerequisites
+*   Node.js (v18 or higher)
+*   npm or yarn
+
+### Installation Steps
+
+1.  **Clone the client repository:**
+    ```bash
+    git clone https://github.com/argh-finds404/CivicNest-Client.git
+    cd CivicNest-Client
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure environment variables:**
+    Create a `.env` file in the root folder and add the following keys (based on `.env.example`):
+    ```env
+    VITE_API_URL=http://localhost:3000
+    VITE_FIREBASE_API_KEY=your_firebase_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    ```
+
+4.  **Run the local development server:**
+    ```bash
+    npm run dev
+    ```
+    The application will be live at `http://localhost:5173`.

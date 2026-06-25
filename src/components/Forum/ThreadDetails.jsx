@@ -11,7 +11,6 @@ import toast from'react-hot-toast';
 import { formatDistanceToNow, format } from'date-fns';
 import PageTitle from'../common/PageTitle';
 
-
 // Parse links and highlight mentions as premium badges
 function parseMentionsAndLinks(text, participants = [], searchResults = [], knownNames = new Set()) {
  if (!text) return"";
@@ -578,7 +577,6 @@ export default function ThreadDetails({ id, onBack }) {
  );
  };
 
- // Helper to check if a user email is online
  const isUserOnline = (email) => {
  return onlineUsers.some(u => u.email === email);
  };

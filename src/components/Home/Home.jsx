@@ -218,7 +218,6 @@ function MembershipPromo({ user, role, navigate }) {
  );
 }
 
-/* ─── Quick-action cards ───────────────────────── */
 const QUICK_ACTIONS = [
  {
  id:"civicbot",
@@ -340,7 +339,6 @@ const QUICK_ACTIONS = [
  },
 ];
 
-/* ─── Mock recent activity ─────────────────────── */
 const ACTIVITY = [
  { id: 1, type:"resolved", user:"Maria S.", city:"Dhaka", text:"Illegal dumping cleared near Dhanmondi Lake.", ago:"2 min ago"},
  { id: 2, type:"event", user:"James K.", city:"Chittagong", text:"Weekend cleanup rally — 34 volunteers joined.", ago:"18 min ago"},
@@ -735,7 +733,7 @@ export default function Home() {
  <SEO title="Community Cleanliness Portal" description="Report civic issues, find lost items, and volunteer in your community." />
  <input id="events-drawer"type="checkbox"className="drawer-toggle"/>
  <div className="drawer-content home-root">
- {/* ════════ HERO ════════ */}
+ {}
  <WarpShaderHero>
  <motion.div
  initial={{ opacity: 0, y: 20 }}
@@ -801,7 +799,7 @@ export default function Home() {
  </motion.div>
  </WarpShaderHero>
 
- {/* ════════ MAIN CONTENT ════════ */}
+ {}
  <main className="home-main pt-8">
  <ActivityTicker />
 
@@ -997,7 +995,7 @@ export default function Home() {
  </section>
  </main>
  
- {/* ════════ BANNER ════════ */}
+ {}
  <Banner />
  
  {/* Quick Incident Reporting Modal */}

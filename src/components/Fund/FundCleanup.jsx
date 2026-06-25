@@ -13,11 +13,9 @@ const FundCleanup = () => {
  const [issues, setIssues] = useState([]);
  const [isLoading, setIsLoading] = useState(true);
  
- // Filters state
  const [search, setSearch] = useState("");
  const [sort, setSort] = useState("most_funded");
  
- // Pagination
  const [page, setPage] = useState(1);
  const [totalPages, setTotalPages] = useState(1);
 
@@ -86,7 +84,7 @@ const FundCleanup = () => {
 
  <div className="max-w-2xl mx-auto px-4">
  
- {/* Feed Controls */}
+ {}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg p-4 shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3 mb-8">
  <div className="relative w-full sm:w-auto flex-grow max-w-sm">
  <i className="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -105,7 +103,7 @@ const FundCleanup = () => {
  </div>
  </div>
 
- {/* Main Feed */}
+ {}
  <div className="relative z-10 space-y-6">
  {isLoading ? (
  <div className="flex justify-center items-center py-12">
@@ -136,7 +134,7 @@ const FundCleanup = () => {
  )}
  </div>
 
- {/* Pagination for Feed */}
+ {}
  {totalPages > 1 && (
  <div className="flex justify-center mt-12 mb-8">
  <div className="inline-flex items-center gap-2 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] p-2 rounded-lg shadow-sm border border-slate-100">

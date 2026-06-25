@@ -9,7 +9,6 @@ function displayOrganizerName(organizer) {
  return name;
 }
 
-/* ── Particle burst (Instagram / YT style) ───────────────────── */
 const INTERESTED_PARTICLES = [
  { color:'#f59e0b', icon:'★'},
  { color:'#fbbf24', icon:'✦'},

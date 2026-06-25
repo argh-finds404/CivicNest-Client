@@ -53,8 +53,6 @@ export default function Forum() {
  }
  }, [id]);
 
-
-
  // Fetch thread list for sidebar
  const { data = {}, isLoading } = useQuery({
  queryKey: ["forum", activeCategory],

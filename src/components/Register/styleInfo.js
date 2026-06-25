@@ -1,11 +1,4 @@
-/**
- * styleInfo.js
- * ─────────────────────────────────────────────
- * All static data, configuration arrays, and
- * constants for the Register page.
- * Import from Register.jsx — never mutate here.
- * ─────────────────────────────────────────────
- */
+
 
 export const IMAGES = [
   "https://images.pexels.com/photos/9543414/pexels-photo-9543414.jpeg?auto=compress&cs=tinysrgb&w=900&q=80",

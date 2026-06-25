@@ -54,7 +54,6 @@ export default function Status() {
  { name:'Mapping Engine', status:'operational'},
  ];
 
-
  const systems = isError ? errorSystems : (statusData?.systems || loadingSystems);
 
  const overallStatus = isError ?'Major Outage': systems.some(s => s.status ==='outage') ?'Major Outage': systems.some(s => s.status ==='degraded') ?'Partial Degradation':'All Systems Operational';

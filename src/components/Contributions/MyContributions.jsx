@@ -28,7 +28,6 @@ const MyContributions = () => {
  }, [fetchContributions]);
 
  const handleDownloadPDF = () => {
- // Passing mock user details
  const userDetails = { name:"Current User", email:"user@example.com"};
  generateContributionsPDF(contributions, userDetails);
  };

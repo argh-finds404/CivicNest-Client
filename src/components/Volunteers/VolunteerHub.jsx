@@ -1,124 +1,29 @@
-// import React, { useState } from"react";
-// import { useQuery } from"@tanstack/react-query";
-// import useAxiosSecure from"../../hooks/useAxiosSecure";
-// import { useAuth } from"../../hooks/useAuth";
-// import toast from"react-hot-toast";
-// import MinimalLoader from'../common/MinimalLoader.jsx';
-// import CleanupEventCard from'../cards/CleanupEventCard.jsx';
-// import { Link } from'react-router';
 
-// export default function VolunteerHub() {
-// const { user } = useAuth();
-// const axiosSecure = useAxiosSecure();
-// const [isRegistering, setIsRegistering] = useState(false);
 
-// const { data, isLoading: drivesLoading } = useQuery({
-// queryKey: ["upcomingCleanupEvents"],
-// queryFn: async () => {
-// const res = await axiosSecure.get("/cleanup-events", { params: { upcoming: true, limit: 3 } });
-// return res.data;
-// },
-// });
-
-// const drives = data?.events || [];
-
-// const { data: isVolunteer, refetch: checkStatus } = useQuery({
-// queryKey: ["volunteerStatus", user?.email],
-// enabled: !!user?.email,
-// queryFn: async () => {
-// const res = await axiosSecure.get(`/volunteers/status`);
-// return res.data?.isRegistered;
-// },
-// });
-
-// const handleRegister = async (e) => {
 // e.preventDefault();
-// const form = e.target;
-// const skills = Array.from(form.elements.skills)
 // .filter((checkbox) => checkbox.checked)
 // .map((checkbox) => checkbox.value);
 
-// try {
-// await axiosSecure.post("/volunteers/register", {
 // skills,
 // availability: form.availability.value,
-// });
 // toast.success("Successfully registered as a volunteer!");
 // setIsRegistering(false);
 // checkStatus();
 // } catch (err) {
 // toast.error("Failed to register");
-// }
-// };
 
-// return (
-// <div className="min-h-screen pt-28 pb-20 px-[5%]">
-// <div className="max-w-7xl mx-auto">
-// <h1 className="font-heading text-5xl tracking-tight md:text-6xl text-on-surface mb-4 tracking-tight">Volunteer Hub</h1>
-// <p className="font-body text-on-surface-variant text-[13px] max-w-2xl mb-12">
 // Offer your skills to the community or join an upcoming drive.
-// </p>
 
-// <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-// <div className="lg:col-span-1">
-// <div className="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/30 sticky top-28">
-// <h2 className="font-heading text-2xl tracking-tight mb-4 text-on-surface tracking-tight">Your Status</h2>
  
 // {isVolunteer ? (
-// <div className="bg-primary-container/20 border border-primary/20 rounded-lg p-4 text-center">
-// <div className="w-16 h-16 bg-primary text-on-primary rounded-full flex items-center justify-center mx-auto mb-4">
-// <span className="material-symbols-outlined text-3xl tracking-tight">volunteer_activism</span>
-// </div>
-// <h3 className="font-bold text-[13px] mb-2 text-primary tracking-tight">Registered Volunteer</h3>
-// <p className="text-[13px] text-on-surface-variant">Thank you for pledging your time to the community!</p>
-// </div>
 // ) : isRegistering ? (
-// <form onSubmit={handleRegister} className="space-y-4">
-// <div>
-// <label className="block text-[13px] font-label mb-2">Select Skills</label>
-// <div className="space-y-2">
 // {['Medical','Plumbing','Electrical','Driving','Teaching','General Labor'].map(skill => (
-// <label key={skill} className="flex items-center gap-2 cursor-pointer">
-// <input type="checkbox"name="skills"value={skill} className="checkbox checkbox-primary checkbox-sm"/>
-// <span className="text-[13px]">{skill}</span>
-// </label>
-// ))}
-// </div>
-// </div>
-// <div>
-// <label className="block text-[13px] font-label mb-2">Availability</label>
-// <select name="availability"className="select select-bordered w-full rounded-xl bg-surface focus:border-primary focus:outline-none"required>
-// <option value="Weekends">Weekends</option>
-// <option value="Weekdays">Weekdays</option>
-// <option value="Anytime">Anytime</option>
-// </select>
-// </div>
-// <div className="flex gap-2 pt-2">
-// <button type="submit"className="flex-1 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-full font-bold shadow-lg hover:scale-[1.02] transition-transform">Submit</button>
-// <button type="button"onClick={() => setIsRegistering(false)} className="px-4 py-3 border border-outline-variant rounded-full font-bold hover:bg-surface-variant transition-colors">Cancel</button>
-// </div>
-// </form>
 // ) : (
-// <div className="text-center">
-// <p className="text-on-surface-variant mb-6">You are not currently registered as a volunteer. Join the movement!</p>
-// <button onClick={() => setIsRegistering(true)} className="w-full py-3 bg-surface-container-high hover:bg-surface-variant rounded-full font-bold border border-outline-variant/50 transition-colors">Register Now</button>
-// </div>
-// )}
-// </div>
-// </div>
 
-// <div className="lg:col-span-2">
-// <div className="flex justify-between items-center mb-6">
-// <h2 className="font-heading text-3xl tracking-tight text-on-surface tracking-tight">Upcoming Drives</h2>
-// <Link to="/cleanup-events"className="text-teal-600 font-bold hover:underline">View All →</Link>
-// </div>
  
 // {drivesLoading ? (
-// <div className="flex justify-center py-10"><MinimalLoader /></div>
 // ) : drives.length > 0 ? (
-// <div className="space-y-6">
 // {drives.map(drive => (
-// <CleanupEventCard 
 // key={drive._id}
 // event={drive}
 // userInterested={drive.interested?.includes(user?.email)}
@@ -126,25 +31,7 @@
 // onInterested={() => {}} 
 // onGoing={() => {}}
 // />
-// ))}
-// </div>
 // ) : (
-// <div className="bg-surface-container-low rounded-xl p-12 text-center border border-outline-variant/30">
-// <p className="font-heading text-2xl tracking-tight text-on-surface-variant">No upcoming drives at the moment</p>
-// <Link to="/cleanup-events/organize"className="mt-4 inline-block px-6 py-2 bg-teal-600 text-white rounded-full font-bold">Organize One</Link>
-// </div>
-// )}
-// </div>
-// </div>
-// </div>
-// </div>
-// );
-// }
-
-
-
-
-
 
 // src/components/Volunteers/VolunteerHub.jsx
 import { useState, useEffect } from"react";
@@ -181,7 +68,6 @@ export default function VolunteerHub() {
  const [areaFilter, setAreaFilter] = useState("");
  const [skillFilter, setSkillFilter] = useState("");
 
- // ── Upcoming cleanup events ──────────────────────────────────────────────────
  const { data: eventsData, isLoading: eventsLoading } = useQuery({
  queryKey: ["volunteerDrives", areaFilter],
  queryFn: () =>
@@ -191,7 +77,6 @@ export default function VolunteerHub() {
  staleTime: 5 * 60 * 1000,
  });
 
- // ── Open opportunities ───────────────────────────────────────────────────────
  const { data: oppsData, isLoading: oppsLoading } = useQuery({
  queryKey: ["volunteerOpportunities", areaFilter, skillFilter],
  enabled: tab ==="opportunities",
@@ -202,7 +87,6 @@ export default function VolunteerHub() {
  staleTime: 5 * 60 * 1000,
  });
 
- // ── Volunteer Directory ──────────────────────────────────────────────────────
  const { data: directoryData, isLoading: directoryLoading } = useQuery({
  queryKey: ["volunteerDirectory", areaFilter, skillFilter],
  enabled: tab ==="directory",
@@ -213,7 +97,6 @@ export default function VolunteerHub() {
  staleTime: 5 * 60 * 1000,
  });
 
- // ── Volunteer Status ─────────────────────────────────────────────────────────
  const { data: statusData } = useQuery({
  queryKey: ["volunteerStatus", user?.email],
  enabled: !!user?.email,
@@ -238,7 +121,6 @@ export default function VolunteerHub() {
  return true;
  });
 
- // ── RSVP mutations (FIX: these were empty before) ───────────────────────────
  const interestedMutation = useMutation({
  mutationFn: (id) => axiosSecure.post(`/cleanup-events/${id}/interested`),
  onSuccess: () => {
@@ -267,7 +149,7 @@ export default function VolunteerHub() {
  <div className="min-h-screen dark:bg-[#0b1215]">
  <SEO title="Volunteer Opportunities" />
 
- {/* ── Hero Banner ──────────────────────────────────────────────────── */}
+ {}
  <div className="relative bg-gradient-to-br from-teal-900 to-emerald-900 pt-32 pb-24 px-[5%] overflow-hidden">
  {/* Mesh Gradient Background */}
  <div className="absolute inset-0 opacity-40 mix-blend-color-dodge">
@@ -415,7 +297,7 @@ export default function VolunteerHub() {
  </div>
  </div>
 
- {/* ── Tabs + Filters ───────────────────────────────────────────────── */}
+ {}
  <div className="sticky top-0 z-20 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-b border-gray-200 dark:border-[#1e3040] dark:border-[#1e3040]">
  <div className="max-w-7xl mx-auto px-[5%]">
  <div className="flex items-center justify-between gap-4 py-3 overflow-x-auto">
@@ -467,7 +349,7 @@ export default function VolunteerHub() {
  </div>
  </div>
 
- {/* ── Tab Content ──────────────────────────────────────────────────── */}
+ {}
  <div className="max-w-7xl mx-auto px-[5%] py-8">
  <AnimatePresence mode="wait">
 
