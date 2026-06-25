@@ -268,7 +268,7 @@ const Navbar = () => {
   enabled: !!user,
   staleTime: 5 * 60 * 1000, // fetch every 5 minutes only
   });
-  const streak = streakQuery.data && streakQuery.data.current > 0 ? streakQuery.data : (user ? { current: 5, best: 8, lastActiveDate: new Date(Date.now() - 24*3600*1000*2).toISOString() } : null);
+  const streak = streakQuery.data ? streakQuery.data : (user ? { current: 0, best: 0, lastActiveDate: null } : null);
 
  const { data: pollStats } = useQuery({
  queryKey: ["polls-stats"],
@@ -789,7 +789,7 @@ const Navbar = () => {
  {/* Preferences Section */}
  <div className="h-px bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] my-4 shrink-0"/>
  <span className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 shrink-0">Preferences</span>
-   {user && streak?.current > 0 && (() => {
+   {user && streak && (() => {
      const columns = getContributionGrid(streak.lastActiveDate, streak.current, user?.email);
      const allCells = columns.flat();
      const totalActiveDays = allCells.filter(c => c.level > 0).length;

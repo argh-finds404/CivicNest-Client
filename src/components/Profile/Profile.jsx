@@ -991,7 +991,7 @@ const Profile = () => {
     if (userData.memberId) {
       doc.text(`Verified Member ID: ${userData.memberId}`, 110, 56);
     }
-    doc.text(`Active Streak: ${userData.streak || 1} days`, 110, 63);
+    doc.text(`Active Streak: ${userData.streak?.current ?? 0} days`, 110, 63);
     doc.text(`Account Role: ${role || "Guest"}`, 110, 70);
 
     // Profile Summary
