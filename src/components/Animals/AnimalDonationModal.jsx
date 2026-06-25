@@ -61,15 +61,15 @@ export default function AnimalDonationModal({ animal, onClose }) {
  ) : (
  <>
  {/* Header */}
- <div className="bg-teal-600 p-4 text-white text-center relative">
- <button 
- onClick={onClose}
- className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 rounded-full hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/30 transition-colors">
- <i className="ri-close-line text-[13px]"></i>
- </button>
- <div className="w-16 h-16 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 rounded-full flex items-center justify-center mx-auto mb-3">
- <i className="ri-hand-heart-fill text-3xl tracking-tight"></i>
- </div>
+  <div className="bg-teal-600 p-4 text-white text-center relative">
+  <button 
+  onClick={onClose}
+  className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white dark:bg-[#0a120e] text-teal-600 hover:bg-teal-50 dark:hover:bg-emerald-950/30 transition-all ring-1 ring-slate-100 dark:ring-[#14241d]/20 rounded-full">
+  <i className="ri-close-line text-[13px]"></i>
+  </button>
+  <div className="w-16 h-16 bg-white dark:bg-[#0a120e] text-teal-600 ring-1 ring-slate-100 dark:ring-[#14241d]/20 rounded-full flex items-center justify-center mx-auto mb-3">
+  <i className="ri-hand-heart-fill text-3xl tracking-tight"></i>
+  </div>
  <h2 className="font-heading text-2xl tracking-tight font-bold tracking-tight">Help Fund Medical Care</h2>
  <p className="text-teal-100 text-[13px] mt-1">{animal.animalType || animal.type} — {animal.condition}</p>
  </div>

@@ -183,7 +183,7 @@ export default function AnimalsBrowse() {
  {stats && (
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl">
  <div className="bg-white/10 backdrop-blur-md border border-white/20 dark:border-emerald-800/20 rounded-lg p-4 flex items-center gap-4 text-white hover:bg-white/20 dark:hover:bg-emerald-950/40 transition-colors">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight shrink-0 text-white"><i className="ri-volume-up-fill"></i></div>
+ <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight shrink-0 text-teal-600"><i className="ri-volume-up-fill"></i></div>
  <div>
  <div className="text-2xl tracking-tight font-black text-white">{stats.total || 0}</div>
  <div className="text-xs font-bold text-emerald-100 dark:text-emerald-300 uppercase tracking-wider">Reported</div>

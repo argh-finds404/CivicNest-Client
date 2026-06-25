@@ -97,24 +97,32 @@ export default function Leaderboard() {
  });
  }
  
- if (u.isVolunteer || u.role ==='volunteer') {
- rawActivities.push({
- id:`${u._id}-volstatus`,
- name: u.name ||"Anonymous Citizen",
- action:"registered as an active Community Volunteer",
- points: 10,
- photo: u.photoURL
- });
- } else {
- rawActivities.push({
- id:`${u._id}-memstatus`,
- name: u.name ||"Anonymous Citizen",
- action:"joined the platform as a Community Member",
- points: 25,
- photo: u.photoURL
- });
- }
- });
+  if (u.isVolunteer || u.role === 'volunteer') {
+    rawActivities.push({
+      id: `${u._id}-volstatus`,
+      name: u.name || "Anonymous Citizen",
+      action: "registered as an active Community Volunteer",
+      points: 10,
+      photo: u.photoURL
+    });
+  } else if (u.role === 'guest') {
+    rawActivities.push({
+      id: `${u._id}-gueststatus`,
+      name: u.name || "Anonymous Citizen",
+      action: "joined the platform as a Guest",
+      points: 0,
+      photo: u.photoURL
+    });
+  } else {
+    rawActivities.push({
+      id: `${u._id}-memstatus`,
+      name: u.name || "Anonymous Citizen",
+      action: "joined the platform as a Community Member",
+      points: 25,
+      photo: u.photoURL
+    });
+  }
+  });
 
  const activityLog = rawActivities.slice(0, 5);
 
@@ -430,9 +438,9 @@ export default function Leaderboard() {
  <p className="text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] leading-snug">
  <span className="font-extrabold text-slate-900 dark:text-white">{log.name}</span> {log.action}
  </p>
- <span className="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-1">
+ <span className={`text-xs font-bold flex items-center gap-1 mt-1 ${log.points > 0 ? 'text-emerald-600' : 'text-slate-400 dark:text-slate-500'}`}>
  <CheckCircle2 className="w-3.5 h-3.5"/>
- +{log.points} Points Credited
+ {log.points > 0 ? `+${log.points} Points Credited` : '0 Points Credited'}
  </span>
  </div>
  </div>

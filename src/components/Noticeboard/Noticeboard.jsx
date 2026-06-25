@@ -31,9 +31,10 @@ export default function Noticeboard() {
  const pinnedCount = notices.filter((n) => n.isPinned).length;
  const oneWeekAgo = new Date();
  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
- const thisWeekCount = notices.filter(
- (n) => new Date(n.date || n.createdAt) >= oneWeekAgo
- ).length;
+ const thisWeekCount = notices.filter((n) => {
+    const d = n.date || n.createdAt;
+    return d && !isNaN(new Date(d).getTime()) && new Date(d) >= oneWeekAgo;
+  }).length;
 
  // Filter Notices
  const filteredNotices = notices.filter((notice) => {
@@ -254,7 +255,7 @@ export default function Noticeboard() {
  Expires
  </p>
  <p className="font-body text-xs font-semibold text-slate-600 dark:text-slate-300">
- {notice.validUntil
+ {notice.validUntil && !isNaN(new Date(notice.validUntil).getTime())
  ? format(new Date(notice.validUntil),"MMM do, yyyy")
  :"Ongoing"}
  </p>
@@ -280,7 +281,12 @@ export default function Noticeboard() {
  const isPosterAdmin = notice.posterRole ==="admin"|| notice.postedBy?.toLowerCase().includes("admin") || notice.posterName?.toLowerCase().includes("admin");
  return (
  <p className="text-[11px] text-slate-400 font-medium">
- Posted {formatDistanceToNow(new Date(notice.date || notice.createdAt), { addSuffix: true })}
+ Posted {(() => {
+    const d = notice.date || notice.createdAt;
+    return d && !isNaN(new Date(d).getTime())
+      ? formatDistanceToNow(new Date(d), { addSuffix: true })
+      : "recently";
+  })()}
  {!isPosterAdmin && notice.posterName && (
  <> by <span className="text-slate-500 dark:text-slate-300 font-semibold">{notice.posterName}</span></>
  )}
