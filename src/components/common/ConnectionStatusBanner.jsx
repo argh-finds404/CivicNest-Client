@@ -43,34 +43,45 @@ export default function ConnectionStatusBanner() {
     <AnimatePresence>
       {showStatus && (
         <motion.div
-          initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -50, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 14 }}
-          className="fixed top-0 left-0 right-0 z-[99999] pointer-events-none px-4 pt-3 flex justify-center"
+          initial={{ y: -60, opacity: 0, scale: 0.9 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: -60, opacity: 0, scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 150, damping: 15 }}
+          className="fixed top-4 left-0 right-0 z-[99999] pointer-events-none px-4 flex justify-center"
         >
           <div
-            className={`pointer-events-auto flex items-center gap-3 px-5 py-2.5 rounded-full shadow-lg border text-xs font-bold font-body ${
+            style={{
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+            }}
+            className={`pointer-events-auto flex items-center gap-3 px-6 py-3 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.4)] border transition-all duration-300 ${
               statusType === "offline"
-                ? "bg-red-50 dark:bg-[#1a0a0d] border-red-200 dark:border-red-950 text-red-650 dark:text-red-400"
-                : "bg-emerald-50 dark:bg-[#0a1b12] border-emerald-200 dark:border-emerald-950 text-emerald-700 dark:text-emerald-400"
+                ? "bg-red-500/10 border-red-500/20 text-red-600 dark:text-red-400"
+                : "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
             }`}
           >
-            {statusType === "offline" ? (
-              <>
-                <span className="flex h-2.5 w-2.5 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-                </span>
-                <i className="ri-wifi-off-line text-sm" />
-                <span>You are currently offline. Actions and maps are paused.</span>
-              </>
-            ) : (
-              <>
-                <i className="ri-checkbox-circle-line text-sm text-emerald-600 animate-bounce" />
-                <span>Connection restored! Syncing updates.</span>
-              </>
-            )}
+            {/* Glowing Connection Dot */}
+            <span className="flex h-3 w-3 relative shrink-0">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                statusType === "offline" ? "bg-red-400" : "bg-emerald-400"
+              }`}></span>
+              <span className={`relative inline-flex rounded-full h-3 w-3 ${
+                statusType === "offline" ? "bg-red-500" : "bg-emerald-500"
+              }`}></span>
+            </span>
+
+            {/* Icon */}
+            <i className={`text-base leading-none ${
+              statusType === "offline" ? "ri-wifi-off-fill text-red-500" : "ri-wifi-fill text-emerald-500 animate-pulse"
+            }`} />
+
+            {/* Label */}
+            <span className="text-[13px] font-bold font-body tracking-tight">
+              {statusType === "offline" 
+                ? "Offline Mode — Changes and alerts are paused" 
+                : "Back Online — Syncing community updates"
+              }
+            </span>
           </div>
         </motion.div>
       )}
