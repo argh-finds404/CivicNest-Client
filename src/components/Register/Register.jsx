@@ -247,12 +247,16 @@ export default function Register() {
  setTimeout(() => navigate("/"), 4600);
 
  } catch (err) {
- console.error("[Register] Email/password error:", err);
- showError(err.message ??"Registration failed. Please try again.");
- } finally {
- setEmailLoading(false);
- }
- };
+    console.error("[Register] Email/password error:", err);
+    if (err.message && err.message.toLowerCase().includes("fetch")) {
+      showError("Server Connection Failed: The backend API could not be reached. If it is hosted on a free Render tier, it may be waking up (cold starts can take ~50 seconds). Please wait a moment and try again.");
+    } else {
+      showError(err.message ?? "Registration failed. Please try again.");
+    }
+  } finally {
+    setEmailLoading(false);
+  }
+  };
 
  /* ══════════════════════════════════════════════
  GOOGLE SIGN-UP
@@ -286,14 +290,16 @@ export default function Register() {
     if (err.code !== "auth/popup-closed-by-user") {
       if (err.code === "auth/unauthorized-domain") {
         showError("Firebase Setup Error: This domain is not authorized for OAuth. Please log in to your Firebase Console, navigate to Authentication -> Settings -> Authorized Domains, and add your production domain to the list.");
+      } else if (err.message && err.message.toLowerCase().includes("fetch")) {
+        showError("Server Connection Failed: Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
       } else {
         showError(err.message ?? "Google sign-up failed. Please try again.");
       }
     }
  } finally {
- setGoogleLoading(false);
- }
- };
+    setGoogleLoading(false);
+  }
+  };
 
  /* ── Derived class helpers (no inline styles) ─── */
  const isPasswordStep = currentStep === 3;

@@ -138,7 +138,11 @@ const Login = () => {
  showToastMessage("success","Login Successful","Welcome back to CivicNest!");
  setTimeout(() => navigate("/"), 1500);
  } catch (err) {
- showToastMessage("error","Authentication Failed", err.message ??"Invalid email or password.");
+    if (err.message && err.message.toLowerCase().includes("fetch")) {
+      showToastMessage("error", "Server Connection Failed", "Could not connect to the backend server. The database or server might be spin-starting on Render (takes ~50s) or CORS is blocking the request. Please wait 1 minute and try again.");
+    } else {
+      showToastMessage("error", "Authentication Failed", err.message ?? "Invalid email or password.");
+    }
  } finally {
  setChecking(false);
  setEmailLoading(false);
@@ -164,14 +168,16 @@ const Login = () => {
  showToastMessage("success","Login Successful",`Welcome, ${firebaseUser.displayName ??"neighbour"}!`);
  setTimeout(() => navigate("/"), 1500);
  } catch (err) {
- /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
- if (err.code !== "auth/popup-closed-by-user") {
- if (err.code === "auth/unauthorized-domain") {
- showToastMessage("error", "Google Sign-In Failed", "Firebase Setup Error: This domain is not authorized. Please add this website's domain in your Firebase Console under Authentication -> Settings -> Authorized Domains.");
- } else {
- showToastMessage("error", "Google Sign-In Failed", err.message ?? "Please try again.");
- }
- }
+    /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
+    if (err.code !== "auth/popup-closed-by-user") {
+      if (err.code === "auth/unauthorized-domain") {
+        showToastMessage("error", "Google Sign-In Failed", "Firebase Setup Error: This domain is not authorized. Please add this website's domain in your Firebase Console under Authentication -> Settings -> Authorized Domains.");
+      } else if (err.message && err.message.toLowerCase().includes("fetch")) {
+        showToastMessage("error", "Server Connection Failed", "Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
+      } else {
+        showToastMessage("error", "Google Sign-In Failed", err.message ?? "Please try again.");
+      }
+    }
  } finally {
  setGoogleLoading(false);
  }
