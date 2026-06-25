@@ -51,22 +51,63 @@
 
 ---
 
-## Technical Architecture & Stack
+## Technical Architecture & Stack Deep-Dive
 
-### Frontend (Client Side)
-*   **Core:** React 18 with Vite for blazing-fast HMR and build optimizations.
-*   **Styling:** Modern, responsive design system built on top of Tailwind CSS, utilizing HSL palettes, smooth glassmorphism layers, and responsive CSS grids.
-*   **State Management & Data Fetching:** TanStack Query (React Query) for state caching, automatic refetches, and garbage collection of server state, coupled with Axios.
-*   **Animations:** Framer Motion for high-fidelity modal transitions, list re-ordering, and micro-interactions.
-*   **Maps:** Leaflet & React Leaflet for interactive geographical mapping.
-*   **Visual Assets:** Lottie Player integration for delightful loading and empty-state feedback.
+### 1. Security & Token-Based Authentication Flow
+*   **Firebase Authentication:** Handles Google Single-Sign-On and Email/Password credentials securely on the frontend.
+*   **Token Handshake:** 
+    1. Upon login, the client retrieves the Firebase User IdToken.
+    2. The token is sent to the server for verification via the `Firebase Admin SDK` middleware.
+    3. Custom Axios request interceptors (`useAxiosSecure.js`) automatically attach the Bearer token as an `Authorization` header on all secure requests.
+    4. Token validation ensures that non-verified users, guests, or unauthorized roles are denied access to restricted endpoints.
 
-### Backend (Server Side)
-*   **Server Framework:** Node.js with Express.js.
-*   **Database:** MongoDB Atlas for flexible, document-based unstructured storage.
-*   **Real-time Layer:** Socket.io for persistent bidirectional WebSocket connections.
-*   **Security:** Firebase Admin SDK for user token verification and customized middleware.
-*   **Payment Processor:** Stripe API, including a raw-body webhook listener to secure payment verification.
+### 2. Dual Payment Gateways (Stripe & SSLCommerz)
+CivicNest features two payment integrations for community cleanup funding and general donations:
+*   **Stripe Gateway:** 
+    *   Uses `@stripe/stripe-js` and `@stripe/react-stripe-js` to render secure, PCI-compliant card input fields (Stripe Elements).
+    *   Initiates `PaymentIntents` on the backend and listens to real-time events via a raw-body `stripe-webhook` endpoint to confirm success.
+*   **SSLCommerz Gateway:** 
+    *   Uses the official Node.js `sslcommerz-lts` package on the backend.
+    *   Initiates sessions via backend redirect URL generation. The user is redirected to the SSLCommerz payment portal, and callbacks (Success, Failure, Cancel) are captured, stored, and verified in MongoDB. A sandbox emulator is written for local development testing.
+
+### 3. Maps & Geospatial Visualizations
+*   **Leaflet & React Leaflet:** Configured to map community incident reports and cleanup event coordinates geographically.
+*   **Customization:** Utilizes custom Leaflet Marker anchors, interactive popups, dynamic center-coordinate matching, and coordinate selection helpers when creating new reports.
+
+### 4. Smooth Momentum Scrolling & Sliders
+*   **Lenis Scroll:** Configured inside a custom React context (`LenisContext.jsx`) with custom `lerp: 0.15` and `duration: 0.7` values to establish smooth momentum scrolling across the portal.
+*   **Swiper:** Powers responsive, high-performance carousel sliding components (e.g. on the homepage).
+
+---
+
+## Deployment Architecture
+
+*   **Frontend Client Hosting:** Deployed on **Netlify** at [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
+*   **Backend Server Hosting:** Deployed on **Render** at [https://civicnest-api.onrender.com](https://civicnest-api.onrender.com)
+*   **Database:** Hosted on a high-availability **MongoDB Atlas** cloud cluster.
+
+---
+
+## Dependency & Package Breakdown
+
+### Client-Side Packages
+*   **Framework:** React 19, Vite 8
+*   **Styles & Theme:** Tailwind CSS v4, DaisyUI v5
+*   **State & Fetching:** TanStack Query (React Query) v5, Axios
+*   **Animations:** Framer Motion, Lottie Player, Canvas Confetti, React Awesome Reveal
+*   **Maps:** Leaflet, React Leaflet
+*   **Scroll:** Lenis
+*   **Charts:** Chart.js, Recharts, React Chartjs 2
+*   **PDF Generation:** jsPDF, jsPDF-AutoTable
+*   **Icons:** Remix Icons, Lucide React, React Icons
+
+### Server-Side Packages
+*   **Server Core:** Node.js, Express.js (v5)
+*   **Database & ODM:** MongoDB Native Driver (v7), Mongoose (v9)
+*   **Realtime Communication:** Socket.io (v4)
+*   **Authentication & Security:** Firebase Admin SDK (v13), Express Rate Limit (v8)
+*   **Payment Handlers:** Stripe Node SDK, SSLCommerz LTS SDK
+*   **AI Integration:** Google Generative AI Node SDK (Gemini API)
 
 ---
 
