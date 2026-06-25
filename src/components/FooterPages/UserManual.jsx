@@ -303,18 +303,55 @@ export default function UserManual() {
         description="Learn how to navigate CivicNest effectively. Read guidelines for guests, member credits, volunteer multipliers, and how to avoid duplicate posts." 
       />
 
-      {/* Hero Section (No Glassmorphism) */}
-      <div className="bg-gradient-to-br from-teal-800 to-teal-700 pt-32 pb-16 px-6 md:px-12 text-center text-white relative">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-4 uppercase">
+      {/* Hero Section (Textured, Ambient, and Animated) */}
+      <div className="bg-gradient-to-br from-teal-900 via-teal-800 to-[#052e2b] pt-32 pb-20 px-6 md:px-12 text-center text-white relative overflow-hidden shadow-inner">
+        {/* SVG Radial Dot Texture Layer */}
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_0)] [background-size:20px_20px] z-0 pointer-events-none opacity-60" />
+        
+        {/* Glow ambient light leaks */}
+        <div className="absolute -top-32 -left-20 w-80 h-80 rounded-full bg-emerald-400/20 blur-[80px] z-0 pointer-events-none" />
+        <div className="absolute -bottom-32 -right-20 w-96 h-96 rounded-full bg-teal-300/20 blur-[100px] z-0 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-emerald-500/10 blur-[120px] z-0 pointer-events-none" />
+
+        {/* Floating Framer Motion Background Icons */}
+        {[
+          { icon: "ri-book-open-line", size: "text-4xl", top: "15%", left: "8%", delay: 0 },
+          { icon: "ri-question-line", size: "text-5xl", top: "40%", right: "6%", delay: 1.5 },
+          { icon: "ri-leaf-line", size: "text-3xl", bottom: "12%", left: "15%", delay: 0.8 },
+          { icon: "ri-shield-check-line", size: "text-4xl", top: "20%", right: "12%", delay: 2.2 },
+          { icon: "ri-flashlight-line", size: "text-3xl", bottom: "15%", right: "20%", delay: 1.1 }
+        ].map((f, idx) => (
+          <motion.div
+            key={idx}
+            className={`absolute text-white hidden md:block select-none pointer-events-none ${f.size}`}
+            style={{ top: f.top, left: f.left, right: f.right, bottom: f.bottom }}
+            animate={{
+              y: [0, -12, 0],
+              rotate: [0, 8, -8, 0],
+              opacity: [0.04, 0.12, 0.04]
+            }}
+            transition={{
+              duration: 5.5,
+              repeat: Infinity,
+              delay: f.delay,
+              ease: "easeInOut"
+            }}
+          >
+            <i className={f.icon} />
+          </motion.div>
+        ))}
+
+        <div className="max-w-3xl mx-auto relative z-10">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-4 uppercase drop-shadow-sm flex items-center justify-center gap-2">
+            <i className="ri-bookmark-3-fill text-[#9FE2BF] text-2xl md:text-4xl" />
             CivicNest Help Center
           </h1>
-          <p className="text-slate-100 max-w-xl mx-auto text-sm md:text-base font-medium mb-8">
+          <p className="text-slate-200 max-w-xl mx-auto text-sm md:text-base font-semibold mb-8 drop-shadow-sm">
             Learn the rules of the nest, master the credit system, and understand how to earn contribution points.
           </p>
 
           {/* Search Box */}
-          <div className="relative max-w-xl mx-auto">
+          <div className="relative max-w-xl mx-auto shadow-xl rounded-full">
             <span className="absolute inset-y-0 left-4 flex items-center text-slate-400">
               <i className="ri-search-line text-lg" />
             </span>
@@ -323,16 +360,33 @@ export default function UserManual() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search the manual... e.g. 'credits', 'verify', 'streak'"
-              className="w-full pl-12 pr-6 py-3.5 rounded-full bg-white dark:bg-[#0b1215] text-slate-800 dark:text-slate-200 border-none shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-400 font-semibold placeholder-slate-400 text-sm md:text-base"
+              className="w-full pl-12 pr-12 py-3.5 rounded-full bg-white dark:bg-[#0b1215] text-slate-800 dark:text-slate-200 border border-white/10 dark:border-[#14241d] focus:outline-none focus:ring-2 focus:ring-emerald-400 font-semibold placeholder-slate-400 text-sm md:text-base transition-all"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute inset-y-0 right-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute inset-y-0 right-4 flex items-center text-slate-400 hover:text-slate-650 dark:hover:text-slate-200"
               >
                 <i className="ri-close-circle-fill text-lg" />
               </button>
             )}
+          </div>
+
+          {/* Quick Tag Recommendations */}
+          <div className="mt-5 flex flex-wrap justify-center items-center gap-2 text-xs text-white/80">
+            <span className="font-semibold text-teal-200/90 flex items-center gap-1">
+              <i className="ri-fire-fill text-[11px]" />
+              Popular Searches:
+            </span>
+            {['Credits', 'Rescue Points', 'Streaks', 'Common Mistakes'].map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setSearch(tag)}
+                className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 transition-all font-bold cursor-pointer active:scale-95 hover:text-teal-200"
+              >
+                #{tag}
+              </button>
+            ))}
           </div>
         </div>
       </div>
