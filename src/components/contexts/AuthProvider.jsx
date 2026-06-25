@@ -22,6 +22,8 @@ const AuthProvider = ({ children }) => {
  * and interrupting async chains (updateProfile, DB save, etc.).
  */
  const [loading, setLoading] = useState(true);
+ const [isLoggingOut, setIsLoggingOut] = useState(false);
+ const [renderOverlay, setRenderOverlay] = useState(false);
 
  
 
@@ -37,7 +39,22 @@ const AuthProvider = ({ children }) => {
  const googleSignIn = () => signInWithPopup(auth, googleProvider);
 
  /** Sign out the current user */
- const logOut = () => signOut(auth);
+ const logOut = async () => {
+    setRenderOverlay(true);
+    // Let the overlay mount first, then trigger fade-in in next tick
+    setTimeout(() => setIsLoggingOut(true), 50);
+    // Wait for the fade-in transition (450ms)
+    await new Promise(resolve => setTimeout(resolve, 450));
+    await signOut(auth);
+    // Wait for navigation / component teardown, then trigger fade-out
+    setTimeout(() => {
+      setIsLoggingOut(false);
+      // Wait for fade-out transition (400ms) before unmounting
+      setTimeout(() => {
+        setRenderOverlay(false);
+      }, 400);
+    }, 600);
+  };
 
  
  useEffect(() => {
@@ -75,6 +92,48 @@ const AuthProvider = ({ children }) => {
  actions no longer flip`loading`, so no unexpected unmounts.
  */}
  {loading ? null : children}
+
+ {renderOverlay && (
+    <div 
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99999,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(11, 18, 21, 0.85)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        transition: 'opacity 0.4s ease-in-out',
+        opacity: isLoggingOut ? 1 : 0,
+        pointerEvents: 'all'
+      }}
+    >
+      <style>{`
+        @keyframes auth-spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+      <div style={{ textAlign: 'center' }}>
+        <div 
+          style={{
+            width: '48px',
+            height: '48px',
+            border: '4px solid rgba(15, 118, 110, 0.2)',
+            borderTop: '4px solid #0f766e',
+            borderRadius: '50%',
+            animation: 'auth-spin 1s linear infinite',
+            margin: '0 auto 16px'
+          }}
+        />
+        <p style={{ color: '#ffffff', fontSize: '14.5px', fontWeight: 'bold', fontFamily: 'HKGrotesk, sans-serif', letterSpacing: '0.05em' }}>
+          Signing out securely...
+        </p>
+      </div>
+    </div>
+  )}
  </AuthContext.Provider>
  );
 };
