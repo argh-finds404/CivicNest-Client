@@ -88,6 +88,7 @@ const Status = lazy(() => import('./components/FooterPages/Status'));
 const CommunityGuidelines = lazy(() => import('./components/FooterPages/CommunityGuidelines'));
 const GoalsVision = lazy(() => import('./components/FooterPages/GoalsVision'));
 const RecentActivities = lazy(() => import('./components/RecentActivities/RecentActivities'));
+const UserManual = lazy(() => import('./components/FooterPages/UserManual'));
 
 /* ── Router ────────────────────────────────────────
    / and /home  → Community dashboard (Home)
@@ -345,6 +346,10 @@ const router = createBrowserRouter([
       {
         path: "/goals-and-vision",
         element: <GoalsVision />,
+      },
+      {
+        path: "/user-manual",
+        element: <UserManual />,
       },
     ]
   },

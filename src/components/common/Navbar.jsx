@@ -224,6 +224,24 @@ const Navbar = () => {
  const [searchModalOpen, setSearchModalOpen] = useState(false);
  const menuRef = useRef(null);
 
+ useEffect(() => {
+    const handleOpen = () => setDrawerOpen(true);
+    const handleClose = () => setDrawerOpen(false);
+    window.addEventListener("tour:open-drawer", handleOpen);
+    window.addEventListener("tour:close-drawer", handleClose);
+    return () => {
+      window.removeEventListener("tour:open-drawer", handleOpen);
+      window.removeEventListener("tour:close-drawer", handleClose);
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event("tour:drawer-toggled"));
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [drawerOpen]);
+
  const [unreadCount, setUnreadCount] = useState(0);
  const [hasUrgent, setHasUrgent] = useState(false);
  const [activePollsCount, setActivePollsCount] = useState(0);
@@ -337,6 +355,7 @@ const Navbar = () => {
  { name:"NGOs", path:"/ngos", icon:"diversity_3"},
  { name:"Leaderboard", path:"/leaderboard", icon:"leaderboard"},
  { name:"Gallery", path:"/gallery", icon:"photo_library"},
+ { name:"User Manual", path:"/user-manual", icon:"help"},
  ];
 
  const updateScrolled = useCallback(() => {
@@ -423,6 +442,7 @@ const Navbar = () => {
  <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
  <button
  onClick={() => setDrawerOpen(true)}
+ id="tour-nav-drawer-toggle"
  className="p-2 -ml-2 text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] rounded-full transition-colors focus:outline-none flex items-center justify-center">
  <span className="material-symbols-outlined text-[26px]">menu</span>
  </button>
@@ -471,6 +491,7 @@ const Navbar = () => {
  <Link
  key={item.name}
  to={item.path}
+ id={`tour-nav-${item.name.toLowerCase()}`}
  onMouseEnter={() => handlePrefetch(item.name)}
  className="relative inline-flex items-center px-3 py-2 text-[14.5px] font-bold group z-10">
  <span className="relative flex flex-col overflow-hidden h-[22px] justify-start items-center">
@@ -519,10 +540,17 @@ const Navbar = () => {
  <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
  <button 
   onClick={() => setSearchModalOpen(true)}
-  className="p-1.5 text-slate-500 hover:bg-slate-100 dark:bg-[#1e3040] dark:hover:bg-[#1e3040] dark:text-[#cbd5e1] rounded-full transition-colors flex items-center justify-center focus:outline-none"
+  className="p-1.5 text-slate-555 hover:bg-slate-100 dark:bg-[#1e3040] dark:hover:bg-[#1e3040] dark:text-[#cbd5e1] rounded-full transition-colors flex items-center justify-center focus:outline-none"
   >
   <i className="ri-search-line text-[20px]"></i>
   </button>
+  <Link 
+  to="/user-manual" 
+  title="Help & User Manual"
+  className="p-1.5 text-slate-555 hover:bg-slate-100 dark:bg-[#1e3040] dark:hover:bg-[#1e3040] dark:text-[#cbd5e1] rounded-full transition-colors flex items-center justify-center focus:outline-none shrink-0"
+  >
+  <i className="ri-question-line text-[20px]"></i>
+  </Link>
  {user && (
  <>
  <div className="hidden lg:block">
@@ -545,6 +573,7 @@ const Navbar = () => {
  <div className="relative"ref={menuRef}>
  <button
  onClick={() => setMenuOpen(!menuOpen)}
+ id="tour-nav-profile"
  className="flex items-center gap-2 p-1 pr-2 rounded-full border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors focus:outline-none focus:ring-2 focus:ring-[#0f766e]/20">
  <div className="w-7 h-7 rounded-full overflow-hidden bg-[#0f766e]/10 text-[#0f766e] flex items-center justify-center text-xs font-bold shrink-0">
  {user.photoURL ? (
@@ -594,6 +623,11 @@ const Navbar = () => {
  to="/issues/my"target="_self"onClick={() => setMenuOpen(false)}
  className="block w-full text-left px-4 py-2 text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors">
  My Reports
+ </Link>
+ <Link 
+ to="/user-manual"target="_self"onClick={() => setMenuOpen(false)}
+ className="block w-full text-left px-4 py-2 text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors">
+ User Manual
  </Link>
  </div>
  <div className="h-px bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]"/>
@@ -683,6 +717,7 @@ const Navbar = () => {
  key={item.name}
  to={item.path}
  onClick={() => setDrawerOpen(false)}
+ id={`tour-drawer-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
  className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-[#0f766e]/10 dark:hover:bg-[#2dd4bf]/10 hover:text-[#0f766e] dark:hover:text-[#2dd4bf] transition-colors font-bold text-[13px] shrink-0">
  <span className="material-symbols-outlined text-[20px] opacity-70">{item.icon}</span>
  {item.name}

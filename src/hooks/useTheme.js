@@ -5,8 +5,8 @@ export function useTheme() {
     // 1. Check localStorage first
     const saved = localStorage.getItem('civicnest-theme');
     if (saved) return saved === 'dark';
-    // 2. Default to system preferences
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // 2. Default to light mode (false) by default
+    return false;
   });
 
   useEffect(() => {

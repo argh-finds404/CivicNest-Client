@@ -11,6 +11,8 @@ import TopProgressBar from '../common/TopProgressBar';
 import { useTheme } from '../../hooks/useTheme';
 import FloatingCivicBot from '../AI/FloatingCivicBot';
 import PageTitle from '../common/PageTitle';
+import TourOverlay from '../common/TourOverlay';
+import HelpNotification from '../common/HelpNotification';
 
 const getPageTitle = (pathname) => {
  if (pathname ==='/'|| pathname ==='/home') return'Home';
@@ -50,6 +52,7 @@ const getPageTitle = (pathname) => {
  if (pathname ==='/status') return'System Status';
  if (pathname ==='/community-guidelines') return'Community Guidelines';
  if (pathname ==='/goals-and-vision') return'Goals & Vision';
+ if (pathname ==='/user-manual') return'User Manual & Help Center';
 
  // Admin routes
  if (pathname ==='/admin') return'Admin Stats - Dashboard';
@@ -202,7 +205,7 @@ const Layout = () => {
  <Navbar />
  {/* Spacer for fixed navbar */}
  <div className="h-[4rem] shrink-0"aria-hidden="true"/>
- 
+  
  {/* Main Content Area with Page Transitions */}
  <AnimatePresence 
  mode="wait"onExitComplete={() => {
@@ -231,6 +234,8 @@ const Layout = () => {
  </AnimatePresence>
 
  <FloatingCivicBot />
+ <TourOverlay />
+ <HelpNotification />
  <Toaster 
  position="bottom-right"containerStyle={{ zIndex: 99999 }}
  toastOptions={{

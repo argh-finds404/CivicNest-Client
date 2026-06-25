@@ -37,6 +37,9 @@ const useAxiosSecure = () => {
         if (status === 401 || status === 403) {
           await logOut();
           navigate("/login");
+        } else {
+          const msg = error.response?.data?.message || error.message || "An API error occurred";
+          window.dispatchEvent(new CustomEvent('app:error-reported', { detail: { message: msg } }));
         }
         return Promise.reject(error);
       }

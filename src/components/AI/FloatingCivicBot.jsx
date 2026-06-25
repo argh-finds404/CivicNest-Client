@@ -119,6 +119,19 @@ const FloatingCivicBot = () => {
     return () => window.removeEventListener("open-civic-bot", handleOpenEvent);
   }, []);
 
+  // Listen for contextual prompts from the User Manual
+  useEffect(() => {
+    const handleCivicBotOpen = (e) => {
+      setIsOpen(true);
+      setActiveTab("chat");
+      if (e.detail && e.detail.prompt) {
+        setInputMessage(e.detail.prompt);
+      }
+    };
+    window.addEventListener("civicbot:open", handleCivicBotOpen);
+    return () => window.removeEventListener("civicbot:open", handleCivicBotOpen);
+  }, []);
+
   // Scroll to bottom on new message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });

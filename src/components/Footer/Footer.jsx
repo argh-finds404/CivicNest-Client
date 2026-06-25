@@ -73,6 +73,7 @@ const Footer = () => {
             <Link className="inline-block text-sm font-semibold text-slate-800 dark:text-white hover:translate-x-1.5 hover:text-[#134e4a] transition-all duration-300 drop-shadow-sm" to="/community-guidelines">Community guidelines</Link>
             <Link className="inline-block text-sm font-semibold text-slate-800 dark:text-white hover:translate-x-1.5 hover:text-[#134e4a] transition-all duration-300 drop-shadow-sm" to="/community-guidelines#posting">Posting standards</Link>
             <Link className="inline-block text-sm font-semibold text-slate-800 dark:text-white hover:translate-x-1.5 hover:text-[#134e4a] transition-all duration-300 drop-shadow-sm" to="/community-guidelines#safety">Safety</Link>
+            <Link className="inline-block text-sm font-semibold text-slate-800 dark:text-white hover:translate-x-1.5 hover:text-[#134e4a] transition-all duration-300 drop-shadow-sm" to="/user-manual">User Manual</Link>
             <a className="inline-block text-sm font-semibold text-slate-800 dark:text-white hover:translate-x-1.5 hover:text-[#134e4a] transition-all duration-300 drop-shadow-sm" href="#">FAQ</a>
           </div>
           <div className="flex flex-col gap-4">
@@ -106,6 +107,7 @@ const Footer = () => {
               <Link className="hover:text-[#134e4a] transition-all duration-300" to="/status">Status</Link>
               <Link className="hover:text-[#134e4a] transition-all duration-300" to="/press-kit">Press Kit</Link>
               <Link className="hover:text-[#134e4a] transition-all duration-300" to="/community-guidelines">Guidelines</Link>
+              <Link className="hover:text-[#134e4a] transition-all duration-300" to="/user-manual">Manual</Link>
               <Link className="hover:text-[#134e4a] transition-all duration-300" to="/goals-and-vision">Goals</Link>
             </div>
           </div>

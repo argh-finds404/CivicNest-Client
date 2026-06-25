@@ -23,10 +23,10 @@ export function LenisProvider({ children }) {
     if (!prefersReducedMotion && !isHeavy) {
       // Initialize Lenis only on non-heavy routes
       lenis = new Lenis({ 
-        lerp: 0.1,              // Responsive deceleration factor
-        duration: 1.2,          // Ideal animation length
+        lerp: 0.15,              // More responsive deceleration factor
+        duration: 0.7,          // Faster scroll speed duration
         smoothWheel: true,
-        wheelMultiplier: 1.0,
+        wheelMultiplier: 1.2,   // More scroll per wheel tick
         touchMultiplier: 1.5,
       });
       
