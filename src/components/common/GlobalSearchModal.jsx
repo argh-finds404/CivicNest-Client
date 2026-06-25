@@ -12,6 +12,20 @@ const GlobalSearchModal = ({ isOpen, onClose }) => {
   const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (isOpen && inputRef.current) {
       setTimeout(() => inputRef.current.focus(), 100);
       setQuery("");
@@ -111,6 +125,10 @@ const GlobalSearchModal = ({ isOpen, onClose }) => {
                         {result.type === 'Issue' && <i className="ri-alert-line text-sm text-amber-500"></i>}
                         {result.type === 'Event' && <i className="ri-calendar-event-line text-sm text-emerald-500"></i>}
                         {result.type === 'Notice' && <i className="ri-notification-3-line text-sm text-indigo-500"></i>}
+                        {result.type === 'Lost & Found' && <i className="ri-search-eye-line text-sm text-blue-500"></i>}
+                        {result.type === 'Animal Rescue' && <i className="ri-heart-line text-sm text-rose-500"></i>}
+                        {result.type === 'NGO' && <i className="ri-shield-user-line text-sm text-teal-500"></i>}
+                        {result.type === 'Forum Thread' && <i className="ri-chat-3-line text-sm text-purple-500"></i>}
                       </div>
                       <div className="flex flex-col overflow-hidden">
                         <span className="text-[13px] font-bold text-slate-800 dark:text-white truncate">
