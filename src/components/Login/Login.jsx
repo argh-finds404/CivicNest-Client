@@ -2,6 +2,7 @@ import React, { useState, useContext } from"react";
 import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
+import AuthShowcase from"../common/AuthShowcase";
 
 const loginStyles =`
 .login-checkbox {
@@ -368,42 +369,12 @@ const Login = () => {
  </div>
  </div>
 
- {/* Right Side - Hero Image Section (Preserved) */}
- <div className="hidden lg:flex lg:w-[58%] relative overflow-hidden">
- <div className="absolute inset-0 bg-gradient-to-br from-[#0f766e]/30 via-[#0f766e]/15 to-transparent z-10"></div>
- <img
- alt="Community volunteers cleaning a park"className="absolute inset-0 w-full h-full object-cover"src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1470&auto=format&fit=crop"/>
-
- {/* Overlay Content */}
- <div className="relative z-20 flex flex-col justify-end p-12 xl:p-16 w-full">
- <div className="max-w-md">
- <h2 className="text-white text-3xl tracking-tight xl:text-4xl tracking-tight font-bold leading-tight tracking-tight mb-3 drop-shadow-sm">
- Restore your local sanctuary.
- </h2>
- <p className="text-white/90 text-[13px] font-medium drop-shadow-sm">
- Join 2,400+ neighbors curating the cleanliness and beauty of our
- shared public spaces.
- </p>
-
- {/* Stats */}
- <div className="flex items-center gap-4 mt-8">
- <div>
- <p className="text-white/70 text-xs uppercase tracking-wider">
- Active Issues
- </p>
- <p className="text-white text-2xl tracking-tight font-bold">1,847</p>
- </div>
- <div className="w-px h-8 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/30"></div>
- <div>
- <p className="text-white/70 text-xs uppercase tracking-wider">
- Resolved
- </p>
- <p className="text-white text-2xl tracking-tight font-bold">12,492</p>
- </div>
- </div>
- </div>
- </div>
- </div>
+ {/* Right side: the live neighbourhood */}
+ <AuthShowcase
+ className="hidden lg:flex lg:w-[58%]"
+ title="Welcome back to the neighbourhood."
+ text="See what's been reported near you, what's been fixed, and where the next cleanup is."
+ />
 
  {/* Toast Notification */}
  {toast.show && (
