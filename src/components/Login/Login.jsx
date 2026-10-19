@@ -1,4 +1,4 @@
-import React, { useState, useRef } from"react";
+import React, { useEffect, useState, useRef } from"react";
 import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
@@ -72,7 +72,7 @@ const getReturnTo = (state) => {
 };
 
 const Login = () => {
- const { signInUser, googleSignIn } = useAuth();
+ const { signInUser, googleSignIn, prepareGoogleSignIn } = useAuth();
  const navigate = useNavigate();
  const returnTo = getReturnTo(useLocation().state);
 
@@ -82,6 +82,9 @@ const Login = () => {
  const [googleLoading, setGoogleLoading] = useState(false);
  const [checking, setChecking] = useState(false);
  const formRef = useRef(null);
+
+ // Get Google sign-in ready so its popup is not blocked
+ useEffect(() => { prepareGoogleSignIn(); }, [prepareGoogleSignIn]);
  const [toast, setToast] = useState({
  show: false,
  type:"",
@@ -173,8 +176,10 @@ const Login = () => {
  setTimeout(() => navigate(returnTo, { replace: true }), 1500);
  } catch (err) {
     /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
-    if (err.code !== "auth/popup-closed-by-user") {
-      if (err.code === "auth/unauthorized-domain") {
+    if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+      if (err.code === "auth/popup-blocked") {
+        showToastMessage("error", "Pop-up Blocked", "Your browser blocked the Google sign-in window. Click the Google button again, or allow pop-ups for this site.");
+      } else if (err.code === "auth/unauthorized-domain") {
         showToastMessage("error", "Google Sign-In Failed", "Firebase Setup Error: This domain is not authorized. Please add this website's domain in your Firebase Console under Authentication -> Settings -> Authorized Domains.");
       } else if (err.message && err.message.toLowerCase().includes("fetch")) {
         showToastMessage("error", "Server Connection Failed", "Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
