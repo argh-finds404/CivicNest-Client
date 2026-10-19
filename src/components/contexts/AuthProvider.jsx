@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from"react";
+import React, { useEffect, useRef, useState } from"react";
+import { useQueryClient } from"@tanstack/react-query";
 import { AuthContext } from"./AuthContext";
 import {
  createUserWithEmailAndPassword,
@@ -15,6 +16,8 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
  const [user, setUser] = useState(null);
+ const queryClient = useQueryClient();
+ const lastUid = useRef(undefined);
  /*
  *`loading`= true ONLY during the one-time initial auth-state check.
  * We do NOT set it to true during login/register — that caused the
@@ -59,6 +62,14 @@ const AuthProvider = ({ children }) => {
  
  useEffect(() => {
  const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+ // Someone signed in, out or switched accounts: refetch everything so no page
+ // keeps showing data cached for the previous identity (e.g. the guest view
+ // of the forum)
+ const uid = currentUser?.uid ?? null;
+ if (lastUid.current !== undefined && lastUid.current !== uid) {
+ queryClient.invalidateQueries();
+ }
+ lastUid.current = uid;
  setUser(currentUser);
  setLoading(false); // resolved — children can render
  
@@ -72,7 +83,7 @@ const AuthProvider = ({ children }) => {
  }
  });
  return () => unsubscribe();
- }, []);
+ }, [queryClient]);
 
  const authInfo = {
  user,
