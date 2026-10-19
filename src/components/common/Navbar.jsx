@@ -376,18 +376,17 @@ const Navbar = () => {
 
  useEffect(() => {
  const lenis = window.lenis;
- if (!lenis) return undefined;
 
  if (drawerOpen) {
- lenis.stop();
+ lenis?.stop();
  document.body.style.overflow ="hidden";
  } else {
- lenis.start();
+ lenis?.start();
  document.body.style.overflow ="";
  }
 
  return () => {
- lenis.start();
+ lenis?.start();
  document.body.style.overflow ="";
  };
  }, [drawerOpen]);

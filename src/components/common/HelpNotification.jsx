@@ -75,7 +75,7 @@ export default function HelpNotification() {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: -50, scale: 0.9 }}
           transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-          className="fixed bottom-6 left-6 z-[9999] w-[320px] bg-white dark:bg-[#0a120e] border border-slate-200 dark:border-[#14241d] border-l-4 border-l-amber-500 rounded-r-2xl rounded-l-md shadow-2xl p-4 flex flex-col gap-3 pointer-events-auto"
+          className="fixed bottom-[6.25rem] left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto z-[9999] sm:w-[320px] bg-white dark:bg-[#0a120e] border border-slate-200 dark:border-[#14241d] border-l-4 border-l-amber-500 rounded-r-2xl rounded-l-md shadow-2xl p-4 flex flex-col gap-3 pointer-events-auto"
         >
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2">

@@ -188,7 +188,7 @@ export default function LostFoundBrowse() {
  </div>
 
  {/* Category Filter Chips */}
- <div className="mb-8 overflow-x-auto py-2 px-1 -mx-1">
+ <div className="mb-8 overflow-x-auto py-2 px-1 -mx-1 flex justify-center">
  <SectionFilterChips chips={CATEGORY_FILTERS} value={categoryFilter} onChange={setCategoryFilter} />
  </div>
 
