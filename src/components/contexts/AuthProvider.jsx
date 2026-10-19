@@ -3,19 +3,16 @@ import { useQueryClient } from"@tanstack/react-query";
 import { AuthContext } from"./AuthContext";
 import {
  createUserWithEmailAndPassword,
- getRedirectResult,
  GoogleAuthProvider,
  onAuthStateChanged,
  signInWithEmailAndPassword,
  signInWithPopup,
- signInWithRedirect,
  signOut,
  updateProfile,
 } from"firebase/auth";
 import { auth } from"../../firebase/firebase.init";
 
 const googleProvider = new GoogleAuthProvider();
-const RETURN_KEY = "civicnest-google-return";
 
 /*
  * Firebase loads a helper frame before it opens the Google popup, and on
@@ -57,38 +54,12 @@ const AuthProvider = ({ children }) => {
  signInWithEmailAndPassword(auth, email, password);
 
  /**
- * Sign in / register with Google. Uses a popup; if the browser blocks it,
- * continues in this tab instead. The page then leaves for Google and comes
- * back, and finishGoogleRedirect() completes the sign-in.
+ * Sign in / register with Google in a popup. The popup is used rather than a
+ * same-tab redirect because the redirect depends on third-party storage for
+ * the Firebase domain, which Chrome blocks on many setups: the user comes
+ * back from Google and the result is lost.
  */
- const googleSignIn = async (returnTo ="/") => {
- try {
- return await signInWithPopup(auth, googleProvider);
- } catch (err) {
- if (err.code !=="auth/popup-blocked") throw err;
- try {
- sessionStorage.setItem(RETURN_KEY, returnTo);
- } catch {
- // storage blocked: the user lands on home after signing in
- }
- await signInWithRedirect(auth, googleProvider);
- return new Promise(() => {}); // the page is navigating to Google
- }
- };
-
- /** After a same-tab Google sign-in: { user, returnTo }, or null if there was none */
- const finishGoogleRedirect = async () => {
- const result = await getRedirectResult(auth);
- if (!result) return null;
- let returnTo ="/";
- try {
- returnTo = sessionStorage.getItem(RETURN_KEY) ||"/";
- sessionStorage.removeItem(RETURN_KEY);
- } catch {
- // storage blocked: fall back to home
- }
- return { user: result.user, returnTo };
- };
+ const googleSignIn = () => signInWithPopup(auth, googleProvider);
 
  /** Sign out the current user */
  const logOut = async () => {
@@ -140,7 +111,6 @@ const AuthProvider = ({ children }) => {
  registerUser,
  signInUser,
  googleSignIn,
- finishGoogleRedirect,
  prepareGoogleSignIn,
  logOut,
  updateProfile, // expose so components can call it directly
