@@ -6,8 +6,7 @@ import { Link } from'react-router';
 import { motion } from'framer-motion';
 import { Building2 } from'lucide-react';
 import MinimalLoader from'../common/MinimalLoader.jsx';
-import BackButton from'../common/BackButton';
-import SectionStats from'../common/SectionStats';
+import PageHeader from'../common/PageHeader';
 import SectionFilterChips from'../common/SectionFilterChips';
 import NGOCard from'../cards/NGOCard.jsx';
 
@@ -60,50 +59,26 @@ export default function NGODirectory() {
  const statsData = stats ? [
  { value: stats.total, label:'Partner NGOs'},
  { value: stats.verified, label:'Verified'},
- { value:'100+', label:'Communities'},
  ] : [];
 
  return (
  <div className="min-h-screen bg-[#f0fdf4]">
  <SEO title="Verified NGO Directory" canonical={`${window.location.origin}/ngos`} />
- {/* Banner Section */}
- <div className="relative pt-28 pb-12 px-[5%] bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-800 overflow-hidden">
- {/* Background Pattern */}
- <div className="absolute inset-0 opacity-10">
- <div className="absolute top-20 left-10 w-72 h-72 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-full blur-3xl"></div>
- <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"></div>
- </div>
-
- <div className="relative z-10 max-w-7xl mx-auto">
- {/* Back Button */}
- <div className="mb-4">
- <BackButton variant="light"/>
- </div>
-
- <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
- <div className="text-white">
- <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 text-emerald-300">
- <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
- <span className="text-[13px] font-semibold uppercase tracking-wider">NGO Directory</span>
- </div>
- <h1 className="font-heading text-4xl tracking-tight md:text-5xl tracking-tight font-extrabold mb-4 leading-tight tracking-tight">
- Connect with Organizations
- </h1>
- <p className="font-body text-white/80 text-[13px] max-w-2xl">
- Discover and support verified Non-Governmental Organizations working to improve our community.
- </p>
- </div>
-
- <Link to="/ngos/register"className="inline-flex items-center gap-3 px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-emerald-50 text-teal-700 font-bold rounded-lg shadow-xl hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105">
- <Building2 className="w-6 h-6"/>
- <span>Register NGO</span>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="NGOs"
+ description="Local organisations doing the long-term work: shelters, clean-water groups, youth clubs. Find one to support, or register yours."
+ actions={
+ <Link to="/ngos/register" className="cn-btn cn-btn-signal">
+ <Building2 className="w-4 h-4" aria-hidden="true" />
+ Register an NGO
  </Link>
- </div>
-
- {/* Stats */}
- <SectionStats stats={statsData} />
- </div>
- </div>
+ }
+ meta={statsData.map((s) => (
+ <span key={s.label}><strong>{s.value ?? 0}</strong> {s.label.toLowerCase()}</span>
+ ))}
+ />
 
  {/* Content Section */}
  <div className="px-[5%] py-8">

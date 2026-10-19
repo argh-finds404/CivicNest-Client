@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 @plugin "daisyui" {
@@ -131,10 +128,10 @@ html {
 }
 
 @theme {
-  --font-body: 'Inter', sans-serif;
-  --font-heading: 'Outfit', sans-serif;
-  --font-display: 'Outfit', sans-serif;
-  --font-serif: 'Inter', sans-serif;
+  --font-body: 'Hanken Grotesk', 'HKGrotesk', system-ui, sans-serif;
+  --font-heading: 'Overpass', 'Hanken Grotesk', system-ui, sans-serif;
+  --font-display: 'Overpass', 'Hanken Grotesk', system-ui, sans-serif;
+  --font-serif: 'Hanken Grotesk', system-ui, sans-serif;
   --font-logo: 'Montserrat', sans-serif;
 
   /* Map the CSS variables to Tailwind v4 theme utility classes */
@@ -226,11 +223,13 @@ html {
 }
 
 @layer base {
-  /* Smooth transitions for theme toggling across all elements */
-  *, *::before, *::after {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 400ms;
+  /* Smooth colour fade across all elements, but only while the theme is being
+     switched (useTheme adds .theme-switching for ~450ms). Leaving this on all the
+     time made every hover during a scroll animate, recalculating styles each frame. */
+  html.theme-switching *, html.theme-switching *::before, html.theme-switching *::after {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke !important;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition-duration: 400ms !important;
   }
 
   body {
@@ -268,23 +267,6 @@ html {
     --ngo-verified:  #0d9488; /* teal-600 — matches app primary */
     --ngo-pending:   #f59e0b; /* amber-500 */
     --ngo-featured:  #7c3aed; /* violet-600 */
-  }
-
-  /* Lenis Recommended CSS */
-  html.lenis {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto;
-  }
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-  .lenis.lenis-scrolling iframe {
-    pointer-events: none;
   }
 
   /* Minimal Custom Scrollbar (Beautify Inspired) */
@@ -523,4 +505,264 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 
 .dark .swal2-icon.swal2-success [class^="swal2-success-line"] {
   background-color: var(--green-500) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   CivicNest design system (cn-*)
+   Palette drawn from the street: Canopy green (brand), Signal yellow
+   (road signs, used sparingly), Asphalt ink, Pavement ground, Hydrant red
+   for urgency, Sky for water/map.
+   Type: Overpass (descends from Highway Gothic, the road-sign face) for
+   headings, Hanken Grotesk for reading.
+   ══════════════════════════════════════════════════════════════════════ */
+:root {
+  --cn-canopy: #0f6b5c;
+  --cn-canopy-deep: #0a4a40;
+  --cn-canopy-bright: #19a184;
+  --cn-signal: #f2b705;
+  --cn-signal-ink: #3d2f00;
+  --cn-hydrant: #dc4b3e;
+  --cn-sky: #d7ecf3;
+
+  --cn-ground: #f2f4f1;          /* pavement */
+  --cn-surface: #ffffff;
+  --cn-surface-raised: #ffffff;
+  --cn-line: #dfe5df;
+  --cn-line-strong: #c6d0c8;
+  --cn-ink: #18242a;              /* asphalt */
+  --cn-ink-muted: #56636a;
+  --cn-ink-faint: #8a969c;
+
+  --cn-brand: var(--cn-canopy);
+  --cn-brand-soft: #e3f1ec;
+
+  --cn-radius-sm: 8px;
+  --cn-radius: 14px;
+  --cn-radius-lg: 22px;
+  --cn-shadow-1: 0 1px 0 rgba(24, 36, 42, 0.04), 0 1px 3px rgba(24, 36, 42, 0.06);
+  --cn-shadow-2: 0 2px 0 rgba(24, 36, 42, 0.03), 0 12px 28px -12px rgba(15, 75, 64, 0.28);
+}
+
+.dark {
+  --cn-ground: #0b1312;
+  --cn-surface: #111c1a;
+  --cn-surface-raised: #152321;
+  --cn-line: #1f302d;
+  --cn-line-strong: #2b423e;
+  --cn-ink: #e8efec;
+  --cn-ink-muted: #9fb0ab;
+  --cn-ink-faint: #6c7f7a;
+  --cn-brand: #2fbf9f;
+  --cn-brand-soft: rgba(47, 191, 159, 0.12);
+  --cn-shadow-1: 0 1px 0 rgba(0, 0, 0, 0.3);
+  --cn-shadow-2: 0 14px 30px -14px rgba(0, 0, 0, 0.7);
+}
+
+@layer components {
+  .cn-card {
+    background: var(--cn-surface);
+    border: 1px solid var(--cn-line);
+    border-radius: var(--cn-radius-lg);
+    box-shadow: var(--cn-shadow-1);
+  }
+  .cn-card-raised { box-shadow: var(--cn-shadow-2); }
+
+  .cn-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.875rem;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+    user-select: none;
+  }
+  .cn-btn:active { transform: translateY(1px); }
+  .cn-btn:focus-visible { outline: 3px solid var(--cn-signal); outline-offset: 2px; }
+  .cn-btn-primary { background: var(--cn-canopy); color: #fff; }
+  .cn-btn-primary:hover { background: var(--cn-canopy-deep); }
+  .cn-btn-signal { background: var(--cn-signal); color: var(--cn-signal-ink); }
+  .cn-btn-signal:hover { background: #ffc81f; }
+  .cn-btn-ghost { background: transparent; color: var(--cn-ink); border-color: var(--cn-line-strong); }
+  .cn-btn-ghost:hover { border-color: var(--cn-brand); color: var(--cn-brand); }
+  .cn-btn-on-dark { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.28); }
+  .cn-btn-on-dark:hover { background: rgba(255,255,255,0.18); }
+
+  .cn-heading {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    color: var(--cn-ink);
+  }
+}
+
+/* Skip rendering work for long below-the-fold blocks until they're near the viewport */
+.cn-defer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-motion { animation: none !important; transition: none !important; }
+}
+
+/* Dark "stage" panel that matches the hero ground, for 3D showpieces */
+.cn-dark-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--cn-radius-lg);
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 70%, rgba(25, 161, 132, 0.35), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    #0a3d35;
+}
+
+/* Leaderboard podium */
+.lb-podium { padding: 1.75rem 1rem 0.5rem; }
+.lb-podium .ib-stage { padding-top: 15rem; padding-bottom: 3.5rem; }
+@media (max-width: 640px) {
+  .lb-podium .ib-stage { scale: 0.82; transform-origin: 50% 0; margin-bottom: -3rem; }
+}
+.lb-podium-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+.lb-champ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+  padding: 0 10px 8px;
+  border-radius: 14px;
+  background: rgba(6, 38, 33, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  text-decoration: none;
+}
+.lb-champ .lb-champ-avatar { margin-top: -26px; }
+.lb-champ-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  background: #145c50;
+  font: 800 1.25rem var(--font-heading);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+.lb-champ-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.lb-rank-1 { width: 64px; height: 64px; border-color: var(--cn-signal); }
+.lb-champ-name {
+  margin-top: 4px;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+  font-size: 0.875rem;
+}
+.lb-champ-pts {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.lb-champ:focus-visible .lb-champ-avatar { outline: 3px solid var(--cn-signal); outline-offset: 2px; }
+.lb-place {
+  font: 900 1rem var(--font-heading);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Polls header spotlight */
+.ps-spot { margin: 0; width: 100%; max-width: 26rem; }
+.ps-spot .ib-stage { padding: 8.5rem 1rem 2.75rem; }
+.ps-share {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cn-ink);
+  font: 800 0.8rem var(--font-heading);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+.ps-option {
+  display: block;
+  max-width: 66px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+}
+.ps-question {
+  margin-top: 0.25rem;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.8);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ps-live {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--cn-hydrant);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+/* Login / register side panel */
+.cn-auth-showcase {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem clamp(2rem, 4vw, 4rem);
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 60% at 55% 40%, rgba(25, 161, 132, 0.35), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    #0a3d35;
+}
+.cn-auth-showcase-copy { max-width: 30rem; }
+.cn-auth-showcase-copy h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.cn-auth-showcase-copy p {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
 }

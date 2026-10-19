@@ -60,7 +60,7 @@ const AdminDonations = () => {
   }
 
   return (
-    <div style={{ fontFamily: "'Outfit', sans-serif" }}>
+    <div style={{ fontFamily: "var(--font-heading)" }}>
       {}
       <div className="flex items-center gap-5 mb-10">
         <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-700 text-white rounded-[1.25rem] flex items-center justify-center shadow-xl shadow-teal-500/30 border border-teal-400">

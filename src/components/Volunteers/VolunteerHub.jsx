@@ -49,7 +49,9 @@ import OpportunityCard from"./OpportunityCard.jsx";
 import { useRole } from "../../hooks/useRole";
 
 import VolunteerDirectoryCard from "./VolunteerDirectoryCard.jsx";
-import BackButton from "../common/BackButton";
+import PageHeader from "../common/PageHeader";
+import CityDiorama from "../Home/CityDiorama";
+import usePublicStats, { statsToPins } from "../../hooks/usePublicStats";
 import { Sprout, CheckCircle, Users } from "lucide-react";
 
 const TABS = [
@@ -61,6 +63,7 @@ const TABS = [
 export default function VolunteerHub() {
  const { user } = useAuth();
  const [role] = useRole();
+ const { data: publicStats } = usePublicStats();
  const axiosSecure = useAxiosSecure();
  const axiosPublic = useAxiosPublic();
  const queryClient = useQueryClient();
@@ -150,152 +153,49 @@ export default function VolunteerHub() {
  <SEO title="Volunteer Opportunities" />
 
  {}
- <div className="relative bg-gradient-to-br from-teal-900 to-emerald-900 pt-32 pb-24 px-[5%] overflow-hidden">
- {/* Mesh Gradient Background */}
- <div className="absolute inset-0 opacity-40 mix-blend-color-dodge">
- <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[80%] bg-teal-500 rounded-full blur-[120px]"/>
- <div className="absolute top-[30%] -right-[10%] w-[60%] h-[100%] bg-emerald-500 rounded-full blur-[140px]"/>
- <div className="absolute -bottom-[20%] left-[20%] w-[40%] h-[60%] bg-lime-500 rounded-full blur-[130px]"/>
- </div>
-
- {/* Decorative Grid */}
- <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
- <div className="absolute inset-0 border-white/5 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
- <div className="relative max-w-7xl mx-auto z-10 flex flex-col lg:flex-row items-center gap-12">
- 
- {/* Text Content */}
- <div className="flex-1 text-center lg:text-left">
-  <div className="mb-6 flex justify-center lg:justify-start">
-    <BackButton variant="light" className="" />
-  </div>
-  
-  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-6">
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-xs font-bold uppercase tracking-widest text-emerald-300">
-      {isMember ? (
-        <>
-          <i className="ri-shield-check-fill text-[13px] text-emerald-400"/>
-          Verified Community Member
-        </>
-      ) : (
-        <>
-          <i className="ri-shield-star-fill text-[13px] animate-pulse"/>
-          Members-Only Volunteer Program
-        </>
-      )}
-    </motion.div>
-  </div>
- 
- <motion.h1 
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.1 }}
- className="text-5xl tracking-tight md:text-7xl font-black text-white leading-tight mb-6 font-heading">
- {isMember ? (
- <>
- Let's Clean <br className="hidden lg:block"/>
- <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-lime-300">
- Together
- </span>
- </>
- ) : (
- <>
- Step Up For <br className="hidden lg:block"/>
- <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-lime-300">
- Your Community
- </span>
- </>
- )}
- </motion.h1>
-
- <motion.p 
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.2 }}
- className="text-[13px] md:text-[13px] tracking-tight text-white/80 max-w-2xl mx-auto lg:mx-0 mb-6 leading-relaxed">
- {isMember ? ("Welcome back! You have verified member access. Join upcoming drives, help resolve issues, and earn double points for your contributions.") : ("Only verified members can join the volunteer force. Organize drives, help resolve issues, and earn double points for your contributions!")}
- </motion.p>
-
- {/* Catchy 2x Points badge */}
- <motion.div 
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.25 }}
- className="inline-flex items-center gap-3 px-5 py-2.5 bg-amber-500/15 border border-amber-500/30 rounded-lg text-amber-300 text-[13px] font-bold mb-8 backdrop-blur-sm">
- <i className="ri-flashlight-fill text-[13px] tracking-tight text-amber-400 animate-pulse"/>
- <span>Volunteers receive <strong className="text-amber-200 underline decoration-amber-400 font-extrabold text-[13px]">2x Points Multiplier</strong> for all cleanup activities!</span>
- </motion.div>
-
- <motion.div 
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.3 }}
- className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
- {!user ? (
- <Link to="/login"className="px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] text-teal-900 font-extrabold rounded-lg hover:scale-105 transition-transform shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
- Log In to Participate
- </Link>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="Volunteer"
+ description={isMember
+ ? "Pick up a cleanup, help on a reported issue, or join a feeding drive. Volunteer work earns double points."
+ : "Verified residents can sign up as volunteers to join cleanups, help on reported issues and run feeding drives. Volunteer work earns double points."}
+ actions={
+ !user ? (
+ <Link to="/login" state={{ from: "/volunteers" }} className="cn-btn cn-btn-signal">Log in to volunteer</Link>
  ) : role !=="member"&& role !=="admin"? (
- <div className="flex flex-col sm:flex-row items-center gap-4">
- <Link to="/membership/request"className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold rounded-lg hover:scale-105 transition-transform shadow-[0_8px_30px_rgb(245,158,11,0.3)] flex items-center gap-2">
- <i className="ri-shield-star-line text-[13px] tracking-tight"/> Apply for Membership
+ <>
+ <Link to="/membership/request" className="cn-btn cn-btn-signal">
+ <i className="ri-shield-check-line text-base" aria-hidden="true" />
+ Verify your residency
  </Link>
- <span className="text-white/60 text-[13px] font-medium">
- (Required to volunteer)
- </span>
- </div>
+ <span className="self-center text-sm text-white/70">Needed before you can volunteer</span>
+ </>
  ) : isVolunteer ? (
- <Link to="/volunteer-dashboard"className="px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] text-teal-800 font-extrabold rounded-lg hover:scale-105 transition-transform shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-2">
- <i className="ri-dashboard-fill text-[13px] tracking-tight"/> My Dashboard
+ <Link to="/volunteer-dashboard" className="cn-btn cn-btn-signal">
+ <i className="ri-dashboard-line text-base" aria-hidden="true" />
+ Open my volunteer dashboard
  </Link>
  ) : isPendingVolunteer ? (
- <div className="flex flex-col sm:flex-row items-center gap-4">
- <div className="px-8 py-4 bg-amber-500/10 border border-amber-300/30 text-amber-300 font-extrabold rounded-lg flex items-center gap-2 shadow-sm backdrop-blur-md">
- <i className="ri-time-line text-[13px] tracking-tight animate-pulse"/> Volunteer Registration Pending
- </div>
- </div>
+ <span className="cn-btn cn-btn-on-dark cursor-default">
+ <i className="ri-time-line text-base" aria-hidden="true" />
+ Your volunteer sign-up is being reviewed
+ </span>
  ) : (
- <Link to="/volunteers/register"className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-extrabold rounded-lg hover:scale-105 transition-transform shadow-[0_8px_30px_rgb(16,185,129,0.3)] flex items-center gap-2">
- <i className="ri-user-add-line text-[13px] tracking-tight"/> Join as Volunteer
+ <Link to="/volunteers/register" className="cn-btn cn-btn-signal">
+ <i className="ri-user-add-line text-base" aria-hidden="true" />
+ Sign up as a volunteer
  </Link>
+ )
+ }
+ meta={publicStats && (
+ <>
+ <span><strong>{publicStats.upcomingEvents}</strong> cleanups coming up</span>
+ <span><strong>{publicStats.openIssues}</strong> open issues that need hands</span>
+ </>
  )}
- </motion.div>
- </div>
-
- {/* Decorative Visual element */}
- <motion.div 
- initial={{ opacity: 0, scale: 0.9 }}
- animate={{ opacity: 1, scale: 1 }}
- transition={{ delay: 0.2 }}
- className="hidden lg:block relative w-96 h-96">
- <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/20 to-emerald-400/20 rounded-full blur-3xl animate-pulse"/>
- <div className="absolute inset-4 bg-white/5 dark:bg-emerald-950/20 border border-white/15 rounded-full backdrop-blur-md flex items-center justify-center shadow-2xl shadow-emerald-950/20">
- <div className="grid grid-cols-2 gap-4">
- <div className="w-24 h-24 bg-white/10 dark:bg-emerald-900/20 border border-white/15 rounded-xl flex flex-col items-center justify-center gap-2 backdrop-blur-lg hover:scale-105 transition-all duration-300 shadow-md shadow-black/10">
- <i className="ri-plant-line text-3xl tracking-tight text-emerald-400"/>
- <span className="text-white/90 text-xs font-bold">Drives</span>
- </div>
- <div className="w-24 h-24 bg-white/10 dark:bg-emerald-900/20 border border-white/15 rounded-xl flex flex-col items-center justify-center gap-2 backdrop-blur-lg hover:scale-105 transition-all duration-300 shadow-md shadow-black/10 translate-y-8">
- <i className="ri-group-line text-3xl tracking-tight text-teal-400"/>
- <span className="text-white/90 text-xs font-bold">Network</span>
- </div>
- <div className="w-24 h-24 bg-white/10 dark:bg-emerald-900/20 border border-white/15 rounded-xl flex flex-col items-center justify-center gap-2 backdrop-blur-lg hover:scale-105 transition-all duration-300 shadow-md shadow-black/10 -translate-y-4">
- <i className="ri-tools-line text-3xl tracking-tight text-amber-400"/>
- <span className="text-white/90 text-xs font-bold">Skills</span>
- </div>
- <div className="w-24 h-24 bg-white/10 dark:bg-emerald-900/20 border border-white/15 rounded-xl flex flex-col items-center justify-center gap-2 backdrop-blur-lg hover:scale-105 transition-all duration-300 shadow-md shadow-black/10 translate-y-4">
- <i className="ri-award-line text-3xl tracking-tight text-purple-400"/>
- <span className="text-white/80 text-xs font-bold">Points</span>
- </div>
- </div>
- </div>
- </motion.div>
-
- </div>
- </div>
+ art={<CityDiorama size="md" pins={statsToPins(publicStats)} />}
+ />
 
  {}
  <div className="sticky top-0 z-20 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-b border-gray-200 dark:border-[#1e3040] dark:border-[#1e3040] px-[5%]">
@@ -336,7 +236,7 @@ export default function VolunteerHub() {
  placeholder="Filter by area..."className="px-3 py-1.5 text-[13px] border border-gray-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-lg bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] focus:outline-none focus:border-teal-500 w-36 text-gray-800 dark:text-white"/>
  {tab !=="drives"&& (
  <select value={skillFilter} onChange={e => setSkillFilter(e.target.value)}
- style={{ fontFamily:"'Outfit', sans-serif"}}
+ style={{ fontFamily:"var(--font-heading)"}}
  className="px-4 py-2 text-[13px] font-semibold border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-xl bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] focus:outline-none focus:border-teal-500 text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] shadow-sm cursor-pointer hover:border-teal-500 transition-all">
  <option value="">All skills</option>
  {["Medical","Plumbing","Electrical","Driving","Teaching","General Cleanup","Animal Care"].map(s => (

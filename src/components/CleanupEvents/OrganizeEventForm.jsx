@@ -157,7 +157,7 @@ export default function OrganizeEventForm() {
  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse"></span>
  Official Application
  </div>
- <h1 className="text-3xl tracking-tight md:text-5xl tracking-tight text-white font-black tracking-tight leading-tight"style={{ fontFamily:'Inter, sans-serif'}}>
+ <h1 className="text-3xl tracking-tight md:text-5xl tracking-tight text-white font-black tracking-tight leading-tight"style={{ fontFamily:'var(--font-body)'}}>
  Organize a <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-200">
  Community Drive
  </span>

@@ -3,19 +3,15 @@ import { motion, AnimatePresence } from"framer-motion";
 import { NavLink, useNavigate, useLocation } from"react-router";
 import { updateProfile, sendEmailVerification } from"firebase/auth";
 import PageTitle from"../common/PageTitle";
+import AuthShowcase from"../common/AuthShowcase";
 
 import { registerStyles } from"./RegisterStyles.js";
 import {
- IMAGES,
- SLIDE_TEXTS,
- STATS,
- AVATARS,
  STEPS,
  STEP_LABELS,
  STEP_PLACEHOLDERS,
  STEP_HINTS,
  PASSWORD_CHECKS,
- BADGES,
 } from"./styleInfo";
 import { AuthContext } from"../contexts/AuthContext";
 
@@ -116,10 +112,19 @@ const Toast = ({ toast, onClose }) => (
  </AnimatePresence>
 );
 
+
+// Where to send the user after auth: the page they were on, or home
+const getReturnTo = (state) => {
+ const from = state?.from;
+ const path = typeof from ==="string"? from : from?.pathname;
+ return path && !/^\/(login|register)$/i.test(path) ? path :"/";
+};
+
 export default function Register() {
  const { registerUser, googleSignIn } = useContext(AuthContext);
  const navigate = useNavigate();
  const location = useLocation();
+ const returnTo = getReturnTo(location.state);
 
  
  const [currentStep, setCurrentStep] = useState(0);
@@ -139,16 +144,10 @@ export default function Register() {
  hasMin: false, hasUpper: false, hasLower: false,
  });
  const [toast, setToast] = useState({ show: false, type:"", message:"", description:""});
- const [bgIndex, setBgIndex] = useState(0);
  const [submitted, setSubmitted] = useState(false);
  const [emailLoading, setEmailLoading] = useState(false);
  const [googleLoading, setGoogleLoading] = useState(false);
 
- /* Auto-advance slideshow */
- useEffect(() => {
- const id = setInterval(() => setBgIndex((i) => (i + 1) % IMAGES.length), 6000);
- return () => clearInterval(id);
- }, []);
 
  
  const showToast = (type, message, description) => {
@@ -226,7 +225,7 @@ export default function Register() {
  /* Step 5 — Success */
  setSubmitted(true);
  showSuccess("Welcome to CivicNest! Check your email to verify.");
- setTimeout(() => navigate("/"), 4600);
+ setTimeout(() => navigate(returnTo, { replace: true }), 4600);
 
  } catch (err) {
     console.error("[Register] Email/password error:", err);
@@ -259,7 +258,7 @@ export default function Register() {
 
  setSubmitted(true);
  showSuccess(`Welcome, ${firebaseUser.displayName ??"neighbour"}! You're in.`);
- setTimeout(() => navigate("/"), 4600);
+ setTimeout(() => navigate(returnTo, { replace: true }), 4600);
 
  } catch (err) {
     console.error("[Register] Google error:", err);
@@ -307,113 +306,11 @@ export default function Register() {
  <Toast toast={toast} onClose={() => setToast((t) => ({ ...t, show: false }))} />
 
  {}
- <div className="reg-left-panel">
-
- {/* Slideshow images */}
- <AnimatePresence mode="popLayout">
- <motion.div
- key={bgIndex}
- initial={{ opacity: 0, scale: 1.04 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 1.02 }}
- transition={{ duration: 0.35, ease:"easeInOut"}}
- className="reg-bg-img-wrapper">
- <img src={IMAGES[bgIndex]} alt="Community action"className="reg-bg-img"/>
- </motion.div>
- </AnimatePresence>
-
- <div className="reg-overlay-primary"/>
- <div className="reg-overlay-secondary"/>
-
- <div className="reg-left-content">
-
- {/* Logo */}
- <motion.div 
- initial={{ opacity: 0, y: -16 }} 
- animate={{ opacity: 1, y: 0 }} 
- transition={{ delay: 0.2 }}
- className="z-20 mb-12">
- <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-[14px] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 backdrop-blur-md border-2 border-white/40 shadow-sm overflow-hidden flex-shrink-0">
- <img
- src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover"/>
- </div>
- <div className="flex flex-col">
- <span className="text-[28px] text-white tracking-tight leading-none"style={{ fontFamily:"'Montserrat', sans-serif", fontWeight: 900 }}>
- Civic<span className="text-[#6EE7B7]">Nest</span>
- </span>
- <span className="text-[9px] font-bold uppercase pl-1 tracking-widest text-[#f4d35e] mt-0.5">
- Sustainable Urban Living
- </span>
- </div>
- </div>
- </motion.div>
-
- {/* Middle — badge + animated text + stats */}
- <div className="reg-middle-section">
- {/* Badge pinned absolute — never shifts with text animation */}
- <div className="reg-badge">
- <div className="reg-badge-dot"/>
- <span className="reg-badge-text">{BADGES[bgIndex]}</span>
- </div>
-
- <div className="reg-slide-text-container">
- <AnimatePresence mode="wait">
- <motion.div
- key={bgIndex}
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: -10 }}
- transition={{ duration: 0.35, delay: 0.2, ease:"easeOut"}}
- className="reg-slide-text-inner">
- <h2 className="reg-slide-title tracking-tight">{SLIDE_TEXTS[bgIndex].title}</h2>
- <p className="reg-slide-desc">{SLIDE_TEXTS[bgIndex].desc}</p>
- </motion.div>
- </AnimatePresence>
- </div>
-
- <div className="reg-stats-row">
- {STATS.map((s, i) => (
- <motion.div key={i}
- initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.6 + i * 0.1 }}
- >
- <p className="reg-stat-value">{s.value}</p>
- <p className="reg-stat-label">{s.label}</p>
- </motion.div>
- ))}
- </div>
- </div>
-
- {/* Social proof */}
- <motion.div
- initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
- transition={{ delay: 0.7 }}
- className="reg-social-proof">
- <div className="reg-avatar-stack">
- {AVATARS.map((src, i) => (
- <img key={i} src={src} alt="Member"className="reg-avatar"/>
- ))}
- <div className="reg-avatar-extra">+12k</div>
- </div>
- <div>
- <p className="reg-proof-title">15,000+ neighbors joined</p>
- <p className="reg-proof-sub">across 40+ cities this month</p>
- </div>
- </motion.div>
- </div>
-
- {/* Indicator dots */}
- <div className="reg-indicators">
- {IMAGES.map((_, i) => (
- <button
- key={i}
- onClick={() => setBgIndex(i)}
- className={`reg-indicator-dot${i === bgIndex ?"is-active":""}`}
+ <AuthShowcase
+ className="reg-left-panel"
+ title="Look after your street, together."
+ text="Report what's broken, follow it until it's fixed, and join cleanups with the people who live around you. It's free."
  />
- ))}
- </div>
- </div>
 
  {}
  <div className="reg-right-panel">

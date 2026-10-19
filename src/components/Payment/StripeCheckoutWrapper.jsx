@@ -63,7 +63,7 @@ const CheckoutForm = ({ amount, clientSecret, onSuccess }) => {
  style: {
  base: {
  color:"#1e293b",
- fontFamily:"Outfit, system-ui, sans-serif",
+ fontFamily:"'Hanken Grotesk', system-ui, sans-serif",
  fontSmoothing:"antialiased",
  fontSize:"15px","::placeholder": {
  color:"#94a3b8",
