@@ -733,3 +733,36 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
   font-size: 0.7rem;
   font-weight: 800;
 }
+
+/* Login / register side panel */
+.cn-auth-showcase {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem clamp(2rem, 4vw, 4rem);
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 60% at 55% 40%, rgba(25, 161, 132, 0.35), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    #0a3d35;
+}
+.cn-auth-showcase-copy { max-width: 30rem; }
+.cn-auth-showcase-copy h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.cn-auth-showcase-copy p {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
