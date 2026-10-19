@@ -53,7 +53,7 @@ export default function OpportunityCard({ opportunity: opp }) {
  </div>
 
  <h3
- className="font-semibold text-gray-900 dark:text-white text-[13px] line-clamp-1 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}
+ className="font-semibold text-gray-900 dark:text-white text-[13px] line-clamp-1 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}
  >
  {opp.title}
  </h3>

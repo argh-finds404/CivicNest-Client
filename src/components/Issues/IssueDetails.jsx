@@ -307,7 +307,7 @@ const IssueDetails = () => {
 
   const copySmsText = () => {
     if (!issue) return;
-    const smsBody = `CivicNest Escalation Ref: #${issue._id.slice(-6).toUpperCase()}. Category: ${issue.category}. Location: ${issue.area}. Grievance: ${issue.title}. Upvotes: ${upvotesCount}. Please resolve this issue.`;
+    const smsBody = `CivicNest Escalation Ref: ${issue.ticketCode || '#' + issue._id.slice(-6).toUpperCase()}. Category: ${issue.category}. Location: ${issue.area}. Grievance: ${issue.title}. Upvotes: ${upvotesCount}. Please resolve this issue.`;
     navigator.clipboard.writeText(smsBody);
     toast.success("SMS pre-filled text copied to clipboard!");
   };
@@ -329,7 +329,7 @@ const IssueDetails = () => {
         toast.dismiss();
       } catch (err) {
         toast.dismiss();
-        letter = `To,\nThe Chief Officer,\nDhaka City Corporation,\nBangladesh.\n\nSubject: Official escalation of civic grievance "${issue.title}" at ${issue.area}.\n\nReference ID: #${issue._id.slice(-6).toUpperCase()}\n\nDear Sir,\n\nI am writing on behalf of the CivicNest community to escalate the issue: "${issue.title}".\nDetails: ${issue.description}\nLocation: ${issue.location || issue.area}\n\nThis issue has received ${upvotesCount} community upvotes and remains unresolved.\n\nSincerely,\n${user?.displayName || "Community Resident"}`;
+        letter = `To,\nThe Chief Officer,\nDhaka City Corporation,\nBangladesh.\n\nSubject: Official escalation of civic grievance "${issue.title}" at ${issue.area}.\n\nReference ID: ${issue.ticketCode || '#' + issue._id.slice(-6).toUpperCase()}\n\nDear Sir,\n\nI am writing on behalf of the CivicNest community to escalate the issue: "${issue.title}".\nDetails: ${issue.description}\nLocation: ${issue.location || issue.area}\n\nThis issue has received ${upvotesCount} community upvotes and remains unresolved.\n\nSincerely,\n${user?.displayName || "Community Resident"}`;
       } finally {
         setLetterLoading(false);
       }
@@ -596,7 +596,12 @@ const IssueDetails = () => {
  <FlairPill category={issue.category} customFlair={issue.customFlair} />
  <StatusBadge status={issue.status} />
  </div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ {issue.ticketCode && (
+ <Link to={`/tickets/${issue.ticketCode}`} className="inline-flex items-center gap-1.5 mb-2 font-mono text-xs font-semibold text-[var(--cn-ink-muted)] hover:text-[var(--cn-brand)]" title="Track this report's ticket">
+ <i className="ri-ticket-2-line" aria-hidden="true" />{issue.ticketCode}
+ </Link>
+ )}
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  {issue.title}
  </h1>
  </div>
@@ -782,7 +787,7 @@ const IssueDetails = () => {
           <i className="ri-government-line"></i>
         </div>
         <div>
-          <h3 className="text-sm font-extrabold text-slate-905 dark:text-white leading-tight" style={{ fontFamily: 'HKGrotesk, sans-serif' }}>
+          <h3 className="text-sm font-extrabold text-slate-905 dark:text-white leading-tight" style={{ fontFamily:'var(--font-heading)' }}>
             Civic Escalation Track
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Bypassing internal community loop to municipal departments</p>
@@ -965,7 +970,7 @@ const IssueDetails = () => {
 
  {/* Comments Section */}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4 md:p-5"id="comments">
- <h3 className="text-[13px] tracking-tight font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-chat-3-fill text-[#0f766e]"></i> Discussion ({issue.commentCount})
  </h3>
  
@@ -1007,7 +1012,7 @@ const IssueDetails = () => {
  <div className="w-14 h-14 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] text-emerald-600 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-sm border border-emerald-100">
  <i className="ri-hand-coin-fill text-2xl tracking-tight"></i>
  </div>
- <h3 className="font-bold text-[13px] tracking-tight text-emerald-900 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Community Fund</h3>
+ <h3 className="font-bold text-[13px] tracking-tight text-emerald-900 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Community Fund</h3>
  <p className="text-xs font-medium text-emerald-700/80 mt-1">{issue.crowdfunding.purpose}</p>
  </div>
  
@@ -1046,7 +1051,7 @@ const IssueDetails = () => {
  <div className="w-10 h-10 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center mb-3">
  <i className="ri-tools-line text-[13px] tracking-tight"></i>
  </div>
- <h3 className="font-bold text-[13px] text-slate-900 dark:text-white mb-1 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Take Action</h3>
+ <h3 className="font-bold text-[13px] text-slate-900 dark:text-white mb-1 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Take Action</h3>
  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mb-4 leading-relaxed">
  Be the hero. Claim this issue, resolve the problem in your community, and earn rewards and reputation.
  </p>
@@ -1086,7 +1091,7 @@ const IssueDetails = () => {
  <div className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
  <i className="ri-verified-badge-fill"></i> Your Task
  </div>
- <h3 className="font-bold text-[13px] text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Resolution Center</h3>
+ <h3 className="font-bold text-[13px] text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Resolution Center</h3>
  </div>
  <button onClick={handleUnclaim} className="w-8 h-8 rounded-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border border-slate-100 text-red-500 hover:bg-red-50 hover:border-red-100 hover:text-red-600 flex items-center justify-center shadow-sm transition-colors text-[13px]"title="Step down">
  <i className="ri-close-line"></i>
@@ -1101,7 +1106,7 @@ const IssueDetails = () => {
  {(!isClaimer && issue.resolutionProofs?.length > 0) && (
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] overflow-hidden">
  <div className="p-5 border-b border-slate-100">
- <h3 className="font-bold text-[13px] text-slate-900 dark:text-white mb-0.5 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Submitted Proofs</h3>
+ <h3 className="font-bold text-[13px] text-slate-900 dark:text-white mb-0.5 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Submitted Proofs</h3>
  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">The assigned member provided proof</p>
  </div>
  <div className="bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215]/50 p-3">
@@ -1115,7 +1120,7 @@ const IssueDetails = () => {
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-5 border border-amber-200 shadow-sm relative overflow-hidden">
  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
  
- <h3 className="font-bold text-[13px] mb-1.5 flex items-center gap-2 text-amber-900 relative z-10 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <h3 className="font-bold text-[13px] mb-1.5 flex items-center gap-2 text-amber-900 relative z-10 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-shield-check-fill text-amber-500"></i> Verify Fix
  </h3>
  <p className="text-amber-700/80 mb-5 text-xs font-medium leading-relaxed relative z-10">

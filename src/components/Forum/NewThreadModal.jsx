@@ -71,7 +71,7 @@ export default function NewThreadModal({ isOpen, onClose, onThreadCreated }) {
  {/* Header */}
  <div className="p-4 border-b border-gray-100 flex justify-between items-start">
  <div>
- <h2 className="text-2xl tracking-tight font-black text-gray-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <h2 className="text-2xl tracking-tight font-black text-gray-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  Create New Thread
  </h2>
  <p className="text-gray-500 dark:text-slate-300 text-xs mt-1">

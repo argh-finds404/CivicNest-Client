@@ -7,7 +7,7 @@ import PollCard from'../cards/PollCard';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import MinimalLoader from'../common/MinimalLoader';
 import PageHeader from'../common/PageHeader';
-import PollSpotlight from'./PollSpotlight';
+import PageArt3D from'../three/PageArt3D';
 import SectionFilterChips from'../common/SectionFilterChips';
 import CreatePollModal from'./CreatePollModal';
 import { useRole } from'../../hooks/useRole';
@@ -204,7 +204,7 @@ export default function PollsBrowse() {
  meta={statsData.map((s) => (
  <span key={s.label}><strong>{s.value.toLocaleString()}</strong> {s.label.toLowerCase()}</span>
  ))}
- art={<PollSpotlight polls={displayPolls} />}
+ art={<PageArt3D model="polls" label="A ballot sliding into a ballot box" />}
  />
 
  {/* Content Section */}

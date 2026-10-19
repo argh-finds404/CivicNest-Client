@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from"framer-motion";
 import { useAuth } from"../../hooks/useAuth";
 import { useRole } from"../../hooks/useRole";
 import { getScrollY } from"../../hooks/useLenis";
+import { atLeast } from"../../utils/roles";
 import NotificationDropdown from"../Notifications/NotificationDropdown";
 import MobileNotificationsModal from"../Notifications/MobileNotificationsModal";
 import { useQuery } from"@tanstack/react-query";
@@ -333,6 +334,8 @@ const Navbar = () => {
  
  if (role ==='admin') {
  mainNavItems.push({ name:"Admin", path:"/admin"});
+ } else if (role ==='moderator') {
+ mainNavItems.push({ name:"Moderation", path:"/admin"});
  }
 
  const handlePrefetch = (name) => {
@@ -341,7 +344,7 @@ const Navbar = () => {
  if (name ==='Notices') import('../Noticeboard/Noticeboard');
  if (name ==='Volunteers') import('../Volunteers/VolunteerHub');
  if (name ==='Polls') import('../Polls/PollsBrowse');
- if (name ==='Admin') import('../Admin/AdminDashboard');
+ if (name ==='Admin'|| name ==='Moderation') import('../Admin/AdminDashboard');
  } catch (e) {
  // Ignore prefetch errors
  }
@@ -352,6 +355,7 @@ const Navbar = () => {
  { name:"Animals", path:"/animals", icon:"pets"},
  { name:"Lost & Found", path:"/lost-found", icon:"find_in_page"},
  { name:"Threads", path:"/forum", icon:"forum"},
+ { name:"My tickets", path:"/tickets", icon:"confirmation_number"},
  { name:"NGOs", path:"/ngos", icon:"diversity_3"},
  { name:"Leaderboard", path:"/leaderboard", icon:"leaderboard"},
  { name:"Gallery", path:"/gallery", icon:"photo_library"},
@@ -710,7 +714,8 @@ const Navbar = () => {
  <span className="px-4 text-xs font-bold text-slate-400 uppercase tracking-wider mt-2 mb-1 shrink-0">Discover</span>
  
  {drawerNavItems
- .filter(item => item.name !=="Threads"|| (user && (role ==="member"|| role ==="admin"|| isVolunteer)))
+ .filter(item => item.name !=="My tickets"|| user)
+ .filter(item => item.name !=="Threads"|| (user && (atLeast(role,"member") || isVolunteer)))
  .map(item => (
  <Link
  key={item.name}

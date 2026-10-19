@@ -468,7 +468,7 @@ const AdminPosts = () => {
  <i className="ri-file-shield-2-line text-3xl tracking-tight drop-shadow-md"></i>
  </div>
  <div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>Manage Posts</h1>
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Manage Posts</h1>
  <p className="text-[13px] md:text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-1">Review and moderate all community posts and activities.</p>
  </div>
  </div>

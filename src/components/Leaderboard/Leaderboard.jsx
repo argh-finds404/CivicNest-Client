@@ -5,6 +5,7 @@ import useAxiosPublic from"../../hooks/useAxiosPublic";
 import { motion } from"framer-motion";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
+import PageArt3D from'../three/PageArt3D';
 import Podium from'./Podium';
 import { 
  Trophy, Crown, Medal, Award, Activity, 
@@ -130,6 +131,7 @@ export default function Leaderboard() {
  <PageHeader
  width="72rem"
  gutter="1.5rem"
+ art={<PageArt3D model="trophy" label="A gold trophy" />}
  title="Leaderboard"
  description="Points go to neighbours who report problems, verify fixes and turn up to cleanups. Here's who's doing the most."
  meta={users.length > 0 && (

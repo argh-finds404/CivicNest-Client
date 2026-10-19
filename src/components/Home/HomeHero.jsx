@@ -22,15 +22,18 @@ export default function HomeHero({ user, displayName }) {
     <section className="cn-hero" data-diorama-host>
       <div className="cn-hero-inner">
         <div className="cn-hero-copy">
-          {user && (
-            <p className="cn-hero-greet">
-              {greeting()}, {firstName}
-            </p>
-          )}
-          <h1 className="cn-hero-title">Your street, looked after.</h1>
+          <p className="cn-hero-greet">
+            <span className="cn-hero-greet-dot" aria-hidden="true" />
+            {user ? `${greeting()} from your neighbourhood` : "Community dashboard"}
+          </p>
+          <h1 className="cn-hero-title">
+            {user ? "Welcome back," : "Welcome to"}{" "}
+            <span className="cn-hero-name">{user ? firstName : "CivicNest"}</span>{" "}
+            <span className="cn-wave" role="img" aria-label="waving hand">👋</span>
+          </h1>
           <p className="cn-hero-sub">
-            Report a broken streetlight or an overflowing bin, follow it until it&apos;s fixed, and join cleanups
-            with the people who live around you.
+            Your city needs you. Report a broken streetlight or an overflowing bin, follow it until it&apos;s
+            fixed, and join cleanups with the people who live around you.
           </p>
           <div className="cn-hero-actions">
             <Link to="/issues/add" className="cn-btn cn-btn-signal">
