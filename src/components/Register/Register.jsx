@@ -125,7 +125,7 @@ const getReturnTo = (state) => {
 };
 
 export default function Register() {
- const { registerUser, googleSignIn, prepareGoogleSignIn } = useContext(AuthContext);
+ const { registerUser, googleSignIn, finishGoogleRedirect, prepareGoogleSignIn } = useContext(AuthContext);
 
  // Get Google sign-in ready so its popup is not blocked
  useEffect(() => { prepareGoogleSignIn(); }, [prepareGoogleSignIn]);
@@ -253,45 +253,58 @@ export default function Register() {
   };
 
  
- const handleGoogleSignIn = async () => {
- setGoogleLoading(true);
- try {
- const credential = await googleSignIn();
- const firebaseUser = credential.user;
-
- /* Save to MongoDB */
+ /** Save the Google user to the database, then go back to where they were */
+ const completeGoogleSignIn = async (firebaseUser, to) => {
  const token = await firebaseUser.getIdToken();
- const dbResult = await saveUserToDB(
+ await saveUserToDB(
  firebaseUser.displayName ??"",
  firebaseUser.email,
  firebaseUser.photoURL ??"",
  token
  );
- console.log("[Register] Google → MongoDB result:", dbResult);
-
  setSubmitted(true);
  showSuccess(`Welcome, ${firebaseUser.displayName ??"neighbour"}! You're in.`);
- setTimeout(() => navigate(returnTo, { replace: true }), 4600);
+ setTimeout(() => navigate(to, { replace: true }), 4600);
+ };
 
+ const showGoogleError = (err) => {
+ if (err.code ==="auth/popup-closed-by-user"|| err.code ==="auth/cancelled-popup-request") return;
+ console.error("[Register] Google error:", err);
+ if (err.code ==="auth/unauthorized-domain") {
+ showError(`Google sign-up isn't enabled on ${window.location.hostname} yet. Add it in Firebase Console → Authentication → Settings → Authorized domains, then try again.`);
+ } else if (err.message && err.message.toLowerCase().includes("fetch")) {
+ showError("Server Connection Failed: Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
+ } else {
+ showError(err.message ??"Google sign-up failed. Please try again.");
+ }
+ };
+
+ const handleGoogleSignIn = async () => {
+ setGoogleLoading(true);
+ try {
+ const credential = await googleSignIn(returnTo);
+ await completeGoogleSignIn(credential.user, returnTo);
  } catch (err) {
-    console.error("[Register] Google error:", err);
-    if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
-      if (err.code === "auth/popup-blocked") {
-        showError("Your browser blocked the Google sign-in window. Click the Google button again, or allow pop-ups for this site.");
-      } else if (err.code === "auth/unauthorized-domain") {
-        showError("Firebase Setup Error: This domain is not authorized for OAuth. Please log in to your Firebase Console, navigate to Authentication -> Settings -> Authorized Domains, and add your production domain to the list.");
-      } else if (err.message && err.message.toLowerCase().includes("fetch")) {
-        showError("Server Connection Failed: Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
-      } else {
-        showError(err.message ?? "Google sign-up failed. Please try again.");
-      }
-    }
+ showGoogleError(err);
  } finally {
-    setGoogleLoading(false);
-  }
-  };
+ setGoogleLoading(false);
+ }
+ };
 
- 
+ // Finish a Google sign-up that continued in this tab because the popup was blocked
+ useEffect(() => {
+ let active = true;
+ finishGoogleRedirect()
+ .then((done) => {
+ if (!active || !done) return;
+ setGoogleLoading(true);
+ return completeGoogleSignIn(done.user, done.returnTo).finally(() => setGoogleLoading(false));
+ })
+ .catch((err) => active && showGoogleError(err));
+ return () => { active = false; };
+ // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on arrival
+ }, []);
+
  const isPasswordStep = currentStep === 3;
  const isPasswordValid = checks.hasMin && checks.hasUpper && checks.hasLower;
 
