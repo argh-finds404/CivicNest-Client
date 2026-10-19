@@ -109,7 +109,7 @@ export default function CleanupEventCard({ event, onInterested, onGoing, userInt
  )}
 
  {/* Title */}
- <h3 className="font-extrabold text-[13px] tracking-tight text-slate-900 dark:text-white line-clamp-2 leading-tight mb-2 group-hover:text-teal-700 transition-colors tracking-tight"style={{ fontFamily:'Inter, sans-serif', letterSpacing:'-0.02em'}}>
+ <h3 className="font-extrabold text-[13px] tracking-tight text-slate-900 dark:text-white line-clamp-2 leading-tight mb-2 group-hover:text-teal-700 transition-colors tracking-tight"style={{ fontFamily:'var(--font-body)', letterSpacing:'-0.02em'}}>
  {event.title}
  </h3>
 

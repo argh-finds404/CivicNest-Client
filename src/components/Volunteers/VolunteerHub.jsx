@@ -336,7 +336,7 @@ export default function VolunteerHub() {
  placeholder="Filter by area..."className="px-3 py-1.5 text-[13px] border border-gray-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-lg bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] focus:outline-none focus:border-teal-500 w-36 text-gray-800 dark:text-white"/>
  {tab !=="drives"&& (
  <select value={skillFilter} onChange={e => setSkillFilter(e.target.value)}
- style={{ fontFamily:"'Outfit', sans-serif"}}
+ style={{ fontFamily:"var(--font-heading)"}}
  className="px-4 py-2 text-[13px] font-semibold border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-xl bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] focus:outline-none focus:border-teal-500 text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] shadow-sm cursor-pointer hover:border-teal-500 transition-all">
  <option value="">All skills</option>
  {["Medical","Plumbing","Electrical","Driving","Teaching","General Cleanup","Animal Care"].map(s => (

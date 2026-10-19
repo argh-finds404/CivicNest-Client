@@ -12,6 +12,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['recharts', 'lodash', '@paper-design/shaders-react']
+    include: ['recharts', 'lodash']
   }
 });

@@ -32,9 +32,19 @@ const useAxiosSecure = () => {
       },
       async (error) => {
         const status = error.response?.status;
-        if (status === 401 || status === 403) {
+        const auth = await import("../firebase/firebase.init").then((m) => m.auth);
+        if (status === 401 && auth.currentUser) {
+          // A signed-in user's token was rejected: the session really expired
           await logOut();
-          navigate("/login");
+          navigate("/login", { state: { from: window.location.pathname } });
+        } else if (status === 401) {
+          // Guest hit a members-only action. Ask them to log in instead of
+          // bouncing them off a page they are allowed to browse.
+          window.dispatchEvent(new CustomEvent("app:auth-required"));
+        } else if (status === 403) {
+          // Signed in but not allowed (e.g. not a verified member yet). Never log out for this.
+          const msg = error.response?.data?.error || error.response?.data?.message || "You don't have access to that yet.";
+          window.dispatchEvent(new CustomEvent("app:error-reported", { detail: { message: msg } }));
         } else {
           const msg = error.response?.data?.message || error.message || "An API error occurred";
           window.dispatchEvent(new CustomEvent('app:error-reported', { detail: { message: msg } }));

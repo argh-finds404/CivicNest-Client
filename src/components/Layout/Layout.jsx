@@ -1,10 +1,9 @@
-import { LenisProvider } from '../../contexts/LenisContext';
-import React, { useEffect, useState, Suspense } from 'react';
-import { useLocation, useOutlet } from 'react-router';
+import React, { useEffect, Suspense } from 'react';
+import { useLocation, useOutlet, ScrollRestoration } from 'react-router';
 import Navbar from '../common/Navbar';
 import Footer from '../Footer/Footer';
 import { Toaster } from 'react-hot-toast';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { socket } from '../../hooks/useSocket';
 import { useIsFetching } from '@tanstack/react-query';
 import TopProgressBar from '../common/TopProgressBar';
@@ -15,6 +14,7 @@ import TourOverlay from '../common/TourOverlay';
 import HelpNotification from '../common/HelpNotification';
 import ConnectionStatusBanner from '../common/ConnectionStatusBanner';
 import ScrollProgressButton from '../common/ScrollProgressButton';
+import AuthPrompt from '../common/AuthPrompt';
 
 const getPageTitle = (pathname) => {
  if (pathname ==='/'|| pathname ==='/home') return'Home';
@@ -80,76 +80,6 @@ const getPageTitle = (pathname) => {
  return'Community Cleanliness & Care';
 };
 
-const PageTransitionCover = ({ isDark }) => {
- const [isLoading, setIsLoading] = useState(true);
-
- useEffect(() => {
- // Only show the splash screen on the initial app load/refresh
- const timer = setTimeout(() => {
- setIsLoading(false);
- }, 400); 
- return () => clearTimeout(timer);
- }, []);
-
- return (
- <AnimatePresence>
- {isLoading && (
- <motion.div
- initial={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
- className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-colors duration-200 ${
- isLoading ? '' : 'pointer-events-none'
- } ${isDark ?'bg-[#050a08]':'bg-[#fafafa]'}`}
- >
- <motion.div
- initial={{ scale: 0.8, opacity: 0, y: 20 }}
- animate={{ scale: 1, opacity: 1, y: 0 }}
- transition={{ type:"spring", stiffness: 200, damping: 20 }}
- className="flex flex-col items-center">
- <motion.div 
- animate={{ rotate: [0, -10, 10, -10, 0] }}
- transition={{ duration: 1.5, repeat: Infinity, ease:"easeInOut"}}
- className="w-20 h-20 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 backdrop-blur-md rounded-xl flex items-center justify-center mb-6 border border-white/20 shadow-2xl">
- <i className="ri-leaf-fill text-5xl tracking-tight text-emerald-400"></i>
- </motion.div>
- <h1 className={`text-4xl tracking-tight md:text-5xl tracking-tight font-heading font-black tracking-tight shadow-sm flex overflow-hidden ${
- isDark ?'text-white':'text-slate-800 dark:text-white'}`}>
- {['C','i','v','i','c'].map((l, i) => (
- <motion.span 
- key={`c-${i}`} 
- initial={{ y: 50 }} 
- animate={{ y: 0 }} 
- transition={{ delay: i * 0.05, type:"spring", stiffness: 300, damping: 20 }}
- >{l}</motion.span>
- ))}
- <span className="text-emerald-400 flex ml-1">
- {['N','e','s','t'].map((l, i) => (
- <motion.span 
- key={`n-${i}`} 
- initial={{ y: 50 }} 
- animate={{ y: 0 }} 
- transition={{ delay: (i + 5) * 0.05, type:"spring", stiffness: 300, damping: 20 }}
- >{l}</motion.span>
- ))}
- </span>
- </h1>
- <div className="mt-8 flex gap-3">
- {[0, 1, 2].map((i) => (
- <motion.div
- key={i}
- animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
- transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
- className="w-3 h-3 bg-emerald-400 rounded-full shadow-lg shadow-emerald-400/50"/>
- ))}
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
- );
-};
-
 const PageLoader = () => (
   <div className="flex-grow w-full min-h-[60vh] flex flex-col items-center justify-center gap-4 bg-slate-50/50 dark:bg-[#050a08]/50">
     <div className="w-12 h-12 rounded-[14px] bg-slate-100 dark:bg-[#1e3040] border-2 border-slate-200 dark:border-[#14241d] shadow-sm flex items-center justify-center mb-2 animate-bounce">
@@ -174,56 +104,22 @@ const Layout = () => {
  return () => socket.disconnect();
  }, []);
 
-  useEffect(() => {
-    const doScroll = () => {
-      if (window.lenis) {
-        window.lenis.scrollTo(0, { immediate: true });
-      } else {
-        window.scrollTo(0, 0);
-      }
-    };
-
-    // Immediate scroll on route change
-    doScroll();
-
-    // Multiple deferred scrolls to capture dynamic layout size updates (lazy loads, queries, etc.)
-    const t1 = setTimeout(doScroll, 50);
-    const t2 = setTimeout(doScroll, 150);
-    const t3 = setTimeout(doScroll, 350);
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
-  }, [location.pathname]);
 
  return (
- <LenisProvider>
  <div className="min-h-screen w-full flex flex-col font-body antialiased selection:bg-teal-500/30 selection:text-teal-900 dark:selection:text-teal-100">
  <PageTitle title={getPageTitle(location.pathname)} />
  <TopProgressBar />
- <PageTransitionCover isDark={isDark} />
  <Navbar />
  {/* Spacer for fixed navbar */}
  <div className="h-[4rem] shrink-0"aria-hidden="true"/>
   
- {/* Main Content Area with Page Transitions */}
- <AnimatePresence 
- mode="wait"onExitComplete={() => {
- if (window.lenis) {
- window.lenis.scrollTo(0, { immediate: true });
- } else {
- window.scrollTo(0, 0);
- }
- }}
- >
+ {/* Main content: a short fade-in on route change. No exit animation, so
+     the next page never waits for the previous one to leave. */}
  <motion.main
  key={location.pathname}
- initial={{ opacity: 0, y: 15 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: -15 }}
- transition={{ duration: 0.3, ease: 'easeOut' }}
+ initial={{ opacity: 0 }}
+ animate={{ opacity: 1 }}
+ transition={{ duration: 0.15, ease: 'easeOut' }}
  className="flex-grow flex flex-col w-full">
  <Suspense fallback={<PageLoader />}>
  <div className="flex-grow flex flex-col w-full">
@@ -233,13 +129,15 @@ const Layout = () => {
  </div>
  </Suspense>
  </motion.main>
- </AnimatePresence>
 
  <FloatingCivicBot />
  <ScrollProgressButton />
  <ConnectionStatusBanner />
  <TourOverlay />
  <HelpNotification />
+ <AuthPrompt />
+ {/* New pages start at the top; Back/Forward restore where you were */}
+ <ScrollRestoration />
  <Toaster 
  position="bottom-right"containerStyle={{ zIndex: 99999 }}
  toastOptions={{
@@ -254,7 +152,6 @@ const Layout = () => {
  }}
  />
  </div>
- </LenisProvider>
  );
 };
 

@@ -110,7 +110,7 @@ export default function CleanupEventDetails() {
  if (isLoading) return <div className="min-h-screen pt-28 flex justify-center"><MinimalLoader /></div>;
   if (isError || !event) {
     return (
-      <div className="min-h-screen pt-28 pb-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-[#070b09] px-4" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <div className="min-h-screen pt-28 pb-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-[#070b09] px-4" style={{ fontFamily: "var(--font-heading)" }}>
         <SEO title="Event Not Found - CivicNest" />
         
         {/* Animated Background Gradients */}
@@ -239,7 +239,7 @@ export default function CleanupEventDetails() {
  };
 
  return (
- <div className="min-h-screen pb-20"style={{ fontFamily:"'Outfit', sans-serif"}}>
+ <div className="min-h-screen pb-20"style={{ fontFamily:"var(--font-heading)"}}>
  <SEO 
    title={event?.title ? `${event.title} - Cleanup Event Details` : "Cleanup Event Details"} 
    description={event?.description?.slice(0, 155)} 
@@ -262,7 +262,7 @@ export default function CleanupEventDetails() {
  {new Date(event.eventDate).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric'})} · {event.eventTime}
  </div>
 
- <h1 className="text-3xl tracking-tight md:text-5xl tracking-tight lg:text-6xl font-black text-white mb-3 tracking-tight drop-shadow-md max-w-4xl"style={{ fontFamily:"'Outfit', sans-serif"}}>
+ <h1 className="text-3xl tracking-tight md:text-5xl tracking-tight lg:text-6xl font-black text-white mb-3 tracking-tight drop-shadow-md max-w-4xl"style={{ fontFamily:"var(--font-heading)"}}>
  {event.title}
  </h1>
 
@@ -680,7 +680,7 @@ function AttendeesModal({ eventId, onClose }) {
 
  return (
  <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
- <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]"style={{ fontFamily:"'Outfit', sans-serif"}}>
+ <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]"style={{ fontFamily:"var(--font-heading)"}}>
  
  <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215]/50">
  <h3 className="font-extrabold text-[13px] tracking-tight text-slate-800 dark:text-white flex items-center gap-2 tracking-tight">

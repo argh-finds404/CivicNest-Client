@@ -10,6 +10,7 @@ import toast from"react-hot-toast";
 import ThreadDetails from"./ThreadDetails";
 import NewThreadModal from"./NewThreadModal";
 import BackButton from"../common/BackButton";
+import { requestLogin } from"../common/AuthPrompt";
 
 const CATEGORIES = [
  { key:"All", label:"All Topics"},
@@ -33,16 +34,17 @@ export default function Forum() {
  const [mobilePanelView, setMobilePanelView] = useState(id ?"chat":"sidebar");
  const [isNewThreadOpen, setIsNewThreadOpen] = useState(false);
 
- // Redirect unauthorized guest users
- useEffect(() => {
- if (!isRoleLoading && user) {
- const isAuthorized = role ==="member"|| role ==="admin"|| isVolunteer;
- if (!isAuthorized) {
- toast.error("Access Denied: Only members and volunteers are allowed to access community threads.", { id:"forum-access-denied"});
- navigate("/membership/request");
+ // Everyone can read the forum; only verified members and volunteers can post
+ const canPost = role ==="member"|| role ==="admin"|| isVolunteer;
+
+ const openNewThread = () => {
+ if (!user) return requestLogin("start a discussion");
+ if (!canPost) {
+ toast("Verify your residency to start discussions.", { id:"forum-verify", icon:"🏡"});
+ return navigate("/membership/request");
  }
- }
- }, [user, role, isRoleLoading, isVolunteer, navigate]);
+ setIsNewThreadOpen(true);
+ };
 
  // Sync mobilePanelView with URL ID changes
  useEffect(() => {
@@ -60,7 +62,6 @@ export default function Forum() {
  const res = await axiosSecure.get(`/forum?category=${activeCategory}&limit=100`);
  return res.data; // { threads: [...], total: N }
  },
- enabled: !!user?.email,
  staleTime: 60000 // Cache category lists for 60 seconds. Sockets invalidate this automatically.
  });
 
@@ -133,7 +134,7 @@ export default function Forum() {
  <div className="flex items-center justify-between">
  <BackButton variant="dark"className="w-fit"/>
  <button 
- onClick={() => setIsNewThreadOpen(true)}
+ onClick={openNewThread}
  className="p-1.5 hover:bg-emerald-50 rounded-xl text-emerald-600 hover:text-emerald-800 transition-all hover:scale-105 active:scale-95 cursor-pointer"title="Start a Topic Thread">
  <i className="ri-add-line text-[13px] font-black"></i>
  </button>
@@ -249,7 +250,7 @@ export default function Forum() {
  {/* Sidebar Footer Action */}
  <div className="p-3.5 border-t border-[#e6eee9] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] flex-shrink-0 shadow-[0_-4px_12px_rgba(0,0,0,0.02)]">
  <button
- onClick={() => setIsNewThreadOpen(true)}
+ onClick={openNewThread}
  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-md text-xs hover:shadow-lg hover:shadow-emerald-600/15 flex items-center justify-center gap-1.5 hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
  <i className="ri-add-line text-[13px] font-bold"></i>
  <span>Start a Topic Thread</span>
@@ -263,6 +264,7 @@ export default function Forum() {
  {id ? (
  <ThreadDetails
  id={id}
+ canPost={canPost}
  onBack={() => {
  navigate("/forum");
  setMobilePanelView("sidebar");
@@ -274,7 +276,7 @@ export default function Forum() {
  <div className="w-16 h-16 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg flex items-center justify-center mb-6 shadow-sm border border-emerald-100/50">
  <i className="ri-chat-3-line text-3xl tracking-tight text-emerald-600"></i>
  </div>
- <h2 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-2 tracking-tight"style={{ fontFamily:'Outfit, sans-serif'}}>
+ <h2 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  Welcome to CivicNest Chats
  </h2>
  <p className="text-slate-500 dark:text-slate-300 max-w-xs text-xs leading-relaxed mb-6 font-medium">
@@ -294,7 +296,7 @@ export default function Forum() {
  </div>
 
  <button
- onClick={() => setIsNewThreadOpen(true)}
+ onClick={openNewThread}
  className="mt-8 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-md text-xs hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] flex items-center gap-1.5">
  <i className="ri-add-line text-[13px]"></i>
  <span>Start a New Thread</span>
