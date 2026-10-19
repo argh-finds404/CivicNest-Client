@@ -7,19 +7,31 @@ export default function ScrollProgressButton() {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let frame = null;
+
+    const update = () => {
+      frame = null;
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (totalHeight > 0) {
-        const currentProgress = (window.scrollY / totalHeight) * 100;
-        setScrollProgress(currentProgress);
+        // Whole percents only, so React re-renders at most ~100 times per page
+        // instead of on every scroll event
+        setScrollProgress(Math.round((window.scrollY / totalHeight) * 100));
       }
 
       // Show button only after scrolling down 300px
       setIsVisible(window.scrollY > 300);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Batch scroll events into one update per animation frame
+    const handleScroll = () => {
+      if (frame === null) frame = requestAnimationFrame(update);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -40,6 +52,7 @@ export default function ScrollProgressButton() {
 
   return (
     <AnimatePresence>
+      {/* Stacked above the CivicBot launcher (bottom-6 right-6, 4rem) on the same centre line so the two never overlap */}
       {isVisible && (
         <motion.button
           initial={{ opacity: 0, scale: 0.7, y: 20 }}
@@ -51,7 +64,7 @@ export default function ScrollProgressButton() {
           onMouseLeave={() => setIsHovered(false)}
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          className="fixed bottom-6 right-6 z-45 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer shadow-[0_8px_30px_rgba(15,118,110,0.15)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-all duration-300 border border-slate-200/50 dark:border-[#1e3040]/50 bg-white/90 dark:bg-[#0a120e]/95 backdrop-blur-md"
+          className="fixed bottom-[6.25rem] right-8 z-45 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer shadow-[0_8px_30px_rgba(15,118,110,0.15)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-colors duration-300 border border-slate-200/50 dark:border-[#1e3040]/50 bg-white/90 dark:bg-[#0a120e]/95 backdrop-blur-md"
         >
           {/* Circular Progress SVG */}
           <svg className="w-full h-full -rotate-90 absolute" viewBox="0 0 50 50">
@@ -90,7 +103,7 @@ export default function ScrollProgressButton() {
                   transition={{ duration: 0.15 }}
                   className="text-[10px] font-extrabold text-[#0f766e] dark:text-emerald-400 font-mono tracking-tighter"
                 >
-                  {Math.round(scrollProgress)}%
+                  {scrollProgress}%
                 </motion.span>
               ) : (
                 <motion.i

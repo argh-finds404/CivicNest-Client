@@ -747,8 +747,8 @@ export default function Home() {
  <h1 className="home-hero-title tracking-tight">
  Welcome back,{" "}
  <span className="home-hero-title-name">{displayName}</span>{" "}
- <motion.img 
- src="https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_u1f44b.png"alt="👋"width="34"height="34"className="inline-block origin-[70%_70%] -translate-y-0.5 ml-1"animate={{ rotate: [0, 25, -15, 25, -15, 20, 0, 0] }}
+ <motion.span 
+ role="img"aria-label="waving hand"className="home-hero-wave-emoji"animate={{ rotate: [0, 25, -15, 25, -15, 20, 0, 0] }}
  transition={{
  duration: 1.8,
  ease:"easeInOut",
@@ -756,7 +756,7 @@ export default function Home() {
  repeat: Infinity,
  repeatDelay: 3.5
  }}
- />
+ >👋</motion.span>
  </h1>
  <p className="home-hero-sub text-[13px] mt-2">
   Your city needs you. Let's build{" "}
