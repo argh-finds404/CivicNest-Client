@@ -544,7 +544,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
 
  if (isLoading) {
  return (
- <div className="flex-1 flex justify-center items-center bg-[#f0f4f2]">
+ <div className="flex-1 flex justify-center items-center bg-[#f0f4f2] dark:bg-[#0b1312]">
  <MinimalLoader size="lg"color="#0d9488"/>
  </div>
  );
@@ -552,7 +552,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
 
  if (!thread) {
  return (
- <div className="flex-1 flex flex-col items-center justify-center p-5 text-center bg-[#f0f4f2] select-none">
+ <div className="flex-1 flex flex-col items-center justify-center p-5 text-center bg-[#f0f4f2] dark:bg-[#0b1312] select-none">
  <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Thread not found</h3>
  <p className="text-xs text-slate-500 dark:text-slate-300 mb-6 font-medium">This discussion may have been removed or locked by a moderator.</p>
  <button onClick={onBack} className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md">
@@ -582,7 +582,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  };
 
  return (
- <div className="flex-grow flex h-full overflow-hidden bg-[#f0f4f2]">
+ <div className="flex-grow flex h-full overflow-hidden bg-[#f0f4f2] dark:bg-[#0b1312]">
  <PageTitle title={thread?.title ?`${thread.title} - Forum Discussion`:"Forum Discussion"} />
  
  {/* Left Chat Viewport */}
@@ -684,7 +684,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  <div 
  ref={listRef}
  onScroll={handleScroll}
- data-lenis-prevent="true"className="flex-1 overflow-y-auto custom-scrollbar p-4 relative bg-[#f0f4f2] space-y-4">
+ data-lenis-prevent="true"className="flex-1 overflow-y-auto custom-scrollbar p-4 relative bg-[#f0f4f2] dark:bg-[#0b1312] space-y-4">
  {/* Loading Spinner for older messages */}
  {isLoadingOlder && (
  <div className="flex justify-center items-center py-4">
@@ -891,7 +891,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  {/* Mentions Autocomplete Suggestions Dropdown */}
  {mentionSuggestions.length > 0 && (
  <div 
- data-lenis-prevent="true"className="absolute bottom-full left-4 right-4 mb-2 max-h-48 overflow-y-auto bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border border-[#dbe6df] rounded-lg shadow-xl z-30 divide-y divide-slate-100 animate-in slide-in-from-bottom-3 duration-250 custom-scrollbar max-w-lg mx-auto">
+ data-lenis-prevent="true"className="absolute bottom-full left-4 right-4 mb-2 max-h-48 overflow-y-auto bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border border-[#dbe6df] dark:border-[#1f302d] rounded-lg shadow-xl z-30 divide-y divide-slate-100 animate-in slide-in-from-bottom-3 duration-250 custom-scrollbar max-w-lg mx-auto">
  <div className="px-3.5 py-2 bg-emerald-50/70 text-[10px] font-bold text-emerald-800 select-none flex items-center justify-between">
  <span>Mention User...</span>
  <span className="text-slate-400 font-medium text-[9px]">Use ↑↓ to navigate, Enter/Tab to select</span>
@@ -1026,7 +1026,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
 
  {/* Right Drawer: Thread Members Info Panel */}
  {showInfoPanel && (
- <aside className="w-64 border-l border-[#dbe6df] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] h-full flex flex-col flex-shrink-0 animate-in slide-in-from-right duration-200 select-none">
+ <aside className="w-64 border-l border-[#dbe6df] dark:border-[#1f302d] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] h-full flex flex-col flex-shrink-0 animate-in slide-in-from-right duration-200 select-none">
  <div className="p-4 border-b border-slate-100 flex items-center justify-between">
  <h3 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider">Thread Members</h3>
  <button 

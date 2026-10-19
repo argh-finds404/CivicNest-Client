@@ -19,7 +19,7 @@ import {
 } from'lucide-react';
 import toast from'react-hot-toast';
 import { useRole } from'../../hooks/useRole';
-import { requestLogin } from'../common/AuthPrompt';
+import { requestLogin } from'../../utils/requestLogin';
 import { Bar as ChartJSBar } from'react-chartjs-2';
 import { 
  Chart as ChartJS, 

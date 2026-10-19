@@ -33,7 +33,8 @@ export default function Leaderboard() {
  queryKey: ["leaderboard"],
  queryFn: async () => {
  const res = await axiosPublic.get("/users/leaderboard");
- return res.data;
+ // Anything but a list (e.g. an error body) would crash the charts below
+ return Array.isArray(res.data) ? res.data : [];
  },
  staleTime: 5 * 60 * 1000,
  });

@@ -220,6 +220,8 @@
 }
 
 .cd-stage.is-paused * { animation-play-state: paused !important; }
+/* Fully off-screen: drop the scene's 3D layers out of compositing while scrolling */
+.cd-stage.is-paused .cd-scene { visibility: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .cd-stage, .cd-scene, .cd-pin-bb, .cd-pin-head::after { animation: none !important; }
