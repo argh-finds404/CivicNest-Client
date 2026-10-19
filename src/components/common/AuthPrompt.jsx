@@ -3,29 +3,25 @@ import { Link, useLocation } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
- * Ask a guest to sign in when they try a members-only action.
- * Fire it from anywhere with `requestLogin("vote in polls")`.
- * The axios interceptor also fires it when a guest request gets a 401.
+ * "Sign in to …" dialog for guests. Opened by requestLogin() in
+ * utils/requestLogin.js, or by the axios interceptor on a guest 401.
  */
-export const requestLogin = (reason) =>
-  window.dispatchEvent(new CustomEvent("app:auth-required", { detail: { reason } }));
-
 export default function AuthPrompt() {
-  const [reason, setReason] = useState(null);
+  // Remember the page it was opened on, so it simply disappears if the user navigates away
+  const [prompt, setPrompt] = useState(null);
   const location = useLocation();
+  const reason = prompt && prompt.path === location.pathname ? prompt.reason : null;
+  const setReason = (value) => setPrompt(value ? { reason: value, path: location.pathname } : null);
 
   useEffect(() => {
-    const open = (e) => setReason(e.detail?.reason || "continue");
+    const open = (e) => setPrompt({ reason: e.detail?.reason || "continue", path: window.location.pathname });
     window.addEventListener("app:auth-required", open);
     return () => window.removeEventListener("app:auth-required", open);
   }, []);
 
-  // Close when the user navigates away
-  useEffect(() => setReason(null), [location.pathname]);
-
   useEffect(() => {
     if (!reason) return undefined;
-    const onKey = (e) => e.key === "Escape" && setReason(null);
+    const onKey = (e) => e.key === "Escape" && setPrompt(null);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [reason]);

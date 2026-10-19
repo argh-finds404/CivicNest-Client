@@ -47,7 +47,15 @@ export default function CityDiorama({ pins = [], size = "lg" }) {
       stage.style.setProperty("--tx", `${target.x}deg`);
       stage.style.setProperty("--ty", `${target.y}deg`);
     };
+    // Ignore pointer tilt while the page is scrolling: the pointer "moves" over
+    // the scene only because the page does, and restyling the 3D scene then
+    // competes with the scroll for frame time
+    let scrollingUntil = 0;
+    const onScroll = () => {
+      scrollingUntil = performance.now() + 180;
+    };
     const onMove = (e) => {
+      if (performance.now() < scrollingUntil) return;
       const r = stage.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
@@ -62,6 +70,7 @@ export default function CityDiorama({ pins = [], size = "lg" }) {
     const host = stage.closest("[data-diorama-host]") || stage;
     host.addEventListener("pointermove", onMove);
     host.addEventListener("pointerleave", onLeave);
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // Pause the ambient animations while off-screen
     const io = new IntersectionObserver(([entry]) => {
@@ -72,6 +81,7 @@ export default function CityDiorama({ pins = [], size = "lg" }) {
     return () => {
       host.removeEventListener("pointermove", onMove);
       host.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("scroll", onScroll);
       io.disconnect();
       if (frame !== null) cancelAnimationFrame(frame);
     };

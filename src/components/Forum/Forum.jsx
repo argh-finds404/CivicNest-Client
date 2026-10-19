@@ -10,7 +10,7 @@ import toast from"react-hot-toast";
 import ThreadDetails from"./ThreadDetails";
 import NewThreadModal from"./NewThreadModal";
 import BackButton from"../common/BackButton";
-import { requestLogin } from"../common/AuthPrompt";
+import { requestLogin } from"../../utils/requestLogin";
 
 const CATEGORIES = [
  { key:"All", label:"All Topics"},
@@ -116,21 +116,21 @@ export default function Forum() {
 
  if (isRoleLoading) {
  return (
- <div className="flex h-screen w-full items-center justify-center bg-[#f0f4f2]">
+ <div className="flex h-screen w-full items-center justify-center bg-[#f0f4f2] dark:bg-[#0b1312]">
  <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
  </div>
  );
  }
 
  return (
- <div className="flex h-[calc(100vh-65px)] w-full overflow-hidden bg-[#f0f4f2] font-sans">
+ <div className="flex h-[calc(100vh-65px)] w-full overflow-hidden bg-[#f0f4f2] dark:bg-[#0b1312] font-sans">
  <SEO title="Community Discussions" />
  
  {/* 1. SIDEBAR PANEL (Clean bright mint-white layout) */}
- <aside className={`w-full lg:w-80 flex-shrink-0 flex flex-col bg-[#f9fbf9] border-r border-[#dbe6df] h-full select-none shadow-[6px_0_24px_rgba(0,0,0,0.03)] z-20
+ <aside className={`w-full lg:w-80 flex-shrink-0 flex flex-col bg-[#f9fbf9] dark:bg-[#0e1816] border-r border-[#dbe6df] dark:border-[#1f302d] h-full select-none shadow-[6px_0_24px_rgba(0,0,0,0.03)] z-20
  ${mobilePanelView ==="sidebar"?"flex":"hidden lg:flex"}`}>
  {/* Brand/App Title with + Action Button */}
- <div className="px-5 py-4 border-b border-[#e6eee9] flex flex-col gap-3 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/60 backdrop-blur-sm">
+ <div className="px-5 py-4 border-b border-[#e6eee9] dark:border-[#1f302d] flex flex-col gap-3 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/60 backdrop-blur-sm">
  <div className="flex items-center justify-between">
  <BackButton variant="dark"className="w-fit"/>
  <button 
@@ -150,7 +150,7 @@ export default function Forum() {
  </div>
 
  {/* Search Input */}
- <div className="p-4 border-b border-[#e6eee9]/80">
+ <div className="p-4 border-b border-[#e6eee9] dark:border-[#1f302d]/80">
  <div className="relative w-full">
  <i className="ri-search-line absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[13px]"></i>
  <input
@@ -162,7 +162,7 @@ export default function Forum() {
 
  {/* Categories (Topics) List */}
  <div 
- data-lenis-prevent="true"className="p-3.5 space-y-1 border-b border-[#e6eee9]/80 max-h-[220px] overflow-y-auto custom-scrollbar flex-shrink-0">
+ data-lenis-prevent="true"className="p-3.5 space-y-1 border-b border-[#e6eee9] dark:border-[#1f302d]/80 max-h-[220px] overflow-y-auto custom-scrollbar flex-shrink-0">
  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-2.5 mb-2">
  Topics
  </p>
@@ -248,7 +248,7 @@ export default function Forum() {
  </div>
 
  {/* Sidebar Footer Action */}
- <div className="p-3.5 border-t border-[#e6eee9] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] flex-shrink-0 shadow-[0_-4px_12px_rgba(0,0,0,0.02)]">
+ <div className="p-3.5 border-t border-[#e6eee9] dark:border-[#1f302d] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] flex-shrink-0 shadow-[0_-4px_12px_rgba(0,0,0,0.02)]">
  <button
  onClick={openNewThread}
  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-md text-xs hover:shadow-lg hover:shadow-emerald-600/15 flex items-center justify-center gap-1.5 hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
@@ -259,7 +259,7 @@ export default function Forum() {
  </aside>
 
  {/* 2. MAIN ACTIVE CHAT VIEWPORT (Bright and clean green-tinted area) */}
- <main className={`flex-1 flex flex-col h-full bg-[#f0f4f2] relative z-10
+ <main className={`flex-1 flex flex-col h-full bg-[#f0f4f2] dark:bg-[#0b1312] relative z-10
  ${mobilePanelView ==="chat"?"flex":"hidden lg:flex"}`}>
  {id ? (
  <ThreadDetails
@@ -272,7 +272,7 @@ export default function Forum() {
  />
  ) : (
  /* Welcome Panel when no thread is selected */
- <div className="flex-1 flex flex-col items-center justify-center p-5 text-center bg-[#f0f4f2]/70 select-none">
+ <div className="flex-1 flex flex-col items-center justify-center p-5 text-center bg-[#f0f4f2] dark:bg-[#0b1312]/70 select-none">
  <div className="w-16 h-16 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg flex items-center justify-center mb-6 shadow-sm border border-emerald-100/50">
  <i className="ri-chat-3-line text-3xl tracking-tight text-emerald-600"></i>
  </div>

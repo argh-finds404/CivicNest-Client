@@ -7,219 +7,10 @@
 /* ── Root ─────────────────────────────────── */
 .home-root {
   min-height: 100vh;
-  background: #f1f5f9;
+  background: var(--cn-ground);
   font-family: var(--font-body);
 }
 
-/* ── Navbar ───────────────────────────────── */
-.home-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(1.25rem);
-  border-bottom: 1px solid #e2e8f0;
-  height: 4rem;
-}
-
-.home-nav-inner {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-/* Logo */
-.home-logo-link {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-.home-logo-img-wrap {
-  width: 2.125rem;
-  height: 2.125rem;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-.home-logo-img { width: 100%; height: 100%; object-fit: cover; }
-.home-logo-name {
-  display: block;
-  font-size: 1.1875rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-  line-height: 1;
-}
-.home-logo-accent { color: #0f766e; }
-.home-logo-tag {
-  display: block;
-  font-size: 0.5625rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #0f766e;
-  line-height: 1;
-  margin-top: 2px;
-}
-
-/* Nav links */
-.home-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex: 1;
-}
-.home-nav-link {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #64748b;
-  text-decoration: none;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.5rem;
-  transition: color 0.15s, background 0.15s;
-}
-.home-nav-link:hover        { color: #0f172a; background: #f1f5f9; }
-.home-nav-link--active      { color: #0f766e; background: rgba(15,118,110,0.08); }
-
-/* User area (right side of nav) */
-.home-user-area {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-/* Notification bell */
-.home-notif-btn {
-  position: relative;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 0.625rem;
-  background: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #64748b;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-.home-notif-btn:hover { background: #e2e8f0; color: #0f172a; }
-.home-notif-badge {
-  position: absolute;
-  top: 0.375rem;
-  right: 0.375rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: #ef4444;
-  border: 1.5px solid #fff;
-}
-
-/* Avatar + dropdown */
-.home-avatar-menu { position: relative; }
-
-.home-avatar-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 62.4375rem;
-  transition: background 0.15s;
-}
-.home-avatar-btn:hover { background: #f1f5f9; }
-
-.home-avatar-img {
-  width: 2.125rem;
-  height: 2.125rem;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #e2e8f0;
-}
-
-.home-avatar-initials {
-  width: 2.125rem;
-  height: 2.125rem;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0f766e, #14b8a6);
-  color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(15,118,110,0.2);
-}
-
-.home-avatar-chevron {
-  color: #94a3b8;
-  transition: transform 0.2s ease;
-}
-.home-avatar-chevron.is-open { transform: rotate(180deg); }
-
-/* Dropdown */
-.home-dropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  width: 13.75rem;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1rem;
-  box-shadow: 0 1rem 2.5rem rgba(0,0,0,0.12);
-  overflow: hidden;
-  z-index: 100;
-}
-.home-dropdown-header { padding: 0.875rem 1rem 0.625rem; }
-.home-dropdown-name {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.home-dropdown-email {
-  font-size: 0.6875rem;
-  color: #94a3b8;
-  margin: 2px 0 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.home-dropdown-divider {
-  height: 1px;
-  background: #f1f5f9;
-  margin: 2px 0;
-}
-.home-dropdown-item {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.625rem 1rem;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #334155;
-  text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: background 0.12s, color 0.12s;
-}
-.home-dropdown-item:hover { background: #f8fafc; color: #0f172a; }
-.home-dropdown-item--danger { color: #ef4444; }
-.home-dropdown-item--danger:hover { background: #fef2f2; color: #dc2626; }
-
-/* ── Hero ─────────────────────────────────── */
 /* ── Hero: live neighbourhood ─────────────── */
 .cn-hero {
   position: relative;
@@ -355,8 +146,8 @@
 .home-event-card-surface {
   border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid var(--cn-line);
+  background: var(--cn-surface);
   transition: border-color 0.2s, transform 0.2s;
 }
 
@@ -378,7 +169,7 @@
 .home-section-title {
   font-size: 1.0625rem;
   font-weight: 800;
-  color: #0f172a;
+  color: var(--cn-ink);
   letter-spacing: -0.02em;
   margin: 0 0 1rem;
 }
@@ -411,8 +202,8 @@
 }
 
 .home-action-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--cn-surface);
+  border: 1px solid var(--cn-line);
   border-radius: 1.125rem;
   padding: 1.25rem;
   display: flex;
@@ -438,12 +229,12 @@
 .home-action-title {
   font-size: 0.875rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--cn-ink);
   margin: 0 0 0.1875rem;
 }
 .home-action-desc {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--cn-ink-muted);
   margin: 0;
   line-height: 1.5;
 }
@@ -451,8 +242,8 @@
 
 /* Activity feed */
 .home-activity-list {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--cn-surface);
+  border: 1px solid var(--cn-line);
   border-radius: 1.25rem;
   overflow: hidden;
   box-shadow: 0 2px 1rem rgba(15, 23, 42, 0.04), 0 1px 0.25rem rgba(15, 23, 42, 0.02);
@@ -487,7 +278,7 @@
 .home-activity-text {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--cn-ink);
   margin: 0 0 0.1875rem;
   line-height: 1.45;
 }
