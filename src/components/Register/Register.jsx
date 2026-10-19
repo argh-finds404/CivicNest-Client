@@ -125,7 +125,10 @@ const getReturnTo = (state) => {
 };
 
 export default function Register() {
- const { registerUser, googleSignIn } = useContext(AuthContext);
+ const { registerUser, googleSignIn, prepareGoogleSignIn } = useContext(AuthContext);
+
+ // Get Google sign-in ready so its popup is not blocked
+ useEffect(() => { prepareGoogleSignIn(); }, [prepareGoogleSignIn]);
  const navigate = useNavigate();
  const location = useLocation();
  const returnTo = getReturnTo(location.state);
@@ -272,8 +275,10 @@ export default function Register() {
 
  } catch (err) {
     console.error("[Register] Google error:", err);
-    if (err.code !== "auth/popup-closed-by-user") {
-      if (err.code === "auth/unauthorized-domain") {
+    if (err.code !== "auth/popup-closed-by-user" && err.code !== "auth/cancelled-popup-request") {
+      if (err.code === "auth/popup-blocked") {
+        showError("Your browser blocked the Google sign-in window. Click the Google button again, or allow pop-ups for this site.");
+      } else if (err.code === "auth/unauthorized-domain") {
         showError("Firebase Setup Error: This domain is not authorized for OAuth. Please log in to your Firebase Console, navigate to Authentication -> Settings -> Authorized Domains, and add your production domain to the list.");
       } else if (err.message && err.message.toLowerCase().includes("fetch")) {
         showError("Server Connection Failed: Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
