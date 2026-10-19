@@ -22,28 +22,21 @@ export default function ReviewerAccess({ formRef, disabled }) {
   };
 
   return (
-    <section className="cn-reviewer" aria-labelledby="reviewer-title">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="reviewer-title" className="text-sm font-bold text-[var(--cn-ink)]">Reviewing CivicNest?</h2>
-        <span className="text-xs text-[var(--cn-ink-muted)]">Password {PASSWORD}</span>
-      </div>
-      <p className="mt-1 text-xs text-[var(--cn-ink-muted)]">Sign in to a demo account to explore each role.</p>
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {ACCOUNTS.map((a) => (
-          <button
-            key={a.role}
-            type="button"
-            disabled={disabled}
-            onClick={() => signInAs(a.email)}
-            className="cn-reviewer-btn"
-            title={`${a.email}: ${a.note}`}
-          >
-            <i className={`${a.icon} text-lg`} aria-hidden="true" />
-            <span className="font-bold text-[13px]">{a.role}</span>
-            <span className="text-[10.5px] leading-tight text-[var(--cn-ink-muted)]">{a.note}</span>
-          </button>
-        ))}
-      </div>
-    </section>
+    <div className="cn-reviewer" role="group" aria-label={`Reviewer demo accounts, password ${PASSWORD}`}>
+      <span className="cn-reviewer-label" title={`Password: ${PASSWORD}`}>Reviewer demo</span>
+      {ACCOUNTS.map((a) => (
+        <button
+          key={a.role}
+          type="button"
+          disabled={disabled}
+          onClick={() => signInAs(a.email)}
+          className="cn-reviewer-btn"
+          title={`${a.email}: ${a.note}`}
+        >
+          <i className={a.icon} aria-hidden="true" />
+          {a.role}
+        </button>
+      ))}
+    </div>
   );
 }

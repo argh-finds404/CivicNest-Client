@@ -4,7 +4,7 @@ export const registerStyles = `
   display: flex;
   height: 100vh;
   width: 100%;
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--font-body);
   font-weight: 500;
   overflow: hidden;
   background: #f8fafc;
@@ -19,7 +19,7 @@ export const registerStyles = `
 
 @media (min-width: 1024px) {
   .reg-left-panel {
-    display: flex;
+    display: block;
   }
 }
 
@@ -676,4 +676,18 @@ export const registerStyles = `
   border-radius: 6px;
   line-height: 1;
 }
+
+/* Dark theme: the form side follows the app's dark surfaces */
+.dark .reg-root { background: var(--cn-ground); }
+.dark .reg-right-panel { background: var(--cn-ground); }
+.dark .reg-form-title, .dark .reg-preview-val, .dark .reg-toast-msg { color: var(--cn-ink); }
+.dark .reg-form-subtitle, .dark .reg-field-label, .dark .reg-toast-desc { color: var(--cn-ink-muted); }
+.dark .reg-back-link, .dark .reg-progress-label, .dark .reg-field-hint, .dark .reg-signin-text { color: var(--cn-ink-faint); }
+.dark .reg-step-circle--pending, .dark .reg-progress-track { background: var(--cn-surface-raised); }
+.dark .reg-input, .dark .reg-preview-card { background: var(--cn-surface); color: var(--cn-ink); border-color: var(--cn-line); }
+.dark .reg-input:focus { background: var(--cn-surface); border-color: #2fbf9f; }
+.dark .reg-divider-line { background: var(--cn-line); }
+.dark .reg-cta-btn--default { background: #0f6b5c; }
+.dark .reg-google-btn { background: var(--cn-surface); color: var(--cn-ink); border-color: var(--cn-line); }
+.dark .reg-toast-card--error, .dark .reg-toast-card--success { background: var(--cn-surface-raised); }
 `;
