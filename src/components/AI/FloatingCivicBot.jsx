@@ -221,8 +221,8 @@ const FloatingCivicBot = () => {
           {/* Pulsing ring background */}
           <span className="absolute -inset-1.5 rounded-full bg-teal-500/20 blur-sm group-hover:bg-teal-500/30 animate-pulse transition duration-300" />
           
-          {/* Custom Animated Robot Head */}
-          <div className="relative w-8 h-8 flex flex-col items-center justify-center">
+          {/* Custom Animated Robot Head (nudged down so head + antenna sit optically centred) */}
+          <div className="relative w-8 h-8 flex flex-col items-center justify-center translate-y-[0.1875rem]">
             {/* Robot Head Outer box */}
             <motion.div 
               className="w-7 h-5 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/95 rounded-md relative flex items-center justify-center border border-emerald-600/10 shadow-sm"
@@ -233,7 +233,7 @@ const FloatingCivicBot = () => {
               <div className="absolute -top-2 w-0.5 h-2 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/95">
                 <motion.div 
                   className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-teal-400"
-                  animate={{ scale: [0.8, 1.3, 0.8], backgroundColor: ["#2dd4bf", "#10b981", "#2dd4bf"] }}
+                  animate={{ scale: [0.8, 1.3, 0.8], opacity: [1, 0.7, 1] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                 />
               </div>

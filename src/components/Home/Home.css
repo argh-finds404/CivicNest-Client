@@ -283,7 +283,9 @@
 }
 
 .home-hero-inner {
-  max-width: 1280px;
+  /* Matches .home-main content width (1280px minus its 1.5rem side padding)
+     so hero text and the sections below share the same left edge */
+  max-width: 1232px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -330,6 +332,15 @@
   text-shadow: 0 2px 1.5rem rgba(0, 0, 0, 0.3);
 }
 .home-hero-title-name { color: #6EE7B7; }
+.home-hero-wave-emoji {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.85em;
+  line-height: 1;
+  transform-origin: 70% 70%;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  text-shadow: none;
+}
 .home-hero-sub {
   font-size: 0.9375rem;
   color: rgba(255,255,255,0.75);
@@ -359,13 +370,14 @@
 @media (min-width: 640px) { .home-stats-row { gap: 1rem; } }
 
 .home-stat-card {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 1.25rem;
   padding: 1rem 1.125rem 0.875rem;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(0.75rem);
+  /* No backdrop-filter: blurring the live shader canvas behind four cards
+     forced a full re-blur every animation frame and made scrolling janky */
   transition: background 0.2s, transform 0.2s;
 }
 .home-stat-card:hover {

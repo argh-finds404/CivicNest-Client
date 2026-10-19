@@ -1,74 +1,20 @@
-import React, { createContext, useContext, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router';
-import Lenis from 'lenis';
+import React, { createContext, useContext, useRef } from 'react';
 
 const LenisContext = createContext(null);
 
-const HEAVY_ROUTES = ['/map', '/ai-assistant'];
-
+/**
+ * Smooth-scroll (Lenis) is intentionally disabled.
+ *
+ * Lenis replaces native scrolling with a JS-driven animation on the main thread,
+ * so every wheel/touch scroll was eased over several frames (felt slow/floaty) and
+ * stuttered whenever React, framer-motion or the hero shader were busy. Native
+ * scrolling runs on the compositor thread and stays smooth regardless.
+ *
+ * All callers already fall back to window.scrollTo when window.lenis is absent,
+ * so the provider is kept as a no-op to avoid touching every consumer.
+ */
 export function LenisProvider({ children }) {
   const lenisRef = useRef(null);
-  const location = useLocation();
-  const isHeavy = HEAVY_ROUTES.some((path) => location.pathname.startsWith(path));
-
-  useEffect(() => {
-    let lenis = null;
-    let rafId = null;
-    let resizeObserver = null;
-
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    if (!prefersReducedMotion && !isHeavy) {
-      // Initialize Lenis only on non-heavy routes
-      lenis = new Lenis({ 
-        lerp: 0.15,              // More responsive deceleration factor
-        duration: 0.7,          // Faster scroll speed duration
-        smoothWheel: true,
-        wheelMultiplier: 1.2,   // More scroll per wheel tick
-        touchMultiplier: 1.5,
-      });
-      
-      lenisRef.current = lenis;
-      window.lenis = lenis;
-
-      // Apply the recommended classes to html root
-      document.documentElement.classList.add('lenis', 'lenis-smooth');
-
-      const raf = (time) => {
-        lenis.raf(time);
-        rafId = requestAnimationFrame(raf);
-      };
-      rafId = requestAnimationFrame(raf);
-
-      // Setup ResizeObserver to handle dynamic height changes
-      resizeObserver = new ResizeObserver(() => {
-        lenis.resize();
-      });
-      if (document.body) {
-        resizeObserver.observe(document.body);
-      }
-    } else {
-      // Ensure Lenis reference and window object are cleared on heavy routes
-      lenisRef.current = null;
-      if (window.lenis) {
-        delete window.lenis;
-      }
-      document.documentElement.classList.remove('lenis', 'lenis-smooth');
-    }
-
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (resizeObserver) resizeObserver.disconnect();
-      if (lenis) {
-        lenis.destroy();
-        delete window.lenis;
-      }
-      document.documentElement.classList.remove('lenis', 'lenis-smooth');
-    };
-  }, [isHeavy]);
-
   return <LenisContext.Provider value={lenisRef}>{children}</LenisContext.Provider>;
 }
 
