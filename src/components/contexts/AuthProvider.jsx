@@ -29,6 +29,24 @@ const prepareGoogleSignIn = () => {
  }
 };
 
+/** Open an empty, centred window for Google sign-in. Must run inside the click. */
+const openSignInWindow = () => {
+ const width = 500;
+ const height = 600;
+ const left = Math.max((window.screen.availWidth - width) / 2, 0);
+ const top = Math.max((window.screen.availHeight - height) / 2, 0);
+ const popup = window.open("",`civicnest-google-${Date.now()}`,`width=${width},height=${height},left=${left},top=${top},resizable=yes`);
+ if (popup) {
+ try {
+ popup.document.title ="Signing in with Google";
+ popup.document.body.innerHTML ='<p style="font:15px system-ui,sans-serif;color:#475569;text-align:center;margin-top:45vh">Opening Google sign-in…</p>';
+ } catch {
+ // Not our document (should not happen for a fresh window): Firebase fills it anyway
+ }
+ }
+ return popup;
+};
+
 const AuthProvider = ({ children }) => {
  const [user, setUser] = useState(null);
  const queryClient = useQueryClient();
@@ -54,12 +72,36 @@ const AuthProvider = ({ children }) => {
  signInWithEmailAndPassword(auth, email, password);
 
  /**
- * Sign in / register with Google in a popup. The popup is used rather than a
- * same-tab redirect because the redirect depends on third-party storage for
- * the Firebase domain, which Chrome blocks on many setups: the user comes
- * back from Google and the result is lost.
+ * Sign in / register with Google in a popup. (A same-tab redirect is not
+ * used: it depends on third-party storage for the Firebase domain, which
+ * Chrome blocks on many setups, so the result is lost on the way back.)
+ *
+ * Firebase only opens its popup after some async work. On a slow
+ * connection that takes long enough for Chrome to stop treating the popup
+ * as part of the click, and it blocks it. So the window is opened here,
+ * straight away inside the click, and Firebase is handed that window
+ * instead of opening its own.
  */
- const googleSignIn = () => signInWithPopup(auth, googleProvider);
+ const googleSignIn = async () => {
+ const popup = openSignInWindow();
+ if (!popup) return signInWithPopup(auth, googleProvider); // blocked outright: Firebase reports it
+
+ const nativeOpen = window.open;
+ let handedOver = false;
+ window.open = (url, ...rest) => {
+ window.open = nativeOpen;
+ if (popup.closed) return nativeOpen.call(window, url, ...rest);
+ handedOver = true;
+ popup.location.replace(url);
+ return popup;
+ };
+ try {
+ return await signInWithPopup(auth, googleProvider);
+ } finally {
+ window.open = nativeOpen;
+ if (!handedOver && !popup.closed) popup.close();
+ }
+ };
 
  /** Sign out the current user */
  const logOut = async () => {
