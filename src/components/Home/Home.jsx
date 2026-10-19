@@ -3,14 +3,13 @@ import SEO from "../common/SEO";
 import { motion, AnimatePresence } from"framer-motion";
 import { useAuth } from"../../hooks/useAuth";
 import { useNavigate } from"react-router";
-import { Typewriter } from'react-simple-typewriter';
 import { Link } from'react-router';
 import { useQuery } from'@tanstack/react-query';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
 import CleanupEventCard from'../cards/CleanupEventCard';
 import PremiumEventCard from'../cards/PremiumEventCard';
 import MinimalLoader from'../common/MinimalLoader';
-import WarpShaderHero from"./WarpShaderHero";
+import HomeHero from"./HomeHero";
 import Banner from"../Banner/Banner";
 import { useRole } from"../../hooks/useRole";
 import toast from"react-hot-toast";
@@ -734,70 +733,7 @@ export default function Home() {
  <input id="events-drawer"type="checkbox"className="drawer-toggle"/>
  <div className="drawer-content home-root">
  {}
- <WarpShaderHero>
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ duration: 0.5 }}
- className="home-hero-text">
- <div className="home-hero-badge">
- <span className="home-hero-badge-dot"/>
- Community Dashboard
- </div>
- <h1 className="home-hero-title tracking-tight">
- Welcome back,{" "}
- <span className="home-hero-title-name">{displayName}</span>{" "}
- <motion.span 
- role="img"aria-label="waving hand"className="home-hero-wave-emoji"animate={{ rotate: [0, 25, -15, 25, -15, 20, 0, 0] }}
- transition={{
- duration: 1.8,
- ease:"easeInOut",
- times: [0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1],
- repeat: Infinity,
- repeatDelay: 3.5
- }}
- >👋</motion.span>
- </h1>
- <p className="home-hero-sub text-[13px] mt-2">
-  Your city needs you. Let's build{" "}
- <span className="text-[#6EE7B7] font-bold">
- <Typewriter
- words={['cleaner streets.','greener parks.','safer neighborhoods.','a better tomorrow.']}
- loop={0}
- cursor
- cursorStyle='|' typeSpeed={70}
- deleteSpeed={50}
- delaySpeed={1500}
- />
- </span>
- <br />
- Report issues, organise cleanups, and celebrate every win with 15,000+ neighbours.
- </p>
- </motion.div>
-
- {/* Stat cards - wrapped for 2-col desktop layout */}
- <motion.div
- initial={{ opacity: 0, y: 24 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ duration: 0.5, delay: 0.15 }}
- className="home-stats-row-wrap">
- <div className="home-stats-row">
- {[
- { label:"Issues Reported", value:"1,847", delta:"+12 today", accent:"#f97316"},
- { label:"Resolved", value:"12,492", delta:"+38 today", accent:"#0f766e"},
- { label:"Active Members", value:"15,241", delta:"+204 week", accent:"#7c3aed"},
- { label:"Events This Month", value:"94", delta:"34 upcoming", accent:"#db2777"},
- ].map((s) => (
- <div key={s.label} className="home-stat-card">
- <div className="home-stat-accent"style={{ background: s.accent }} />
- <p className="home-stat-value">{s.value}</p>
- <p className="home-stat-label">{s.label}</p>
- <p className="home-stat-delta">{s.delta}</p>
- </div>
- ))}
- </div>
- </motion.div>
- </WarpShaderHero>
+ <HomeHero user={user} displayName={displayName} />
 
  {}
  <main className="home-main pt-8">
@@ -904,7 +840,7 @@ export default function Home() {
  </section>
 
  {/* Recent activity */}
- <section className="home-section">
+ <section className="home-section cn-defer">
  <div className="home-section-header">
  <h2 className="home-section-title tracking-tight">Recent Activity</h2>
  </div>
@@ -996,7 +932,7 @@ export default function Home() {
  </main>
  
  {}
- <Banner />
+ <div className="cn-defer"><Banner /></div>
  
  {/* Quick Incident Reporting Modal */}
  <AnimatePresence>

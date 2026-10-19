@@ -53,7 +53,7 @@ function parseMentionsAndLinks(text, participants = [], searchResults = [], know
  return html;
 }
 
-export default function ThreadDetails({ id, onBack }) {
+export default function ThreadDetails({ id, onBack, canPost = true }) {
  const axiosPublic = useAxiosPublic();
  const axiosSecure = useAxiosSecure();
  const { user } = useAuth();
@@ -950,8 +950,15 @@ export default function ThreadDetails({ id, onBack }) {
  {!user ? (
  <div className="bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] p-3 rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] text-center">
  <p className="text-xs text-slate-500 dark:text-slate-300 font-semibold mb-2">You must be logged in to participate in the conversation.</p>
- <Link to="/login"className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+ <Link to="/login"state={{ from: `/forum/${id}` }} className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
  Log In
+ </Link>
+ </div>
+ ) : !canPost ? (
+ <div className="bg-amber-50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200/70 dark:border-amber-900/40 text-center">
+ <p className="text-xs text-amber-800 dark:text-amber-300 font-semibold mb-2">Verified residents and volunteers can reply. You can keep reading.</p>
+ <Link to="/membership/request"className="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+ Verify residency
  </Link>
  </div>
  ) : thread.isLocked ? (

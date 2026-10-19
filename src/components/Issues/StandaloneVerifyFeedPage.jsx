@@ -4,7 +4,7 @@ import BackButton from'../common/BackButton';
 
 export default function StandaloneVerifyFeedPage() {
  return (
- <div className="min-h-screen pt-28 pb-20 px-[5%]"style={{ fontFamily:"'Outfit', sans-serif"}}>
+ <div className="min-h-screen pt-28 pb-20 px-[5%]"style={{ fontFamily:"var(--font-heading)"}}>
  <div className="max-w-5xl mx-auto">
  <div className="mb-4">
  <BackButton variant="dark" />

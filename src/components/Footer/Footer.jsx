@@ -11,7 +11,7 @@ const Footer = () => {
  };
 
   return (
-    <footer className="w-full mt-auto font-body tracking-tight relative z-10 overflow-hidden">
+    <footer className="cn-defer w-full mt-auto font-body tracking-tight relative z-10 overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#e9ecef] via-[#bde0fe] to-[#028090] opacity-90 -z-10"></div>
       

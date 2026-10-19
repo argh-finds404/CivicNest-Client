@@ -116,10 +116,19 @@ const Toast = ({ toast, onClose }) => (
  </AnimatePresence>
 );
 
+
+// Where to send the user after auth: the page they were on, or home
+const getReturnTo = (state) => {
+ const from = state?.from;
+ const path = typeof from ==="string"? from : from?.pathname;
+ return path && !/^\/(login|register)$/i.test(path) ? path :"/";
+};
+
 export default function Register() {
  const { registerUser, googleSignIn } = useContext(AuthContext);
  const navigate = useNavigate();
  const location = useLocation();
+ const returnTo = getReturnTo(location.state);
 
  
  const [currentStep, setCurrentStep] = useState(0);
@@ -226,7 +235,7 @@ export default function Register() {
  /* Step 5 — Success */
  setSubmitted(true);
  showSuccess("Welcome to CivicNest! Check your email to verify.");
- setTimeout(() => navigate("/"), 4600);
+ setTimeout(() => navigate(returnTo, { replace: true }), 4600);
 
  } catch (err) {
     console.error("[Register] Email/password error:", err);
@@ -259,7 +268,7 @@ export default function Register() {
 
  setSubmitted(true);
  showSuccess(`Welcome, ${firebaseUser.displayName ??"neighbour"}! You're in.`);
- setTimeout(() => navigate("/"), 4600);
+ setTimeout(() => navigate(returnTo, { replace: true }), 4600);
 
  } catch (err) {
     console.error("[Register] Google error:", err);

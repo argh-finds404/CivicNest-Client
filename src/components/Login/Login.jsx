@@ -1,5 +1,5 @@
 import React, { useState, useContext } from"react";
-import { NavLink, useNavigate } from"react-router";
+import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
 
@@ -62,9 +62,18 @@ const saveUserToDB = (name, email, photoURL, token) =>
  body: JSON.stringify({ name, email, photoURL }),
  }).then((r) => r.json());
 
+
+// Where to send the user after auth: the page they were on, or home
+const getReturnTo = (state) => {
+ const from = state?.from;
+ const path = typeof from ==="string"? from : from?.pathname;
+ return path && !/^\/(login|register)$/i.test(path) ? path :"/";
+};
+
 const Login = () => {
  const { signInUser, googleSignIn } = useAuth();
  const navigate = useNavigate();
+ const returnTo = getReturnTo(useLocation().state);
 
  const [showPassword, setShowPassword] = useState(false);
  const [rememberMe, setRememberMe] = useState(false);
@@ -122,14 +131,14 @@ const Login = () => {
  }
 
  if (!checkData.exists) {
- navigate("/Register", { state: { email, fromLogin: true } });
+ navigate("/Register", { state: { email, fromLogin: true, from: returnTo } });
  return;
  }
 
  setEmailLoading(true);
  await signInUser(email, password);
  showToastMessage("success","Login Successful","Welcome back to CivicNest!");
- setTimeout(() => navigate("/"), 1500);
+ setTimeout(() => navigate(returnTo, { replace: true }), 1500);
  } catch (err) {
     if (err.message && err.message.toLowerCase().includes("fetch")) {
       showToastMessage("error", "Server Connection Failed", "Could not connect to the backend server. The database or server might be spin-starting on Render (takes ~50s) or CORS is blocking the request. Please wait 1 minute and try again.");
@@ -159,7 +168,7 @@ const Login = () => {
  );
 
  showToastMessage("success","Login Successful",`Welcome, ${firebaseUser.displayName ??"neighbour"}!`);
- setTimeout(() => navigate("/"), 1500);
+ setTimeout(() => navigate(returnTo, { replace: true }), 1500);
  } catch (err) {
     /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
     if (err.code !== "auth/popup-closed-by-user") {
