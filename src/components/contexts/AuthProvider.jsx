@@ -14,6 +14,21 @@ import { auth } from"../../firebase/firebase.init";
 
 const googleProvider = new GoogleAuthProvider();
 
+/*
+ * Firebase loads a helper frame before it opens the Google popup, and on
+ * desktop Chrome it only starts that on the first click. If the frame is
+ * slow, the popup is no longer tied to the click and Chrome blocks it
+ * (auth/popup-blocked). Sign-in pages call this on mount so the frame is
+ * ready and the popup opens straight away. Safe to call repeatedly.
+ */
+const prepareGoogleSignIn = () => {
+ try {
+ auth._popupRedirectResolver?._initialize(auth)?.catch(() => {});
+ } catch {
+ // Not available in this SDK version: the popup still works, just later
+ }
+};
+
 const AuthProvider = ({ children }) => {
  const [user, setUser] = useState(null);
  const queryClient = useQueryClient();
@@ -91,6 +106,7 @@ const AuthProvider = ({ children }) => {
  registerUser,
  signInUser,
  googleSignIn,
+ prepareGoogleSignIn,
  logOut,
  updateProfile, // expose so components can call it directly
  };
