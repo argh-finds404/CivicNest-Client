@@ -19,6 +19,7 @@ import {
 } from'lucide-react';
 import toast from'react-hot-toast';
 import { useRole } from'../../hooks/useRole';
+import { requestLogin } from'../../utils/requestLogin';
 import { Bar as ChartJSBar } from'react-chartjs-2';
 import { 
  Chart as ChartJS, 
@@ -119,9 +120,13 @@ export default function PollCard({ poll }) {
  });
 
  const handleVote = (optionId) => {
+ if (!user) {
+ requestLogin('vote in polls');
+ return;
+ }
  const isAuthorized = role ==="member"|| role ==="admin"|| isVolunteer;
  if (!isAuthorized) {
- toast.error('Access Denied: Only members and volunteers are allowed to vote in community polls.');
+ toast('Verify your residency to vote in community polls.', { icon:'🏡'});
  return;
  }
 
@@ -403,7 +408,7 @@ export default function PollCard({ poll }) {
  <div className="space-y-2.5">
  {showChartView || localPoll.type ==='survey'? (
  // ChartJS Bar Chart View
- <div className="w-full flex justify-center items-center"style={{ minHeight: Math.max(140, localPoll.options.length * 44), fontFamily:'Inter, sans-serif'}}>
+ <div className="w-full flex justify-center items-center"style={{ minHeight: Math.max(140, localPoll.options.length * 44), fontFamily:'var(--font-body)'}}>
  <ChartJSBar
  data={{
  labels: localPoll.options.map(opt => {
@@ -452,8 +457,8 @@ export default function PollCard({ poll }) {
  }
  },
  backgroundColor:'#1e293b',
- titleFont: { size: 12, weight:'bold', family:'Inter'},
- bodyFont: { size: 11, family:'Inter'},
+ titleFont: { size: 12, weight:'bold', family:'Hanken Grotesk'},
+ bodyFont: { size: 11, family:'Hanken Grotesk'},
  padding: 10,
  cornerRadius: 8,
  }
@@ -466,7 +471,7 @@ export default function PollCard({ poll }) {
  y: {
  grid: { display: false },
  ticks: {
- font: { size: 11, weight:'600', family:'Inter'},
+ font: { size: 11, weight:'600', family:'Hanken Grotesk'},
  color:'#475569',
  },
  border: { display: false }

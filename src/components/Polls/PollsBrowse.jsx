@@ -6,8 +6,8 @@ import { motion } from'framer-motion';
 import PollCard from'../cards/PollCard';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import MinimalLoader from'../common/MinimalLoader';
-import BackButton from'../common/BackButton';
-import SectionStats from'../common/SectionStats';
+import PageHeader from'../common/PageHeader';
+import PollSpotlight from'./PollSpotlight';
 import SectionFilterChips from'../common/SectionFilterChips';
 import CreatePollModal from'./CreatePollModal';
 import { useRole } from'../../hooks/useRole';
@@ -190,48 +190,22 @@ export default function PollsBrowse() {
 
  return (
  <div className="min-h-screen bg-[#f0fdf4]">
- {/* Banner Section */}
- <div className="relative pt-28 pb-12 px-[5%] bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-800 overflow-hidden">
- {/* Background Pattern */}
- <div className="absolute inset-0 opacity-10">
- <div className="absolute top-20 left-10 w-72 h-72 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-full blur-3xl"></div>
- <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"></div>
- </div>
-
- <div className="relative z-10 max-w-7xl mx-auto">
- {/* Back Button */}
- <div className="mb-4">
- <BackButton variant="light"/>
- </div>
-
- <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
- <div className="text-white">
- <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 text-emerald-300">
- <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
- <span className="text-[13px] font-bold uppercase tracking-wider">Community Polls</span>
- </div>
- <h1 className="font-heading text-4xl tracking-tight md:text-5xl tracking-tight font-extrabold mb-4 leading-tight tracking-tight">
- Voice Your Opinion
- </h1>
- <p className="font-body text-white/80 text-[13px] max-w-2xl">
- Participate in community polls to help shape decisions. Every vote matters.
- </p>
- </div>
-
- <div className="flex items-center gap-4 flex-wrap">
- <button
- onClick={() => document.getElementById('create-poll-modal').showModal()}
- className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-emerald-50 text-teal-700 font-bold rounded-lg shadow-xl hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105 cursor-pointer">
- <Plus className="w-5 h-5"/>
- <span>Create Poll</span>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="Polls"
+ description="Small decisions for the neighbourhood: where the new bins go, which street gets cleaned first. Vote on what's open, or ask a question of your own."
+ actions={
+ <button type="button" onClick={() => document.getElementById('create-poll-modal').showModal()} className="cn-btn cn-btn-signal">
+ <Plus className="w-4 h-4" aria-hidden="true" />
+ Ask a question
  </button>
- </div>
- </div>
-
- {/* Stats */}
- <SectionStats stats={statsData} />
- </div>
- </div>
+ }
+ meta={statsData.map((s) => (
+ <span key={s.label}><strong>{s.value.toLocaleString()}</strong> {s.label.toLowerCase()}</span>
+ ))}
+ art={<PollSpotlight polls={displayPolls} />}
+ />
 
  {/* Content Section */}
  <div className="px-[5%] py-8">

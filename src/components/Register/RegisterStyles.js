@@ -19,7 +19,7 @@ export const registerStyles = `
 
 @media (min-width: 1024px) {
   .reg-left-panel {
-    display: block;
+    display: flex;
   }
 }
 

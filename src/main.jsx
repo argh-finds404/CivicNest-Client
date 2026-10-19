@@ -117,7 +117,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'issues/:id',
-        element: <PrivateRoute><IssueDetails /></PrivateRoute>,
+        element: <IssueDetails />,
       },
       {
         path: 'contributions',
@@ -149,7 +149,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'lost-found/:id',
-        element: <PrivateRoute><LostFoundDetails /></PrivateRoute>,
+        element: <LostFoundDetails />,
       },
       {
         path: 'animals',
@@ -165,11 +165,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'animals/feeding-drives',
-        element: <PrivateRoute><FeedingDrives /></PrivateRoute>,
+        element: <FeedingDrives />,
       },
       {
         path: 'animals/:id',
-        element: <PrivateRoute><AnimalDetails /></PrivateRoute>,
+        element: <AnimalDetails />,
       },
       {
         path: 'membership/request',
@@ -251,7 +251,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/noticeboard/:id",
-        element: <PrivateRoute><NoticeDetails /></PrivateRoute>,
+        element: <NoticeDetails />,
       },
       {
         path: "/volunteers",
@@ -283,7 +283,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/fund",
-        element: <PrivateRoute><FundCleanup /></PrivateRoute>,
+        element: <FundCleanup />,
       },
       {
         path: "/support",
@@ -299,7 +299,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/ngos/:id",
-        element: <PrivateRoute><NGOProfile /></PrivateRoute>,
+        element: <NGOProfile />,
       },
       {
         path: "/polls",
@@ -315,7 +315,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/cleanup-events/:id",
-        element: <PrivateRoute><CleanupEventDetails /></PrivateRoute>,
+        element: <CleanupEventDetails />,
       },
       {
         path: "/press-kit",
@@ -343,6 +343,8 @@ const router = createBrowserRouter([
       },
     ]
   },
+  // Browse and detail pages are public; only creating, editing, personal
+  // dashboards and payments sit behind PrivateRoute / MemberRoute.
   {
     path: '/Login',
     Component: Login,

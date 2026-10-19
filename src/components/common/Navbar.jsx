@@ -436,7 +436,7 @@ const Navbar = () => {
   borderColor:"rgba(226, 232, 240, 0.6)",
   }}
   transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
-  className="pointer-events-auto flex items-center justify-between bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/85 dark:bg-[#0b1215]/85 backdrop-blur-xl border-solid border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/60 dark:border-[#1e3040]/60">
+  className="pointer-events-auto flex items-center justify-between bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/85 dark:bg-[#0b1215]/85 border-solid border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/60 dark:border-[#1e3040]/60">
  {/* Left Area: Drawer Toggle + Logo */}
  <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
  <button

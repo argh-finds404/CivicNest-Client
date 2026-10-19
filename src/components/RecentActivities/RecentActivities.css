@@ -5,7 +5,7 @@
 .recent-activities-root {
   min-height: 100vh;
   background-color: #f1f5f9;
-  font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font-body);
   color: #0f172a;
   padding-bottom: 6.25rem;
 }

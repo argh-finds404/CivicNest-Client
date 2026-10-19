@@ -6,8 +6,7 @@ import { motion, AnimatePresence } from"framer-motion";
 import LostFoundCard from"../cards/LostFoundCard";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import MinimalLoader from'../common/MinimalLoader.jsx';
-import BackButton from'../common/BackButton';
-import SectionStats from'../common/SectionStats';
+import PageHeader from'../common/PageHeader';
 import SectionFilterChips from'../common/SectionFilterChips';
 import { 
  Search, 
@@ -84,57 +83,27 @@ export default function LostFoundBrowse() {
  { value: stats.thisWeek, label:'This Week'},
  ] : [];
 
- const bannerGradient = typeView ==='lost'?'bg-gradient-to-br from-rose-950 via-rose-900 to-slate-900':'bg-gradient-to-br from-teal-950 via-teal-900 to-slate-900';
 
  return (
  <div className="min-h-screen bg-[#F8FAFC]">
  <SEO title="Lost & Found Hub" canonical={`${window.location.origin}/lost-found`} />
- {/* Banner Section */}
- <div className={`relative pt-28 pb-12 px-[5%] ${bannerGradient} overflow-hidden`}>
- {/* Background Pattern */}
- <div className="absolute inset-0 opacity-10">
- <div className="absolute top-20 left-10 w-72 h-72 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-full blur-3xl"></div>
- <div className="absolute bottom-10 right-10 w-96 h-96 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-full blur-3xl"></div>
- </div>
-
- <div className="relative z-10 max-w-7xl mx-auto">
- {/* Back Button */}
- <div className="mb-4">
- <BackButton variant="light"/>
- </div>
-
- <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
- <div className="text-white">
- <div className={`inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 ${typeView ==='lost'?'text-rose-300':'text-emerald-300'}`}>
- <span className={`w-2 h-2 rounded-full animate-pulse ${typeView ==='lost'?'bg-rose-400':'bg-emerald-400'}`}></span>
- <span className="text-xs font-bold uppercase tracking-widest">
- {typeView ==='lost'?'Lost & Found':'Found Items'}
- </span>
- </div>
- <h1 className="font-heading text-4xl tracking-tight md:text-5xl tracking-tight font-extrabold mb-4 leading-tight tracking-tight">
- {typeView ==='lost'?'Report Lost Items':'Report Found Items'}
- </h1>
- <p className="font-body text-white/80 text-[13px] max-w-2xl font-medium">
- {typeView ==='lost'?'Help reunite neighbors with their belongings. Report lost items to get community assistance.':'Found something? Help reunite it with its owner by reporting it here.'}
- </p>
- </div>
-
- <Link
- to={typeView ==='lost'?"/lost-found/add-lost":"/lost-found/add-found"}
- className="inline-flex items-center gap-3 px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-slate-50 dark:bg-[#0a1410] dark:bg-[#0a1410] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] font-bold rounded-lg shadow-xl hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105">
- {typeView ==='lost'? (
- <Search className="w-5 h-5 text-rose-600 shrink-0"/>
- ) : (
- <Gift className="w-5 h-5 text-emerald-600 shrink-0"/>
- )}
- <span>{typeView ==='lost'?'Report Lost':'Report Found'}</span>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="Lost & found"
+ description={typeView ==='lost'
+ ? "Lost a wallet, a phone or a pet? Post it here so neighbours know to look out for it."
+ : "Found something on the street? Post it here and help it get back to its owner."}
+ actions={
+ <Link to={typeView ==='lost'?"/lost-found/add-lost":"/lost-found/add-found"} className="cn-btn cn-btn-signal">
+ {typeView ==='lost' ? <Search className="w-4 h-4" aria-hidden="true" /> : <Gift className="w-4 h-4" aria-hidden="true" />}
+ {typeView ==='lost'?'Report something lost':'Report something found'}
  </Link>
- </div>
-
- {/* Stats */}
- <SectionStats stats={statsData} />
- </div>
- </div>
+ }
+ meta={statsData.map((s) => (
+ <span key={s.label}><strong>{s.value ?? 0}</strong> {s.label.toLowerCase()}</span>
+ ))}
+ />
 
  {/* Content Section */}
  <div className="px-[5%] py-8">

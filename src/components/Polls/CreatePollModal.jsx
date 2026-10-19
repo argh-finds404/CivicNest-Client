@@ -2,6 +2,7 @@ import React, { useState } from'react';
 import { useMutation, useQueryClient } from'@tanstack/react-query';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useAuth } from'../../hooks/useAuth';
+import { requestLogin } from'../../utils/requestLogin';
 import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
 import { Check, CheckSquare, HelpCircle, Clock, BarChart3, MessageCircle, Users, ChevronLeft, ChevronRight, CheckCircle2 } from'lucide-react';
@@ -119,7 +120,7 @@ export default function CreatePollModal() {
  e.preventDefault();
  
  if (!user) {
- toast.error('Please log in to create a poll');
+ requestLogin('create a poll');
  return;
  }
 
