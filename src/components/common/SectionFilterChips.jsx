@@ -17,7 +17,7 @@ export default function SectionFilterChips({ chips, value, onChange }) {
  className={`relative flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold
  border transition-all duration-300 cursor-pointer shadow-sm select-none z-10
  ${isActive
- ?'text-white border-transparent':'bg-emerald-50/50 border-emerald-100 text-emerald-800/85 hover:border-[var(--g-200)] hover:bg-emerald-100/40 hover:text-emerald-950'}`}
+ ?'text-white border-transparent':'bg-emerald-50/50 border-emerald-100 text-emerald-800/85 hover:border-[var(--g-200)] hover:bg-emerald-100/40 hover:text-emerald-950 dark:bg-white/5 dark:border-white/10 dark:text-emerald-200/85 dark:hover:bg-white/10 dark:hover:border-emerald-400/40 dark:hover:text-white'}`}
  >
  {isActive && (
  <motion.div

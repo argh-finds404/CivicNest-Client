@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from'framer-motion';
 import PremiumDropdown from'../common/PremiumDropdown';
 import { socket } from'../../hooks/useSocket';
 import PageHeader from'../common/PageHeader';
-import CityDiorama from'../Home/CityDiorama';
-import usePublicStats, { statsToPins } from'../../hooks/usePublicStats';
+import PageArt3D from'../three/PageArt3D';
+import usePublicStats from'../../hooks/usePublicStats';
 
 const AllIssues = () => {
  const navigate = useNavigate();
@@ -127,7 +127,7 @@ const AllIssues = () => {
  <span><strong>{stats.issuesResolved?.toLocaleString()}</strong> fixed so far</span>
  </>
  )}
- art={<CityDiorama size="md" pins={statsToPins(stats, { events: false })} />}
+ art={<PageArt3D model="issues" label="A traffic cone and warning sign beside a pothole" />}
  />
 
  {}

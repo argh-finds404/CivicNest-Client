@@ -48,7 +48,7 @@ function MembershipPromo({ user, role, navigate }) {
  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
  <i className="ri-shield-check-fill animate-pulse"></i> RESIDENT BADGE
  </div>
- <h3 className="text-2xl tracking-tight md:text-3xl tracking-tight font-extrabold text-white leading-tight tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <h3 className="text-2xl tracking-tight md:text-3xl tracking-tight font-extrabold text-white leading-tight tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  Unlock Verification
  </h3>
  <p className="text-slate-400 text-[13px] leading-relaxed max-w-md">
@@ -947,7 +947,7 @@ export default function Home() {
  {/* Header */}
  <div className="bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-5 text-white flex justify-between items-center shrink-0">
  <div>
- <h3 className="text-[13px] tracking-tight font-black tracking-tight flex items-center gap-2"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <h3 className="text-[13px] tracking-tight font-black tracking-tight flex items-center gap-2"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-alert-fill text-yellow-300 animate-pulse"></i> Quick Report Incident
  </h3>
  <p className="text-xs text-teal-100 mt-1">Alert the community about cleanliness & public hazards</p>

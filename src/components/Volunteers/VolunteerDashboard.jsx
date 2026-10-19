@@ -324,7 +324,7 @@ export default function VolunteerDashboard() {
  {/* Active Events Check-in Panel */}
  {notCheckedIn.length > 0 && (
  <div className="bg-teal-50 border border-teal-200 rounded-lg p-5 shadow-sm">
- <h3 className="font-bold text-teal-800 mb-4 flex items-center gap-2 tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h3 className="font-bold text-teal-800 mb-4 flex items-center gap-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-calendar-check-line text-[13px]"></i>
  🗓 Active Events — Check In
  </h3>
@@ -341,7 +341,7 @@ export default function VolunteerDashboard() {
  <div className="absolute -top-12 -right-12 w-40 h-40 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/15 rounded-full blur-2xl"></div>
  <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-black/10 rounded-full blur-2xl"></div>
  
- <h3 className="font-heading text-[13px] tracking-tight font-black mb-4 tracking-tight relative z-10"style={{ fontFamily:'HKGrotesk'}}>
+ <h3 className="font-heading text-[13px] tracking-tight font-black mb-4 tracking-tight relative z-10"style={{ fontFamily:'var(--font-heading)'}}>
  Progress to {stats.nextLevel}
  </h3>
  <div className="mb-4 relative z-10">
@@ -407,7 +407,7 @@ export default function VolunteerDashboard() {
 
  {/* Community Verify Feed Widget */}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg p-4 border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm">
- <h3 className="font-heading text-[13px] font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2 tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h3 className="font-heading text-[13px] font-bold text-slate-800 dark:text-white mb-4 flex items-center gap-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-shield-check-line text-teal-600"></i>
  Needs Verification
  </h3>

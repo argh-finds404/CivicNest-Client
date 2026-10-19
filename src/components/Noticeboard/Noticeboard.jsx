@@ -7,6 +7,7 @@ import { format, formatDistanceToNow } from"date-fns";
 import MinimalLoader from"../common/MinimalLoader.jsx";
 import { Link } from"react-router";
 import PageHeader from"../common/PageHeader";
+import PageArt3D from "../three/PageArt3D";
 import { Player } from"@lottiefiles/react-lottie-player";
 import emptyAnimation from"../../assets/lottie/empty-notices.json";
 
@@ -76,6 +77,7 @@ export default function Noticeboard() {
  <PageHeader
  width="64rem"
  gutter="1rem"
+ art={<PageArt3D model="notices" label="A noticeboard with pinned notes and a megaphone" />}
  title="Notices"
  description="Announcements, warnings and maintenance updates for the neighbourhood, from the people who run it."
  meta={

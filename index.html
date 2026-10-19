@@ -7,12 +7,16 @@
     <script>
       (function(){
         var t = localStorage.getItem('civicnest-theme');
-        if (t === 'dark') document.documentElement.classList.add('dark');
+        var d = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var r = document.documentElement;
+        if (d) r.classList.add('dark');
+        r.setAttribute('data-theme', d ? 'dark' : 'light');
+        r.style.colorScheme = d ? 'dark' : 'light';
       })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..800&family=Overpass:wght@500..900&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Plus+Jakarta+Sans:wght@400..800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
@@ -60,7 +64,7 @@
       }
       
       .logo-text {
-        font-family: 'Overpass', 'Hanken Grotesk', sans-serif;
+        font-family: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
         font-size: 3.5rem;
         font-weight: 900;
         color: #ffffff;

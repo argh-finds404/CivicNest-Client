@@ -32,7 +32,7 @@ ChartJS.register(
  Filler
 );
 
-ChartJS.defaults.font.family ="'HKGrotesk', sans-serif";
+ChartJS.defaults.font.family ="'Plus Jakarta Sans', sans-serif";
 ChartJS.defaults.color ="#64748b";
 
 export default function AdminStats() {
@@ -134,7 +134,7 @@ export default function AdminStats() {
  </div>
  <div className="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
  <div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>Platform Overview</h1>
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Platform Overview</h1>
  <p className="text-[13px] md:text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-1">Live metrics and platform health statistics.</p>
  </div>
  <button 
@@ -242,8 +242,8 @@ export default function AdminStats() {
  legend: { display: false },
  tooltip: {
  backgroundColor:'rgba(15, 23, 42, 0.95)',
- titleFont: { size: 12, family:"'HKGrotesk', sans-serif", weight:'normal'},
- bodyFont: { size: 15, weight:'bold', family:"'HKGrotesk', sans-serif"},
+ titleFont: { size: 12, family:"'Plus Jakarta Sans', sans-serif", weight:'normal'},
+ bodyFont: { size: 15, weight:'bold', family:"'Plus Jakarta Sans', sans-serif"},
  padding: 14,
  cornerRadius: 12,
  displayColors: true,
@@ -252,12 +252,12 @@ export default function AdminStats() {
  scales: {
  x: { 
  grid: { display: false }, 
- ticks: { font: { family:"'HKGrotesk', sans-serif", size: 12, weight:'bold'}, color:'#475569'}, 
+ ticks: { font: { family:"'Plus Jakarta Sans', sans-serif", size: 12, weight:'bold'}, color:'#475569'}, 
  border: { display: false } 
  },
  y: { 
  grid: { color:'#e2e8f0', drawBorder: false, borderDash: [5, 5] }, 
- ticks: { font: { family:"'HKGrotesk', sans-serif", size: 12, weight:'bold'}, color:'#475569', padding: 10 }, 
+ ticks: { font: { family:"'Plus Jakarta Sans', sans-serif", size: 12, weight:'bold'}, color:'#475569', padding: 10 }, 
  border: { display: false } 
  }
  }
@@ -296,13 +296,13 @@ export default function AdminStats() {
  usePointStyle: true,
  pointStyle:'circle',
  padding: 24,
- font: { family:"'HKGrotesk', sans-serif", size: 12, weight:'500'},
+ font: { family:"'Plus Jakarta Sans', sans-serif", size: 12, weight:'500'},
  color:'#64748b'}
  },
  tooltip: {
  backgroundColor:'rgba(15, 23, 42, 0.95)',
- titleFont: { size: 12, family:"'HKGrotesk', sans-serif", weight:'normal'},
- bodyFont: { size: 15, weight:'bold', family:"'HKGrotesk', sans-serif"},
+ titleFont: { size: 12, family:"'Plus Jakarta Sans', sans-serif", weight:'normal'},
+ bodyFont: { size: 15, weight:'bold', family:"'Plus Jakarta Sans', sans-serif"},
  padding: 14,
  cornerRadius: 12,
  boxShadow:'0 10px 25px -5px rgba(0, 0, 0, 0.1)'}
@@ -345,8 +345,8 @@ export default function AdminStats() {
  legend: { display: false },
  tooltip: {
  backgroundColor:'rgba(15, 23, 42, 0.95)',
- titleFont: { size: 12, family:"'HKGrotesk', sans-serif", weight:'normal'},
- bodyFont: { size: 15, weight:'bold', family:"'HKGrotesk', sans-serif"},
+ titleFont: { size: 12, family:"'Plus Jakarta Sans', sans-serif", weight:'normal'},
+ bodyFont: { size: 15, weight:'bold', family:"'Plus Jakarta Sans', sans-serif"},
  padding: 14,
  cornerRadius: 12,
  displayColors: false,
@@ -367,13 +367,13 @@ export default function AdminStats() {
  scales: {
  x: { 
  grid: { display: false }, 
- ticks: { font: { family:"'HKGrotesk', sans-serif", size: 12, weight:'bold'}, color:'#475569'}, 
+ ticks: { font: { family:"'Plus Jakarta Sans', sans-serif", size: 12, weight:'bold'}, color:'#475569'}, 
  border: { display: false } 
  },
  y: { 
  grid: { color:'#e2e8f0', drawBorder: false, borderDash: [5, 5] }, 
  ticks: { 
- font: { family:"'HKGrotesk', sans-serif", size: 12, weight:'bold'}, 
+ font: { family:"'Plus Jakarta Sans', sans-serif", size: 12, weight:'bold'}, 
  color:'#475569', 
  padding: 10,
  callback: function(value) {
