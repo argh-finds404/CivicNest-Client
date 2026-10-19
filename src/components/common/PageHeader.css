@@ -1,0 +1,60 @@
+.cn-page-head {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(ellipse 50% 80% at 85% 50%, rgba(25, 161, 132, 0.3), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    #0a3d35;
+}
+.cn-page-head-inner {
+  box-sizing: border-box;
+  max-width: var(--head-w, 1280px);
+  margin: 0 auto;
+  padding: 2.75rem var(--head-g, 1.5rem) 2.5rem;
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .cn-page-head-art .cn-page-head-inner {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    min-height: 19rem;
+  }
+}
+.cn-page-head-copy { max-width: 40rem; }
+.cn-page-head-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: #fff;
+}
+.cn-page-head-desc {
+  margin: 0.9rem 0 0;
+  max-width: 36rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+.cn-page-head-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1.4rem; }
+.cn-page-head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin-top: 1.4rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+.cn-page-head-meta strong { color: #fff; font-family: var(--font-heading); font-weight: 800; }
+
+.cn-page-head-art-slot { display: none; }
+@media (min-width: 1024px) {
+  .cn-page-head-art-slot { display: grid; place-items: center; }
+}

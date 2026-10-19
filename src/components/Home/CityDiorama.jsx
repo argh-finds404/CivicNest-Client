@@ -32,7 +32,7 @@ const KIND = {
 
 const heightOf = (ch) => (/\d/.test(ch) ? Number(ch) * 14 + 10 : ch === "p" ? 4 : 0);
 
-export default function CityDiorama({ pins = [] }) {
+export default function CityDiorama({ pins = [], size = "lg" }) {
   const stageRef = useRef(null);
 
   // Pointer tilt: write CSS variables directly, once per frame, no React renders
@@ -83,7 +83,7 @@ export default function CityDiorama({ pins = [] }) {
   });
 
   return (
-    <div className="cd-stage" ref={stageRef}>
+    <div className={`cd-stage${size === "md" ? " cd-stage-md" : ""}`} ref={stageRef}>
       <div className="cd-scene">
         <div className="cd-ground" aria-hidden="true" />
 

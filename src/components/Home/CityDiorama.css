@@ -17,6 +17,7 @@
      makes Chrome flatten the whole scene */
   animation: cd-fade 0.6s ease-out both;
 }
+.cd-stage-md { --t: 40px; height: calc(var(--t) * 7.2); }
 @media (max-width: 640px) {
   .cd-stage { --t: 40px; }
   .cd-pin-extra { display: none; }

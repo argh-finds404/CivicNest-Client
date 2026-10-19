@@ -7,7 +7,9 @@ import useAxiosSecure from'../../hooks/useAxiosSecure';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
 import PremiumEventCard from'../cards/PremiumEventCard';
 import MinimalLoader from'../common/MinimalLoader';
-import BackButton from'../common/BackButton';
+import PageHeader from'../common/PageHeader';
+import CityDiorama from'../Home/CityDiorama';
+import usePublicStats, { statsToPins } from'../../hooks/usePublicStats';
 import { useAuth } from'../../hooks/useAuth';
 import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
@@ -15,6 +17,7 @@ import toast from'react-hot-toast';
 export default function CleanupEventsPage() {
  const axiosSecure = useAxiosSecure();
  const axiosPublic = useAxiosPublic();
+ const { data: publicStats } = usePublicStats();
  const queryClient = useQueryClient();
  const { user } = useAuth();
  const [role] = useRole();
@@ -110,69 +113,25 @@ export default function CleanupEventsPage() {
  <div className="min-h-screen">
  <SEO title="Cleanup Drives" canonical={`${window.location.origin}/cleanup-events`} />
  {}
- <div className="relative pt-28 pb-16 px-[5%] bg-gradient-to-br from-teal-600 via-teal-700 to-emerald-800 overflow-hidden">
- {/* Background Pattern */}
- <div className="absolute inset-0 opacity-10">
- <div className="absolute top-20 left-10 w-72 h-72 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-full blur-3xl"></div>
- <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"></div>
- </div>
-
- <div className="relative z-10 max-w-7xl mx-auto">
- {/* Back Button */}
- <div className="mb-4">
- <BackButton variant="light"/>
- </div>
-
- {/* Header Content */}
- <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
- <div className="text-white">
- <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 text-emerald-300">
- <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
- <span className="text-[13px] font-bold uppercase tracking-wider">Community Gatherings</span>
- </div>
- <h1 className="font-heading text-4xl tracking-tight md:text-6xl font-extrabold mb-4 leading-tight tracking-tight">
- Social Events
- </h1>
- <p className="font-body text-white/80 text-[13px] max-w-2xl">
- Discover and join community gatherings, workshops, and social events. Connect with like-minded people and make a difference together.
- </p>
- 
- {/* Stats */}
- <div className="flex flex-wrap items-center gap-4 mt-6">
- <div className="flex items-center gap-2">
- <i className="ri-group-line text-2xl tracking-tight text-emerald-300"></i>
- <div>
- <p className="text-2xl tracking-tight font-bold text-white">1,234</p>
- <p className="text-xs text-white/60 uppercase tracking-wider">Members</p>
- </div>
- </div>
- <div className="w-px h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20"></div>
- <div className="flex items-center gap-2">
- <i className="ri-calendar-event-line text-2xl tracking-tight text-emerald-300"></i>
- <div>
- <p className="text-2xl tracking-tight font-bold text-white">56</p>
- <p className="text-xs text-white/60 uppercase tracking-wider">Events</p>
- </div>
- </div>
- <div className="w-px h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20"></div>
- <div className="flex items-center gap-2">
- <i className="ri-trophy-line text-2xl tracking-tight text-emerald-300"></i>
- <div>
- <p className="text-2xl tracking-tight font-bold text-white">89%</p>
- <p className="text-xs text-white/60 uppercase tracking-wider">Engagement</p>
- </div>
- </div>
- </div>
- </div>
-
- <Link
- to="/cleanup-events/organize"className="inline-flex items-center gap-3 px-8 py-4 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-emerald-50 text-teal-700 font-bold rounded-lg shadow-xl hover:shadow-2xl hover:shadow-white/20 transition-all transform hover:scale-105">
- <span className="material-symbols-outlined text-2xl tracking-tight">add_circle</span>
- <span>Create Event</span>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="Cleanups"
+ description="Neighbours meeting up to clear a street, a lake edge or a market lane. Join one near you, or organise your own and we'll help you find people."
+ actions={
+ <Link to="/cleanup-events/organize" className="cn-btn cn-btn-signal">
+ <i className="ri-add-circle-line text-base" aria-hidden="true" />
+ Organise a cleanup
  </Link>
- </div>
- </div>
- </div>
+ }
+ meta={publicStats && (
+ <>
+ <span><strong>{publicStats.upcomingEvents}</strong> coming up</span>
+ <span><strong>{publicStats.activeMembers?.toLocaleString()}</strong> neighbours on CivicNest</span>
+ </>
+ )}
+ art={<CityDiorama size="md" pins={statsToPins(publicStats, { issues: false })} />}
+ />
 
  {/* Content Section */}
  <div className="px-[5%] py-12">
