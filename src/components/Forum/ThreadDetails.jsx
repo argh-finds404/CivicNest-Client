@@ -88,7 +88,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  const { data: thread, isLoading } = useQuery({
  queryKey: ['thread', id],
  queryFn: async () => {
- const res = await axiosPublic.get(`/forum/${id}`);
+ const res = await axiosSecure.get(`/forum/${id}`);
  return res.data;
  }
  });
@@ -330,7 +330,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  const oldestId = messages[0]._id;
 
  try {
- const res = await axiosPublic.get(`/forum/${id}?before=${oldestId}&limit=50`);
+ const res = await axiosSecure.get(`/forum/${id}?before=${oldestId}&limit=50`);
  const olderReplies = res.data.replies || [];
 
  if (olderReplies.length > 0) {
