@@ -3,16 +3,19 @@ import { useQueryClient } from"@tanstack/react-query";
 import { AuthContext } from"./AuthContext";
 import {
  createUserWithEmailAndPassword,
+ getRedirectResult,
  GoogleAuthProvider,
  onAuthStateChanged,
  signInWithEmailAndPassword,
  signInWithPopup,
+ signInWithRedirect,
  signOut,
  updateProfile,
 } from"firebase/auth";
 import { auth } from"../../firebase/firebase.init";
 
 const googleProvider = new GoogleAuthProvider();
+const RETURN_KEY = "civicnest-google-return";
 
 /*
  * Firebase loads a helper frame before it opens the Google popup, and on
@@ -53,8 +56,39 @@ const AuthProvider = ({ children }) => {
  const signInUser = (email, password) =>
  signInWithEmailAndPassword(auth, email, password);
 
- /** Sign in / register via Google popup */
- const googleSignIn = () => signInWithPopup(auth, googleProvider);
+ /**
+ * Sign in / register with Google. Uses a popup; if the browser blocks it,
+ * continues in this tab instead. The page then leaves for Google and comes
+ * back, and finishGoogleRedirect() completes the sign-in.
+ */
+ const googleSignIn = async (returnTo ="/") => {
+ try {
+ return await signInWithPopup(auth, googleProvider);
+ } catch (err) {
+ if (err.code !=="auth/popup-blocked") throw err;
+ try {
+ sessionStorage.setItem(RETURN_KEY, returnTo);
+ } catch {
+ // storage blocked: the user lands on home after signing in
+ }
+ await signInWithRedirect(auth, googleProvider);
+ return new Promise(() => {}); // the page is navigating to Google
+ }
+ };
+
+ /** After a same-tab Google sign-in: { user, returnTo }, or null if there was none */
+ const finishGoogleRedirect = async () => {
+ const result = await getRedirectResult(auth);
+ if (!result) return null;
+ let returnTo ="/";
+ try {
+ returnTo = sessionStorage.getItem(RETURN_KEY) ||"/";
+ sessionStorage.removeItem(RETURN_KEY);
+ } catch {
+ // storage blocked: fall back to home
+ }
+ return { user: result.user, returnTo };
+ };
 
  /** Sign out the current user */
  const logOut = async () => {
@@ -106,6 +140,7 @@ const AuthProvider = ({ children }) => {
  registerUser,
  signInUser,
  googleSignIn,
+ finishGoogleRedirect,
  prepareGoogleSignIn,
  logOut,
  updateProfile, // expose so components can call it directly
