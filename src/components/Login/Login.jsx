@@ -72,7 +72,7 @@ const getReturnTo = (state) => {
 };
 
 const Login = () => {
- const { signInUser, googleSignIn, finishGoogleRedirect, prepareGoogleSignIn } = useAuth();
+ const { signInUser, googleSignIn, prepareGoogleSignIn } = useAuth();
  const navigate = useNavigate();
  const returnTo = getReturnTo(useLocation().state);
 
@@ -160,12 +160,15 @@ const Login = () => {
  /** Save the Google user to the database, then go back to where they were */
  const completeGoogleSignIn = async (firebaseUser, to) => {
  const token = await firebaseUser.getIdToken();
- await saveUserToDB(
+ // The API can take ~50s to wake on its free tier: give the save a few
+ // seconds, then carry on. It finishes in the background either way.
+ const saved = saveUserToDB(
  firebaseUser.displayName ??"",
  firebaseUser.email,
  firebaseUser.photoURL ??"",
  token
- );
+ ).catch((err) => console.error("Saving the Google user failed:", err));
+ await Promise.race([saved, new Promise((resolve) => setTimeout(resolve, 4000))]);
  showToastMessage("success","Login Successful",`Welcome, ${firebaseUser.displayName ??"neighbour"}!`);
  setTimeout(() => navigate(to, { replace: true }), 1500);
  };
@@ -173,7 +176,9 @@ const Login = () => {
  const showGoogleError = (err) => {
  /* user closed popup → auth/popup-closed-by-user — don't show that as an error */
  if (err.code ==="auth/popup-closed-by-user"|| err.code ==="auth/cancelled-popup-request") return;
- if (err.code ==="auth/unauthorized-domain") {
+ if (err.code ==="auth/popup-blocked") {
+ showToastMessage("error","Pop-up Blocked","Your browser stopped the Google window. Click Continue with Google again, or allow pop-ups for this site.");
+ } else if (err.code ==="auth/unauthorized-domain") {
  showToastMessage("error","Google Sign-In Not Enabled Here",`Add ${window.location.hostname} in Firebase Console → Authentication → Settings → Authorized domains, then try again.`);
  } else if (err.message && err.message.toLowerCase().includes("fetch")) {
  showToastMessage("error","Server Connection Failed","Authentication succeeded on Firebase, but MongoDB could not be reached. Free tier servers take ~50 seconds to spin up on first load. Please wait a moment and try again.");
@@ -185,7 +190,7 @@ const Login = () => {
  const handleGoogleSignIn = async () => {
  setGoogleLoading(true);
  try {
- const result = await googleSignIn(returnTo);
+ const result = await googleSignIn();
  await completeGoogleSignIn(result.user, returnTo);
  } catch (err) {
  showGoogleError(err);
@@ -193,20 +198,6 @@ const Login = () => {
  setGoogleLoading(false);
  }
  };
-
- // Finish a Google sign-in that continued in this tab because the popup was blocked
- useEffect(() => {
- let active = true;
- finishGoogleRedirect()
- .then((done) => {
- if (!active || !done) return;
- setGoogleLoading(true);
- return completeGoogleSignIn(done.user, done.returnTo).finally(() => setGoogleLoading(false));
- })
- .catch((err) => active && showGoogleError(err));
- return () => { active = false; };
- // eslint-disable-next-line react-hooks/exhaustive-deps -- run once on arrival
- }, []);
 
  return (
  <div className="min-h-screen w-full flex bg-white dark:bg-[#0a120e]"style={{ fontFamily:"var(--font-body)", fontWeight: 500 }}>
