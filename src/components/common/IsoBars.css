@@ -1,0 +1,120 @@
+/* Three-quarter view: rotateX(--ax) rotateZ(--az). With a negative --az the
+   +y ("front") and -x ("side") faces point at the viewer. */
+.ib-stage {
+  --ax: 62deg;
+  --az: -20deg;
+  display: grid;
+  place-items: center;
+  perspective: 1200px;
+  padding: 7rem 1rem 4.5rem;
+}
+.ib-scene {
+  grid-area: 1 / 1;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--ax)) rotateZ(var(--az));
+}
+.ib-scene-overlay { pointer-events: none; }
+.ib-plinth {
+  position: absolute;
+  inset: -16px -20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+}
+
+.ib-bar {
+  position: absolute;
+  left: var(--x);
+  top: 0;
+  width: var(--w);
+  height: var(--d);
+  transform-style: preserve-3d;
+  transform-origin: 50% 50% 0;
+  animation: ib-grow 0.9s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  animation-delay: calc(0.1s + var(--i) * 0.12s);
+}
+.ib-face { position: absolute; display: block; }
+.ib-top { inset: 0; transform: translateZ(var(--h)); border-radius: 3px; }
+.ib-front {
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: var(--h);
+  transform-origin: top;
+  transform: rotateX(90deg);
+}
+.ib-side {
+  top: 0;
+  bottom: 0;
+  left: calc(-1 * var(--h));
+  width: var(--h);
+  transform-origin: right;
+  transform: rotateY(90deg);
+}
+.ib-canopy .ib-top { background: #33c29f; }
+.ib-canopy .ib-front { background: linear-gradient(0deg, #0f6b5c, #179a80); }
+.ib-canopy .ib-side { background: #0c5a4d; }
+.ib-signal .ib-top { background: #ffd23f; }
+.ib-signal .ib-front { background: linear-gradient(0deg, #c99300, #f2b705); }
+.ib-signal .ib-side { background: #a87b00; }
+.ib-hydrant .ib-top { background: #f07a6f; }
+.ib-hydrant .ib-front { background: linear-gradient(0deg, #b3352a, #dc4b3e); }
+.ib-hydrant .ib-side { background: #962c23; }
+.ib-stone .ib-top { background: #f4f7f3; }
+.ib-stone .ib-front { background: linear-gradient(0deg, #b9c7c0, #d7e1dc); }
+.ib-stone .ib-side { background: #9fb1a9; }
+
+/* Upright cards standing on (cap) or in front of (label) each bar, in the
+   overlay scene. Caps stand on the front edge of each roof. */
+.ib-anchor {
+  position: absolute;
+  left: calc(var(--x) + var(--w) / 2);
+  top: var(--d);
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--h));
+}
+.ib-anchor-base { top: var(--d); transform: none; }
+/* Upright billboards: real-sized boxes (zero-size pivots get mis-sized
+   compositing layers in Chrome and can vanish) anchored at their bottom
+   centre (cap) or top centre (label), rotated to face the viewer */
+.ib-cap,
+.ib-label {
+  position: absolute;
+  left: -80px;
+  width: 160px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  transform: rotateZ(calc(-1 * var(--az))) rotateX(calc(-1 * var(--ax)));
+}
+.ib-cap { bottom: 0; align-items: flex-end; transform-origin: 50% 100%; }
+.ib-label { top: 0; height: 48px; align-items: flex-start; transform-origin: 50% 0; }
+.ib-cap-in,
+.ib-label-in { max-width: 150px; }
+.ib-cap-in {
+  pointer-events: auto;
+  padding-bottom: 10px;
+  transform-origin: 50% 100%;
+  animation: ib-drop 0.6s cubic-bezier(0.25, 1.4, 0.4, 1) both;
+  animation-delay: calc(0.7s + var(--i) * 0.12s);
+}
+.ib-label-in { padding-top: 10px; }
+
+@keyframes ib-grow {
+  from { scale: 1 1 0.001; }
+  to { scale: 1 1 1; }
+}
+/* Transform only: an opacity animation here interferes with the 3D layers */
+@keyframes ib-drop {
+  from { scale: 0.001; }
+  to { scale: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ib-bar, .ib-cap-in { animation: none !important; }
+}

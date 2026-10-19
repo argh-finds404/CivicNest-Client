@@ -232,7 +232,9 @@
     #0a3d35;
 }
 .cn-hero-inner {
-  max-width: 1232px;
+  /* Same box as .home-main (1280px incl. 1.5rem gutters) so edges line up */
+  box-sizing: border-box;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 3rem 1.5rem 2.5rem;
   display: grid;

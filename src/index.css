@@ -609,3 +609,127 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 @media (prefers-reduced-motion: reduce) {
   .cn-motion { animation: none !important; transition: none !important; }
 }
+
+/* Dark "stage" panel that matches the hero ground, for 3D showpieces */
+.cn-dark-stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--cn-radius-lg);
+  color: #fff;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 70%, rgba(25, 161, 132, 0.35), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px) 0 0 / 40px 40px,
+    #0a3d35;
+}
+
+/* Leaderboard podium */
+.lb-podium { padding: 1.75rem 1rem 0.5rem; }
+.lb-podium .ib-stage { padding-top: 15rem; padding-bottom: 3.5rem; }
+@media (max-width: 640px) {
+  .lb-podium .ib-stage { scale: 0.82; transform-origin: 50% 0; margin-bottom: -3rem; }
+}
+.lb-podium-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+}
+.lb-champ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+  padding: 0 10px 8px;
+  border-radius: 14px;
+  background: rgba(6, 38, 33, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  text-decoration: none;
+}
+.lb-champ .lb-champ-avatar { margin-top: -26px; }
+.lb-champ-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  background: #145c50;
+  font: 800 1.25rem var(--font-heading);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+.lb-champ-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.lb-rank-1 { width: 64px; height: 64px; border-color: var(--cn-signal); }
+.lb-champ-name {
+  margin-top: 4px;
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+  font-size: 0.875rem;
+}
+.lb-champ-pts {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.lb-champ:focus-visible .lb-champ-avatar { outline: 3px solid var(--cn-signal); outline-offset: 2px; }
+.lb-place {
+  font: 900 1rem var(--font-heading);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Polls header spotlight */
+.ps-spot { margin: 0; width: 100%; max-width: 26rem; }
+.ps-spot .ib-stage { padding: 8.5rem 1rem 2.75rem; }
+.ps-share {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cn-ink);
+  font: 800 0.8rem var(--font-heading);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+.ps-option {
+  display: block;
+  max-width: 66px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+}
+.ps-question {
+  margin-top: 0.25rem;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.8);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ps-live {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--cn-hydrant);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 800;
+}

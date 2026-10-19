@@ -8,7 +8,7 @@ import AnimalCard from"../cards/AnimalCard";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import useAxiosPublic from"../../hooks/useAxiosPublic";
 import MinimalLoader from'../common/MinimalLoader.jsx';
-import BackButton from'../common/BackButton';
+import PageHeader from'../common/PageHeader';
 import { MapContainer, TileLayer, Marker, Popup } from"react-leaflet";
 import"leaflet/dist/leaflet.css";
 import L from"leaflet";
@@ -135,85 +135,32 @@ export default function AnimalsBrowse() {
  return (
  <div className="min-h-screen bg-[#f0fdf4]">
  <SEO title="Animal Rescue & Feeding" canonical={`${window.location.origin}/animals`} />
- {/* Banner Section */}
- <div className="relative pt-28 pb-12 px-[5%] overflow-hidden">
- {/* Background Image & Overlay */}
- <div className="absolute inset-0">
- <img 
- src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80"alt="Animal Rescue"className="w-full h-full object-cover"/>
- <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 to-teal-900/80 backdrop-blur-sm"></div>
- </div>
-
- <div className="relative z-10 max-w-7xl mx-auto">
- {/* Back Button */}
- <div className="mb-6">
- <BackButton variant="light"/>
- </div>
-
- <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8">
- <div className="text-white max-w-2xl">
- <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 text-emerald-300">
- <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
- <span className="text-xs font-bold uppercase tracking-wider">Community Rescue</span>
- </div>
- <h1 className="font-heading text-4xl tracking-tight md:text-5xl tracking-tight font-black mb-3 leading-tight drop-shadow-md tracking-tight">
- Animal Rescue Center
- </h1>
- <p className="font-body text-emerald-50/90 text-[13px] font-medium drop-shadow-sm max-w-xl">
- Report stray animals in need of medical attention, shelter, or food. Help save lives in our community and provide verified updates.
- </p>
- </div>
-
- <div className="flex flex-col gap-3 shrink-0 w-full md:w-64">
- <button
- onClick={() => setShowDriveModal(true)}
- className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg shadow-xl transition-all transform hover:-translate-y-0.5 w-full">
- <i className="ri-restaurant-2-fill text-[13px] tracking-tight"></i>
- <span>Organize Feeding Drive</span>
- </button>
- <Link
- to="/animals/add"className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-emerald-50 text-teal-800 font-bold rounded-lg shadow-xl transition-all transform hover:-translate-y-0.5 w-full">
- <i className="ri-megaphone-fill text-[13px] tracking-tight"></i>
- <span>Report Stray Animal</span>
+ <PageHeader
+ width="calc(80rem + 10%)"
+ gutter="5%"
+ title="Animals"
+ description="Strays that need food, treatment or a home. Report one you've seen, follow its recovery, or organise a feeding drive with neighbours."
+ actions={
+ <>
+ <Link to="/animals/add" className="cn-btn cn-btn-signal">
+ <i className="ri-heart-add-line text-base" aria-hidden="true" />
+ Report an animal
  </Link>
- </div>
- </div>
-
- {/* Stats Bar */}
- {stats && (
- <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl">
- <div className="bg-white/10 backdrop-blur-md border border-white/20 dark:border-emerald-800/20 rounded-lg p-4 flex items-center gap-4 text-white hover:bg-white/20 dark:hover:bg-emerald-950/40 transition-colors">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight shrink-0 text-teal-600"><i className="ri-volume-up-fill"></i></div>
- <div>
- <div className="text-2xl tracking-tight font-black text-white">{stats.total || 0}</div>
- <div className="text-xs font-bold text-emerald-100 dark:text-emerald-300 uppercase tracking-wider">Reported</div>
- </div>
- </div>
- <div className="bg-white/10 backdrop-blur-md border border-white/20 dark:border-emerald-800/20 rounded-lg p-4 flex items-center gap-4 text-white hover:bg-white/20 dark:hover:bg-emerald-950/40 transition-colors">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight text-amber-400 shrink-0"><i className="ri-alert-fill"></i></div>
- <div>
- <div className="text-2xl tracking-tight font-black text-white">{stats.urgent || 0}</div>
- <div className="text-xs font-bold text-emerald-100 dark:text-emerald-300 uppercase tracking-wider">Urgent Rescues</div>
- </div>
- </div>
- <div className="bg-white/10 backdrop-blur-md border border-white/20 dark:border-emerald-800/20 rounded-lg p-4 flex items-center gap-4 text-white hover:bg-white/20 dark:hover:bg-emerald-950/40 transition-colors">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight text-blue-400 shrink-0"><i className="ri-hospital-line"></i></div>
- <div>
- <div className="text-2xl tracking-tight font-black text-white">{stats.inTreatment || 0}</div>
- <div className="text-xs font-bold text-emerald-100 dark:text-emerald-300 uppercase tracking-wider">In Treatment</div>
- </div>
- </div>
- <div className="bg-white/10 backdrop-blur-md border border-white/20 dark:border-emerald-800/20 rounded-lg p-4 flex items-center gap-4 text-white hover:bg-white/20 dark:hover:bg-emerald-950/40 transition-colors">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-[13px] tracking-tight text-emerald-400 shrink-0"><i className="ri-heart-pulse-fill"></i></div>
- <div>
- <div className="text-2xl tracking-tight font-black text-white">{stats.rescued || 0}</div>
- <div className="text-xs font-bold text-emerald-50 dark:text-emerald-300 uppercase tracking-wider">Rescued</div>
- </div>
- </div>
- </div>
+ <button type="button" onClick={() => setShowDriveModal(true)} className="cn-btn cn-btn-on-dark">
+ <i className="ri-restaurant-2-line text-base" aria-hidden="true" />
+ Organise a feeding drive
+ </button>
+ </>
+ }
+ meta={stats && (
+ <>
+ <span><strong>{stats.urgent || 0}</strong> urgent</span>
+ <span><strong>{stats.inTreatment || 0}</strong> in treatment</span>
+ <span><strong>{stats.rescued || 0}</strong> rescued</span>
+ <span><strong>{stats.total || 0}</strong> reported in all</span>
+ </>
  )}
- </div>
- </div>
+ />
 
  {/* Content Section */}
  <div className="px-[5%] py-8">

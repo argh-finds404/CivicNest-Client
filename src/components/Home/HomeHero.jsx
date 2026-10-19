@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import usePublicStats, { statsToPins } from "../../hooks/usePublicStats";
 import CityDiorama from "./CityDiorama";
 
-const OPEN_STATUSES = new Set(["open", "pending", "in_review", "action_taken"]);
 const fmt = new Intl.NumberFormat("en");
 
 const greeting = () => {
@@ -15,27 +13,8 @@ const greeting = () => {
 };
 
 export default function HomeHero({ user, displayName }) {
-  const axiosPublic = useAxiosPublic();
-  const { data: stats } = useQuery({
-    queryKey: ["publicStats"],
-    queryFn: async () => (await axiosPublic.get("/public/stats")).data?.data,
-    staleTime: 60 * 1000,
-  });
-
-  const pins = [
-    ...(stats?.recentIssues || []).map((issue) => ({
-      id: `i-${issue._id}`,
-      kind: OPEN_STATUSES.has(issue.status) ? "open" : issue.status === "solved" ? "solved" : null,
-      label: issue.area ? `${issue.title} · ${issue.area}` : issue.title,
-      href: `/issues/${issue._id}`,
-    })),
-    ...(stats?.nextEvents || []).map((event) => ({
-      id: `e-${event._id}`,
-      kind: "event",
-      label: event.area ? `${event.title} · ${event.area}` : event.title,
-      href: `/cleanup-events/${event._id}`,
-    })),
-  ].filter((p) => p.kind);
+  const { data: stats } = usePublicStats();
+  const pins = statsToPins(stats);
 
   const firstName = displayName?.split(" ")[0];
 

@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from'react';
 import SEO from '../common/SEO';
-import { useNavigate } from'react-router';
+import { useNavigate, Link } from'react-router';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
 import SocialFeedCard from'../cards/SocialFeedCard';
 import MinimalLoader from'../common/MinimalLoader';
-import { Typewriter } from'react-simple-typewriter';
 import { motion, AnimatePresence } from'framer-motion';
 import PremiumDropdown from'../common/PremiumDropdown';
 import { socket } from'../../hooks/useSocket';
-import BackButton from'../common/BackButton';
+import PageHeader from'../common/PageHeader';
+import CityDiorama from'../Home/CityDiorama';
+import usePublicStats, { statsToPins } from'../../hooks/usePublicStats';
 
 const AllIssues = () => {
  const navigate = useNavigate();
+ const { data: stats } = usePublicStats();
  const axiosPublic = useAxiosPublic();
  const [issues, setIssues] = useState([]);
  const [isLoading, setIsLoading] = useState(true);
@@ -91,61 +93,45 @@ const AllIssues = () => {
  { label:"Ward 6", value:"Ward 6"}
  ];
 
+ // Try one fallback image only; retrying on every error looped forever when the fallback failed too
  const handleImageError = (e) => {
+ if (e.target.dataset.fallback) return;
+ e.target.dataset.fallback ="1";
  e.target.src =`https://picsum.photos/seed/${e.target.alt}/500/400`;
  };
 
  return (
- <div className="min-h-screen py-8 font-body">
+ <div className="min-h-screen pb-8 font-body">
  <SEO title="Active Incident Reports" canonical={`${window.location.origin}/issues`} />
  
- {/* Top Header with Typewriter */}
- <div className="max-w-5xl mx-auto px-4 mb-6">
- <BackButton variant="dark"className="mb-4 inline-flex"/>
- <h1 className="text-3xl tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight">
- Active Incident Reports
- </h1>
- <p className="text-[13px] text-slate-600 dark:text-slate-300 font-medium mt-1">
- Monitor, track, and mobilize resources for local{" "}
- <span className="text-[#0f766e] font-bold">
- <Typewriter
- words={['infrastructure hazards.','drainage failures.','utility outages.','sanitation breaches.']}
- loop={0}
- cursor
- cursorStyle='|'typeSpeed={70}
- deleteSpeed={50}
- delaySpeed={1500}
+ <PageHeader
+ width="64rem"
+ gutter="1rem"
+ title="Issues near you"
+ description="Broken streetlights, blocked drains, overflowing bins: see what neighbours have reported, add what you've seen, and follow each one until it's fixed."
+ actions={
+ <>
+ <Link to="/issues/add" className="cn-btn cn-btn-signal">
+ <i className="ri-map-pin-add-line text-base" aria-hidden="true" />
+ Report an issue
+ </Link>
+ <Link to="/ai-assistant" className="cn-btn cn-btn-on-dark">
+ <i className="ri-robot-2-line text-base" aria-hidden="true" />
+ Draft one with CivicBot
+ </Link>
+ </>
+ }
+ meta={stats && (
+ <>
+ <span><strong>{stats.openIssues?.toLocaleString()}</strong> open</span>
+ <span><strong>{stats.issuesResolved?.toLocaleString()}</strong> fixed so far</span>
+ </>
+ )}
+ art={<CityDiorama size="md" pins={statsToPins(stats, { events: false })} />}
  />
- </span>
- </p>
- </div>
 
  {}
- <div className="max-w-5xl mx-auto px-4 mb-6">
- <div className="bg-gradient-to-r from-teal-50/70 to-emerald-50/70 dark:from-teal-950/20 dark:to-emerald-950/20 border border-teal-100 dark:border-teal-900 rounded-xl p-4 flex items-center justify-between flex-wrap gap-3 shadow-sm">
- <div className="flex items-center gap-3">
- <div className="w-10 h-10 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/10 rounded-lg border border-teal-100 dark:border-teal-900 flex items-center justify-center text-teal-600">
- <i className="ri-robot-line text-[13px]"></i>
- </div>
- <div>
- <p className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
- ✨ CivicBot AI Helper Available
- </p>
- <p className="text-[11px] text-slate-650 mt-0.5 font-semibold">
- Draft detailed incident reports, generate city corporate complaint letters, and get animal rescue tips instantly.
- </p>
- </div>
- </div>
- <button 
- type="button"onClick={() => navigate('/ai-assistant')}
- className="px-4 py-2 bg-[#0f766e] hover:bg-[#0d645d] text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer">
- Open CivicBot AI
- </button>
- </div>
- </div>
-
- {}
- <div className="max-w-5xl mx-auto px-4 mb-8">
+ <div className="max-w-5xl mx-auto px-4 mt-8 mb-8">
  <h2 className="text-[13px] font-bold text-slate-500 dark:text-slate-300 uppercase tracking-wider mb-4 px-1">Filter Incidents by Infrastructure Sector</h2>
  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
  <button 

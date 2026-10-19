@@ -6,7 +6,7 @@ import useAxiosPublic from"../../hooks/useAxiosPublic";
 import { format, formatDistanceToNow } from"date-fns";
 import MinimalLoader from"../common/MinimalLoader.jsx";
 import { Link } from"react-router";
-import BackButton from"../common/BackButton";
+import PageHeader from"../common/PageHeader";
 import { Player } from"@lottiefiles/react-lottie-player";
 import emptyAnimation from"../../assets/lottie/empty-notices.json";
 
@@ -68,67 +68,25 @@ export default function Noticeboard() {
  };
 
  return (
- <div className="min-h-screen dark:bg-[#0b1215] pt-28 pb-20 px-[5%]">
+ <div className="min-h-screen dark:bg-[#0b1215] pb-20">
  <SEO title="Official Noticeboard" />
  {openDropdownId && (
  <div className="fixed inset-0 z-20"onClick={() => setOpenDropdownId(null)} />
  )}
- <div className="max-w-5xl mx-auto">
- <BackButton variant="dark"className="mb-6 inline-flex"/>
-
- {/* Banner */}
- <div className="bg-gradient-to-r from-teal-800 to-emerald-700 rounded-xl p-5 md:p-10 text-white flex flex-col md:flex-row justify-between items-center mb-8 relative overflow-hidden shadow-xl border border-teal-700/50">
- {/* Geometric subtle background grid */}
- <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"/>
- <div className="flex-1 z-10 text-center md:text-left">
- <h1 className="font-heading text-4xl tracking-tight md:text-5xl tracking-tight font-black mb-3 tracking-tight flex items-center justify-center md:justify-start gap-3">
- <i className="ri-megaphone-fill text-emerald-300 text-3xl tracking-tight md:text-4xl tracking-tight animate-pulse"/>
- Community Notices
- </h1>
- <p className="font-body text-emerald-100 text-[13px] md:text-[13px] max-w-2xl mb-6">
- Official announcements, upcoming events, warnings, and maintenance updates for our neighborhood.
- </p>
- {/* Live Stats Badges */}
- <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-4">
- <div className="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-[10px] text-xs font-semibold border border-white/10 flex items-center gap-2 transition-all hover:bg-white/20 select-none">
- <span className="flex h-5 px-2 items-center justify-center rounded-[6px] bg-emerald-500/20 text-emerald-300 font-bold text-xs">
- {activeCount}
- </span>
- <span className="text-white flex items-center gap-1.5">
- <i className="ri-checkbox-circle-fill text-emerald-400"/>
- Active Notices
- </span>
- </div>
- <div className="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-[10px] text-xs font-semibold border border-white/10 flex items-center gap-2 transition-all hover:bg-white/20 select-none">
- <span className="flex h-5 px-2 items-center justify-center rounded-[6px] bg-amber-500/20 text-amber-300 font-bold text-xs">
- {pinnedCount}
- </span>
- <span className="text-white flex items-center gap-1.5">
- <i className="ri-pushpin-2-fill text-amber-400"/>
- Important Alerts
- </span>
- </div>
- <div className="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-[10px] text-xs font-semibold border border-white/10 flex items-center gap-2 transition-all hover:bg-white/20 select-none">
- <span className="flex h-5 px-2 items-center justify-center rounded-[6px] bg-sky-500/20 text-sky-300 font-bold text-xs">
- {thisWeekCount}
- </span>
- <span className="text-white flex items-center gap-1.5">
- <i className="ri-calendar-check-fill text-sky-400"/>
- New This Week
- </span>
- </div>
- </div>
- </div>
- {}
- <div className="w-40 h-40 shrink-0 select-none z-10 mt-6 md:mt-0 flex items-center justify-center relative">
- <div className="absolute inset-0 bg-emerald-400/20 rounded-full animate-ping opacity-30 scale-75"/>
- <div className="w-28 h-28 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-lg">
- <span className="material-symbols-outlined text-[64px] text-white animate-bounce"style={{ animationDuration:'3s'}}>
- notifications_active
- </span>
- </div>
- </div>
- </div>
+ <PageHeader
+ width="64rem"
+ gutter="1rem"
+ title="Notices"
+ description="Announcements, warnings and maintenance updates for the neighbourhood, from the people who run it."
+ meta={
+ <>
+ <span><strong>{activeCount}</strong> active</span>
+ <span><strong>{pinnedCount}</strong> marked important</span>
+ <span><strong>{thisWeekCount}</strong> new this week</span>
+ </>
+ }
+ />
+ <div className="max-w-5xl mx-auto px-4 pt-8">
 
  {}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-lg p-5 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-5 shadow-sm">
