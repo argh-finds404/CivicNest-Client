@@ -7,6 +7,7 @@ import LostFoundCard from"../cards/LostFoundCard";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
+import PageArt3D from'../three/PageArt3D';
 import SectionFilterChips from'../common/SectionFilterChips';
 import { 
  Search, 
@@ -90,6 +91,7 @@ export default function LostFoundBrowse() {
  <PageHeader
  width="calc(80rem + 10%)"
  gutter="5%"
+ art={<PageArt3D model="lostfound" label="A magnifying glass searching over a lost key and wallet" />}
  title="Lost & found"
  description={typeView ==='lost'
  ? "Lost a wallet, a phone or a pet? Post it here so neighbours know to look out for it."
@@ -110,7 +112,7 @@ export default function LostFoundBrowse() {
  <div className="max-w-7xl mx-auto">
  {/* Type Toggle */}
  <div className="mb-8">
- <div className="flex bg-slate-200/55 p-1.5 rounded-lg max-w-md mx-auto relative border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/40 select-none">
+ <div className="flex bg-slate-200/55 dark:bg-white/5 p-1.5 rounded-2xl max-w-md mx-auto relative border border-slate-200 dark:border-white/10 select-none">
  {TYPE_TOGGLE.map(type => {
  const isActive = typeView === type.value;
  return (
@@ -121,7 +123,7 @@ export default function LostFoundBrowse() {
  }}
  className={`relative flex-grow flex items-center justify-center gap-2 py-3 text-[13px] font-bold rounded-xl transition-all duration-300 cursor-pointer z-10 select-none
  ${isActive
- ?'text-white':'text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]'}`}
+ ?'text-white':'text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white'}`}
  >
  {isActive && (
  <motion.div

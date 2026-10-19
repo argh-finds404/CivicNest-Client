@@ -9,6 +9,7 @@ import useAxiosSecure from"../../hooks/useAxiosSecure";
 import useAxiosPublic from"../../hooks/useAxiosPublic";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
+import PageArt3D from'../three/PageArt3D';
 import { MapContainer, TileLayer, Marker, Popup } from"react-leaflet";
 import"leaflet/dist/leaflet.css";
 import L from"leaflet";
@@ -138,6 +139,7 @@ export default function AnimalsBrowse() {
  <PageHeader
  width="calc(80rem + 10%)"
  gutter="5%"
+ art={<PageArt3D model="animals" label="A doghouse with a food bowl and a bone" />}
  title="Animals"
  description="Strays that need food, treatment or a home. Report one you've seen, follow its recovery, or organise a feeding drive with neighbours."
  actions={

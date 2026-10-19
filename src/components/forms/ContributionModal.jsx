@@ -1,11 +1,11 @@
 import React, { useState } from'react';
 import toast from'react-hot-toast';
 import { motion, AnimatePresence } from'framer-motion';
-import useAxiosPublic from'../../hooks/useAxiosPublic';
+import useAxiosSecure from'../../hooks/useAxiosSecure';
 import MinimalLoader from'../common/MinimalLoader.jsx';
 
 const ContributionModal = ({ issueId, isOpen, onClose, onContributeSuccess }) => {
- const axiosPublic = useAxiosPublic();
+ const axiosSecure = useAxiosSecure();
  const [amount, setAmount] = useState(100);
  const [name, setName] = useState("");
  const [phone, setPhone] = useState("");
@@ -29,7 +29,7 @@ const ContributionModal = ({ issueId, isOpen, onClose, onContributeSuccess }) =>
  message
  };
 
- const res = await axiosPublic.post('/contributions', payload);
+ await axiosSecure.post('/contributions', payload);
 
  toast.success("Thank you for your contribution!");
  if (onContributeSuccess) onContributeSuccess(payload);

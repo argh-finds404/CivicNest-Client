@@ -358,7 +358,7 @@ export default function CleanupEventDetails() {
         <TileLayer url={isDark ?"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"}/>
         <Marker position={position}>
           <Popup>
-            <div className="p-2 min-w-[200px]" style={{ fontFamily: 'HKGrotesk, sans-serif' }}>
+            <div className="p-2 min-w-[200px]" style={{ fontFamily:'var(--font-heading)' }}>
               <h4 className="font-extrabold text-slate-900 text-xs mb-1 truncate">{event.title}</h4>
               <p className="text-[11px] text-slate-500 mb-2.5 leading-relaxed">{event.location?.address || 'Meeting Point'}</p>
               <div className="flex gap-2">

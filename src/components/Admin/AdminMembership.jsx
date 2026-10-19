@@ -73,7 +73,7 @@ const AdminMembership = () => {
  <i className="ri-pass-valid-line text-3xl tracking-tight drop-shadow-md"></i>
  </div>
  <div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  {activeTab ==='membership'?'Membership Applications':'Volunteer Applications'}
  </h1>
  <p className="text-[13px] md:text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-1">

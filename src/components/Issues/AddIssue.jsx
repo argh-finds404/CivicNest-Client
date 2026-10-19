@@ -202,8 +202,9 @@ const AddIssue = () => {
 
  const res = await axiosSecure.post("/issues", payload);
  if (res.data.success || res.status === 201 || res.status === 200) {
- toast.success("Issue submitted successfully!", { id:"submitIssue"});
- navigate('/issues/my');
+ const code = res.data.ticketCode;
+ toast.success(code ? `Report filed. Your ticket is ${code}.` :"Report filed.", { id:"submitIssue", duration: 6000 });
+ navigate(code ? `/tickets/${code}` :'/issues/my');
  } else {
  throw new Error("Failed to post issue");
  }

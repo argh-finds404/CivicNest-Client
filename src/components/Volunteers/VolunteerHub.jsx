@@ -50,8 +50,8 @@ import { useRole } from "../../hooks/useRole";
 
 import VolunteerDirectoryCard from "./VolunteerDirectoryCard.jsx";
 import PageHeader from "../common/PageHeader";
-import CityDiorama from "../Home/CityDiorama";
-import usePublicStats, { statsToPins } from "../../hooks/usePublicStats";
+import PageArt3D from "../three/PageArt3D";
+import usePublicStats from "../../hooks/usePublicStats";
 import { Sprout, CheckCircle, Users } from "lucide-react";
 
 const TABS = [
@@ -194,7 +194,7 @@ export default function VolunteerHub() {
  <span><strong>{publicStats.openIssues}</strong> open issues that need hands</span>
  </>
  )}
- art={<CityDiorama size="md" pins={statsToPins(publicStats)} />}
+ art={<PageArt3D model="volunteers" label="A shovel in fresh soil beside a sapling and a watering can" />}
  />
 
  {}
@@ -342,7 +342,7 @@ export default function VolunteerHub() {
  {tab ==="directory"&& (
  <motion.div key="directory"initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
  <div className="mb-6">
- <h2 className="text-2xl tracking-tight font-bold text-gray-900 dark:text-white mb-1 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}>
+ <h2 className="text-2xl tracking-tight font-bold text-gray-900 dark:text-white mb-1 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  Volunteer Directory
  </h2>
  <p className="text-[13px] text-gray-500 dark:text-slate-300">

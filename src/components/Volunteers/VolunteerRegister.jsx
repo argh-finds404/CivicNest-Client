@@ -92,7 +92,7 @@ export default function VolunteerRegister() {
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg shadow-xl border border-slate-100 overflow-hidden">
  {/* Header */}
  <div className="bg-gradient-to-br from-teal-600 to-emerald-600 p-5 text-white text-center">
- <h1 className="text-3xl tracking-tight font-extrabold mb-2 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}>Join as a Volunteer</h1>
+ <h1 className="text-3xl tracking-tight font-extrabold mb-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Join as a Volunteer</h1>
  <p className="text-white/80">Make a real difference in your community.</p>
  
  {/* Progress Bar */}
@@ -108,7 +108,7 @@ export default function VolunteerRegister() {
  {/* Step 1: Skills */}
  {step === 1 && (
  <motion.div key="step1"initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
- <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}>What skills can you offer?</h3>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>What skills can you offer?</h3>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
  {SKILLS_LIST.map(skill => {
  const isSelected = formData.skills.includes(skill.label);
@@ -140,7 +140,7 @@ export default function VolunteerRegister() {
  {/* Step 2: Availability & Area */}
  {step === 2 && (
  <motion.div key="step2"initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
- <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}>Where & When?</h3>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Where & When?</h3>
  
  <div className="space-y-6 mb-8">
  <div>
@@ -185,7 +185,7 @@ export default function VolunteerRegister() {
  {/* Step 3: Contact Info */}
  {step === 3 && (
  <motion.div key="step3"initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
- <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:"HKGrotesk, sans-serif"}}>Contact Details</h3>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Contact Details</h3>
  
  <form onSubmit={handleSubmit} className="space-y-6 mb-8">
  <div>

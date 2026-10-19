@@ -117,7 +117,7 @@ export default function MembershipRequest() {
  <div className="w-16 h-16 bg-teal-50 rounded-lg flex items-center justify-center mx-auto mb-6 border border-teal-100 shadow-sm text-[#0f766e]">
  <i className="ri-shield-user-line text-3xl tracking-tight"></i>
  </div>
- <h1 className="text-3xl tracking-tight font-extrabold text-slate-900 dark:text-white text-center mb-2 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Verified Membership</h1>
+ <h1 className="text-3xl tracking-tight font-extrabold text-slate-900 dark:text-white text-center mb-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Verified Membership</h1>
  <p className="text-slate-500 dark:text-slate-300 text-center text-[13px] mb-8 max-w-md mx-auto leading-relaxed">
  To organize cleanup drives, post items to Lost & Found, or report animals, you must verify your residency.
  </p>

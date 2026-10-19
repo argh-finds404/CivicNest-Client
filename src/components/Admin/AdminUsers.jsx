@@ -40,7 +40,7 @@ const AdminUsers = () => {
  Swal.fire({
  icon:'error',
  title:'Update Failed',
- text:'Could not update user role.'});
+ text: error.response?.data?.error ||'Could not update user role.'});
  }
  };
 
@@ -60,7 +60,7 @@ const AdminUsers = () => {
  <i className="ri-team-line text-3xl tracking-tight drop-shadow-md"></i>
  </div>
  <div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>User Management</h1>
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>User Management</h1>
  <p className="text-[13px] md:text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-1">Manage user roles and accounts across the platform.</p>
  </div>
  </div>
@@ -97,6 +97,7 @@ const AdminUsers = () => {
  <td className="py-4 px-6">
  <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
  user.role ==='admin'?'bg-red-50 text-red-600 border border-red-200':
+ user.role ==='moderator'?'bg-violet-50 text-violet-700 border border-violet-200 dark:bg-violet-950/30 dark:text-violet-300 dark:border-violet-900':
  user.role ==='member'?'bg-[#40826D]/10 text-[#40826D] border border-[#40826D]/20':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]'}`}>
  {user.role ||'guest'}
  </span>
@@ -109,6 +110,7 @@ const AdminUsers = () => {
  >
  <option value="guest">Guest</option>
  <option value="member">Member</option>
+ <option value="moderator">Moderator</option>
  <option value="admin">Admin</option>
  </select>
  </td>

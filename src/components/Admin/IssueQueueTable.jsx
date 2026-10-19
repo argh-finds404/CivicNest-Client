@@ -146,7 +146,7 @@ export default function IssueQueueTable() {
  <i className="ri-stack-line text-3xl tracking-tight drop-shadow-md"></i>
  </div>
  <div>
- <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>Issue Command Center</h1>
+ <h1 className="text-3xl tracking-tight md:text-4xl tracking-tight font-black text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Issue Command Center</h1>
  <p className="text-[13px] md:text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-1">Efficiently manage, assign, and resolve community reports.</p>
  </div>
  </div>
@@ -191,7 +191,7 @@ export default function IssueQueueTable() {
  <i className={`${tabIcons[statusFilter]} text-3xl tracking-tight opacity-80`}></i>
  </div>
  <div>
- <h2 className="text-2xl tracking-tight font-extrabold text-slate-800 dark:text-white capitalize tracking-tight"style={{ fontFamily:'HKGrotesk'}}>{statusFilter.replace('_','')} Queue</h2>
+ <h2 className="text-2xl tracking-tight font-extrabold text-slate-800 dark:text-white capitalize tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>{statusFilter.replace('_','')} Queue</h2>
  <p className="text-[13px] font-medium text-slate-500 dark:text-slate-300 mt-1">Review and manage specific community reports</p>
  </div>
  </div>
@@ -215,7 +215,7 @@ export default function IssueQueueTable() {
  <div className="w-32 h-32 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-[2rem] shadow-sm border border-slate-100 flex items-center justify-center mb-6 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
  <i className={`${tabIcons[statusFilter]} text-6xl opacity-50`}></i>
  </div>
- <h3 className="text-2xl tracking-tight md:text-3xl tracking-tight font-extrabold text-slate-800 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>Queue is Empty!</h3>
+ <h3 className="text-2xl tracking-tight md:text-3xl tracking-tight font-extrabold text-slate-800 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Queue is Empty!</h3>
  <p className="text-slate-500 dark:text-slate-300 font-medium mt-3 max-w-sm leading-relaxed">
  There are currently no issues in the <strong className="text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] capitalize">{statusFilter.replace('_','')}</strong> queue. Take a break or check another category!
  </p>

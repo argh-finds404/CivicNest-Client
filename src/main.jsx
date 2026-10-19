@@ -5,6 +5,7 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import AuthProvider from './components/contexts/AuthProvider';
 import { HelmetProvider } from 'react-helmet-async';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 import React, { Suspense, lazy } from 'react';
 import ChunkErrorBoundary from './components/common/ChunkErrorBoundary';
@@ -54,6 +55,9 @@ const AdminForum = lazy(() => import('./components/Admin/AdminForum'));
 const AdminNGOs = lazy(() => import('./components/Admin/AdminNGOs'));
 const AdminNotices = lazy(() => import('./components/Admin/AdminNotices'));
 const AdminGallery = lazy(() => import('./components/Admin/AdminGallery'));
+const AdminTickets = lazy(() => import('./components/Admin/AdminTickets'));
+const MyTickets = lazy(() => import('./components/Tickets/MyTickets'));
+const TicketDetails = lazy(() => import('./components/Tickets/TicketDetails'));
 
 const PaymentSuccess = lazy(() => import('./components/Payment/PaymentSuccess'));
 const PaymentFailure = lazy(() => import('./components/Payment/PaymentFailure'));
@@ -64,6 +68,7 @@ const NGORegister = lazy(() => import('./components/NGOs/NGORegister'));
 const PollsBrowse = lazy(() => import('./components/Polls/PollsBrowse'));
 import MemberRoute from './routes/MemberRoute';
 import AdminRoute from './routes/AdminRoute';
+import StaffRoute from './routes/StaffRoute';
 const CivicBot = lazy(() => import('./components/AI/CivicBot'));
 const Profile = lazy(() => import('./components/Profile/Profile'));
 const PublicProfile = lazy(() => import('./components/Profile/PublicProfile'));
@@ -101,15 +106,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'recent-activities',
-        Component: RecentActivities,
+        element: <PrivateRoute><RecentActivities /></PrivateRoute>,
       },
       {
         path: 'gallery',
-        element: <BeforeAfterGallery />,
+        element: <PrivateRoute><BeforeAfterGallery /></PrivateRoute>,
       },
       {
         path: 'issues',
-        element: <AllIssues />,
+        element: <PrivateRoute><AllIssues /></PrivateRoute>,
       },
       {
         path: 'issues/add',
@@ -117,7 +122,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'issues/:id',
-        element: <IssueDetails />,
+        element: <PrivateRoute><IssueDetails /></PrivateRoute>,
+      },
+      {
+        path: 'tickets',
+        element: <PrivateRoute><MyTickets /></PrivateRoute>,
+      },
+      {
+        path: 'tickets/:code',
+        element: <PrivateRoute><TicketDetails /></PrivateRoute>,
       },
       {
         path: 'contributions',
@@ -133,7 +146,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'lost-found',
-        element: <LostFoundBrowse />,
+        element: <PrivateRoute><LostFoundBrowse /></PrivateRoute>,
       },
       {
         path: 'lost-found/add-lost',
@@ -149,11 +162,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'lost-found/:id',
-        element: <LostFoundDetails />,
+        element: <PrivateRoute><LostFoundDetails /></PrivateRoute>,
       },
       {
         path: 'animals',
-        element: <AnimalsBrowse />,
+        element: <PrivateRoute><AnimalsBrowse /></PrivateRoute>,
       },
       {
         path: 'animals/add',
@@ -165,11 +178,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'animals/feeding-drives',
-        element: <FeedingDrives />,
+        element: <PrivateRoute><FeedingDrives /></PrivateRoute>,
       },
       {
         path: 'animals/:id',
-        element: <AnimalDetails />,
+        element: <PrivateRoute><AnimalDetails /></PrivateRoute>,
       },
       {
         path: 'membership/request',
@@ -177,11 +190,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'admin',
-        element: <AdminRoute><AdminDashboard /></AdminRoute>,
+        element: <StaffRoute><AdminDashboard /></StaffRoute>,
         children: [
           {
             index: true,
             element: <AdminStats />
+          },
+          {
+            path: 'tickets',
+            element: <AdminTickets />
           },
           {
             path: 'queue',
@@ -189,11 +206,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'users',
-            element: <AdminUsers />
+            element: <AdminRoute><AdminUsers /></AdminRoute>
           },
           {
             path: 'membership',
-            element: <AdminMembership />
+            element: <AdminRoute><AdminMembership /></AdminRoute>
           },
           {
             path: 'posts',
@@ -209,25 +226,25 @@ const router = createBrowserRouter([
           },
           {
             path: 'ngos',
-            element: <AdminNGOs />
+            element: <AdminRoute><AdminNGOs /></AdminRoute>
           },
           {
             path: 'notices',
-            element: <AdminNotices />
+            element: <AdminRoute><AdminNotices /></AdminRoute>
           },
           {
             path: 'gallery',
-            element: <AdminGallery />
+            element: <AdminRoute><AdminGallery /></AdminRoute>
           },
           {
             path: 'donations',
-            element: <AdminDonations />
+            element: <AdminRoute><AdminDonations /></AdminRoute>
           }
         ]
       },
       {
         path: 'ai-assistant',
-        element: <CivicBot />,
+        element: <PrivateRoute><CivicBot /></PrivateRoute>,
       },
       {
         path: 'profile',
@@ -235,7 +252,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'user/:id',
-        element: <PublicProfile />,
+        element: <PrivateRoute><PublicProfile /></PrivateRoute>,
       },
       {
         path: '/payment-success',
@@ -247,15 +264,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/noticeboard",
-        element: <Noticeboard />,
+        element: <PrivateRoute><Noticeboard /></PrivateRoute>,
       },
       {
         path: "/noticeboard/:id",
-        element: <NoticeDetails />,
+        element: <PrivateRoute><NoticeDetails /></PrivateRoute>,
       },
       {
         path: "/volunteers",
-        element: <VolunteerHub />,
+        element: <PrivateRoute><VolunteerHub /></PrivateRoute>,
       },
       {
         path: "/volunteers/register",
@@ -267,23 +284,23 @@ const router = createBrowserRouter([
       },
       {
         path: "/forum",
-        element: <Forum />,
+        element: <PrivateRoute><Forum /></PrivateRoute>,
       },
       {
         path: "/forum/:id",
-        element: <Forum />,
+        element: <PrivateRoute><Forum /></PrivateRoute>,
       },
       {
         path: "/map",
-        element: <CommunityMap />,
+        element: <PrivateRoute><CommunityMap /></PrivateRoute>,
       },
       {
         path: "/leaderboard",
-        element: <Leaderboard />,
+        element: <PrivateRoute><Leaderboard /></PrivateRoute>,
       },
       {
         path: "/fund",
-        element: <FundCleanup />,
+        element: <PrivateRoute><FundCleanup /></PrivateRoute>,
       },
       {
         path: "/support",
@@ -291,7 +308,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/ngos",
-        element: <NGODirectory />,
+        element: <PrivateRoute><NGODirectory /></PrivateRoute>,
       },
       {
         path: "/ngos/register",
@@ -299,15 +316,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/ngos/:id",
-        element: <NGOProfile />,
+        element: <PrivateRoute><NGOProfile /></PrivateRoute>,
       },
       {
         path: "/polls",
-        element: <PollsBrowse />,
+        element: <PrivateRoute><PollsBrowse /></PrivateRoute>,
       },
       {
         path: "/cleanup-events",
-        element: <CleanupEventsPage />,
+        element: <PrivateRoute><CleanupEventsPage /></PrivateRoute>,
       },
       {
         path: "/cleanup-events/organize",
@@ -315,7 +332,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/cleanup-events/:id",
-        element: <CleanupEventDetails />,
+        element: <PrivateRoute><CleanupEventDetails /></PrivateRoute>,
       },
       {
         path: "/press-kit",
@@ -343,8 +360,9 @@ const router = createBrowserRouter([
       },
     ]
   },
-  // Browse and detail pages are public; only creating, editing, personal
-  // dashboards and payments sit behind PrivateRoute / MemberRoute.
+  // Public: home, login/register and the info pages linked from the footer.
+  // Everything else needs an account (PrivateRoute), verified residency
+  // (MemberRoute) or a staff role (StaffRoute / AdminRoute).
   {
     path: '/Login',
     Component: Login,
@@ -377,9 +395,11 @@ createRoot(document.getElementById('root')).render(
         Firebase auth-state check before rendering children.
       */}
       <HelmetProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+          </AuthProvider>
+        </ThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>
   </StrictMode>,
