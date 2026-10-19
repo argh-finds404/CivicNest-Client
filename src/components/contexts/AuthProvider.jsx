@@ -139,7 +139,7 @@ const AuthProvider = ({ children }) => {
             margin: '0 auto 16px'
           }}
         />
-        <p style={{ color: '#ffffff', fontSize: '14.5px', fontWeight: 'bold', fontFamily: 'HKGrotesk, sans-serif', letterSpacing: '0.05em' }}>
+        <p style={{ color: '#ffffff', fontSize: '14.5px', fontWeight: 'bold', fontFamily:'var(--font-heading)', letterSpacing: '0.05em' }}>
           Signing out securely...
         </p>
       </div>

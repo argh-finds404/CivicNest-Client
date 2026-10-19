@@ -1,8 +1,9 @@
-import React, { useState, useContext } from"react";
+import React, { useState, useContext, useRef } from"react";
 import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
 import AuthShowcase from"../common/AuthShowcase";
+import ReviewerAccess from"./ReviewerAccess";
 
 const loginStyles =`
 .login-checkbox {
@@ -81,6 +82,7 @@ const Login = () => {
  const [emailLoading, setEmailLoading] = useState(false);
  const [googleLoading, setGoogleLoading] = useState(false);
  const [checking, setChecking] = useState(false);
+ const formRef = useRef(null);
  const [toast, setToast] = useState({
  show: false,
  type:"",
@@ -208,8 +210,8 @@ const Login = () => {
  src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover"/>
  </div>
  <div className="flex flex-col">
- <span className="text-[28px] text-[#0f172a] tracking-tight leading-none"style={{ fontFamily:"'Montserrat', sans-serif", fontWeight: 900 }}>
- Civic<span className="text-[#0f766e]">Nest</span>
+ <span className="text-[28px] text-[#0f172a] dark:text-white tracking-tight leading-none"style={{ fontFamily:"'Montserrat', sans-serif", fontWeight: 900 }}>
+ Civic<span className="text-[#0f766e] dark:text-[#6ee7b7]">Nest</span>
  </span>
  <span className="text-[9px] font-bold uppercase tracking-widest text-[#0f766e] mt-0.5">
  Sustainable Urban Living
@@ -233,7 +235,7 @@ const Login = () => {
  </div>
 
  {/* Form — name attributes added, wired to handleSubmit */}
- <form className="space-y-5"onSubmit={handleSubmit}>
+ <form ref={formRef} className="space-y-5"onSubmit={handleSubmit}>
  {/* Email Field */}
  <div className="space-y-1.5">
  <label className="block text-xs font-semibold text-[#94a3b8]">
@@ -288,7 +290,7 @@ const Login = () => {
  </svg>
  )}
  </div>
- <span className="text-[13px] text-[#475569] group-hover:text-[#0f172a] transition-colors select-none">
+ <span className="text-[13px] text-[#475569] group-hover:text-[#0f172a] dark:text-slate-300 dark:group-hover:text-white transition-colors select-none">
  Remember me
  </span>
  </label>
@@ -300,7 +302,7 @@ const Login = () => {
 
  {/* Sign In Button */}
  <button
- className="w-full h-[48px] bg-[#0f172a] hover:bg-[#1e293b] text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200 text-[13px] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"type="submit"disabled={emailLoading || googleLoading || checking}
+ className="w-full h-[48px] bg-[#0f172a] hover:bg-[#1e293b] dark:bg-[#0f6b5c] dark:hover:bg-[#14806c] text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-200 text-[13px] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"type="submit"disabled={emailLoading || googleLoading || checking}
  >
  {checking ? (
  <>
@@ -321,6 +323,8 @@ const Login = () => {
  ) : ("Sign in")}
  </button>
  </form>
+
+ <ReviewerAccess formRef={formRef} disabled={emailLoading || googleLoading || checking} />
 
  {/* Divider */}
  <div className="relative my-6">

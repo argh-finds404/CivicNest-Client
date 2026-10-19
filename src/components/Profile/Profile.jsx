@@ -58,7 +58,7 @@ const OverviewTab = ({
  const unlockToast = (msg) => {
  toast.custom(
  (t) => (
- <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto flex items-center p-2 pr-5 border border-slate-100 dark:border-[#1e3040]/30"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] rounded-full pointer-events-auto flex items-center p-2 pr-5 border border-slate-100 dark:border-[#1e3040]/30"style={{ fontFamily:'var(--font-heading)'}}>
  <div className="h-10 w-10 shrink-0 rounded-full bg-[#40826D]/15 dark:bg-[#40826D]/20 flex items-center justify-center">
  <i className="ri-lock-unlock-line text-[#40826D] text-[15px] font-bold"></i>
  </div>
@@ -149,7 +149,7 @@ const OverviewTab = ({
  </div>
 
  <div className="flex-1 text-center md:text-left relative mt-4 md:mt-4 pb-2">
- <h2 className="text-3xl tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h2 className="text-3xl tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  {firebaseForm.displayName ||"Citizen"}
  </h2>
  <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-2">
@@ -173,7 +173,7 @@ const OverviewTab = ({
  {/* Main Details */}
  <div className="lg:col-span-2 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-100 shadow-sm p-5">
  <div className="flex items-center justify-between mb-6">
- <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white flex items-center gap-2 tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white flex items-center gap-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-user-settings-line text-[#40826D]"></i> Profile Information
  </h3>
  {!isEditingProfile && (
@@ -328,7 +328,7 @@ const OverviewTab = ({
  {/* Security & Badges */}
  <div className="lg:col-span-1 flex flex-col gap-4">
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-100 shadow-sm p-5 flex-1">
- <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 tracking-tight"style={{ fontFamily:'HKGrotesk'}}>
+ <h3 className="text-[13px] tracking-tight font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>
  <i className="ri-shield-check-line text-[#40826D]"></i> Account Status
  </h3>
  
@@ -414,7 +414,7 @@ const OverviewTab = ({
  
  <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
  <div>
- <h4 className="text-3xl tracking-tight font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#9FE2BF] mb-2 drop-shadow-sm"style={{ fontFamily:'HKGrotesk'}}>
+ <h4 className="text-3xl tracking-tight font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-[#9FE2BF] mb-2 drop-shadow-sm"style={{ fontFamily:'var(--font-heading)'}}>
  Become a Verified Member
  </h4>
  <p className="text-slate-300 font-medium max-w-xl leading-relaxed text-[13px]">
@@ -462,7 +462,7 @@ const OverviewTab = ({
  <i className="ri-image-edit-fill text-2xl tracking-tight"></i>
  </div>
  <div>
- <h3 className="text-[13px] tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>Update Cover Photo</h3>
+ <h3 className="text-[13px] tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Update Cover Photo</h3>
  <p className="text-[13px] text-slate-500 dark:text-slate-300 font-medium">Paste a direct image URL below.</p>
  </div>
  </div>
@@ -862,7 +862,7 @@ const Profile = () => {
 
  toast.custom(
  (t) => (
- <div className="max-w-sm w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-[2rem] pointer-events-auto flex items-center ring-1 ring-slate-900/5 p-2.5 pr-4"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <div className="max-w-sm w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] rounded-[2rem] pointer-events-auto flex items-center ring-1 ring-slate-900/5 p-2.5 pr-4"style={{ fontFamily:'var(--font-heading)'}}>
  <div className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-[#9FE2BF] to-[#40826D] flex items-center justify-center shadow-inner">
  <i className="ri-check-double-line text-white text-[13px] tracking-tight shadow-sm"></i>
  </div>
@@ -882,7 +882,7 @@ const Profile = () => {
  } catch (err) {
  toast.custom(
  (t) => (
- <div className="max-w-sm w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(239,68,68,0.15)] rounded-[2rem] pointer-events-auto flex items-center ring-1 ring-red-500/10 p-2.5 pr-4"style={{ fontFamily:'HKGrotesk, sans-serif'}}>
+ <div className="max-w-sm w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(239,68,68,0.15)] rounded-[2rem] pointer-events-auto flex items-center ring-1 ring-red-500/10 p-2.5 pr-4"style={{ fontFamily:'var(--font-heading)'}}>
  <div className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center shadow-inner">
  <i className="ri-error-warning-line text-white text-[13px] tracking-tight shadow-sm"></i>
  </div>
@@ -1090,7 +1090,7 @@ const Profile = () => {
             mass: 0.8
           }}
           className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-200 dark:ring-[#14241d]/90 backdrop-blur-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] rounded-2xl pointer-events-auto flex items-center p-4 border border-slate-200 dark:border-[#1e3040]/30 max-w-sm"
-          style={{ fontFamily: 'HKGrotesk, sans-serif' }}
+          style={{ fontFamily:'var(--font-heading)' }}
         >
           <div className="h-10 w-10 shrink-0 rounded-full bg-amber-500/10 flex items-center justify-center">
             <i className="ri-lock-2-line text-amber-500 text-lg font-bold"></i>
@@ -1143,7 +1143,7 @@ const Profile = () => {
  <i className="ri-dashboard-3-line text-[#40826D] text-2xl tracking-tight"></i>
  </div>
  <div>
- <h1 className="text-2xl tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'HKGrotesk'}}>My Dashboard</h1>
+ <h1 className="text-2xl tracking-tight font-extrabold text-slate-900 dark:text-white tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>My Dashboard</h1>
  <p className="text-[13px] text-slate-500 dark:text-slate-300 font-medium mt-0.5">Manage your profile, reports, and community contributions.</p>
  </div>
  </div>

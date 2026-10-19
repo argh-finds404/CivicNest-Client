@@ -65,7 +65,7 @@ const NewThread = () => {
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-gray-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4 md:p-10">
  <div className="mb-8 flex justify-between items-start flex-wrap gap-4">
  <div>
- <h1 className="text-3xl tracking-tight font-black text-gray-900 dark:text-white mb-2 tracking-tight"style={{ fontFamily:'HKGrotesk, sans-serif'}}>Create New Thread</h1>
+ <h1 className="text-3xl tracking-tight font-black text-gray-900 dark:text-white mb-2 tracking-tight"style={{ fontFamily:'var(--font-heading)'}}>Create New Thread</h1>
  <p className="text-gray-500 dark:text-slate-300 text-[13px]">Start a new discussion with the community.</p>
  </div>
  <CreditIndicator postType="forum"/>

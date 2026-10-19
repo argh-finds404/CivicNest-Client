@@ -1,0 +1,72 @@
+.ft {
+  position: relative;
+  margin-top: auto;
+  color: rgba(255, 255, 255, 0.78);
+  background:
+    radial-gradient(ellipse 50% 70% at 85% 0%, rgba(25, 161, 132, 0.28), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px) 0 0 / 48px 48px,
+    #072f29;
+  padding-top: 5rem;
+}
+/* Skyline strip: page-coloured sky with the buildings in the footer colour.
+   Kept inside the footer because .cn-defer clips anything outside it. */
+.ft-skyline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 46px;
+  background: var(--cn-ground);
+  fill: #072f29;
+}
+.ft-inner { box-sizing: border-box; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+.ft-cta {
+  display: grid;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.75rem;
+  border-radius: var(--cn-radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+@media (min-width: 900px) { .ft-cta { grid-template-columns: 1fr auto; padding: 2rem 2.25rem; } }
+.ft-cta-title { margin: 0; font-family: var(--font-heading); font-weight: 800; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: -0.02em; color: #fff; }
+.ft-cta-text { margin: 0.4rem 0 0; font-size: 0.95rem; }
+.ft-cta-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+
+.ft-track { display: flex; align-items: center; padding: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); transition: border-color 0.15s, box-shadow 0.15s; }
+.ft-track:focus-within { border-color: rgba(110, 231, 183, 0.7); box-shadow: 0 0 0 4px rgba(110, 231, 183, 0.15); }
+.ft-track input { width: 10.5rem; background: transparent; border: 0; outline: none; color: #fff; font: 600 0.88rem ui-monospace, SFMono-Regular, Menlo, monospace; padding: 0 0.75rem; text-transform: uppercase; }
+.ft-track input::placeholder { color: rgba(255, 255, 255, 0.4); text-transform: none; }
+.ft-track-btn { min-height: 2.3rem; padding: 0 1rem; border: 0; border-radius: 999px; background: #fff; color: #072f29; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: transform 0.15s, background-color 0.15s; }
+.ft-track-btn:hover { background: #d9f5ec; transform: translateY(-1px); }
+.ft-track-btn:focus-visible { outline: 3px solid var(--cn-signal); outline-offset: 2px; }
+.ft-track-error { flex-basis: 100%; margin: 0; font-size: 0.82rem; color: #ffb4ab; }
+
+.ft-main { display: grid; gap: 2.5rem; padding: 3.25rem 0 2.5rem; }
+@media (min-width: 900px) { .ft-main { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } }
+.ft-logo { display: inline-flex; align-items: center; gap: 0.7rem; color: #fff; text-decoration: none; font-family: "Montserrat", sans-serif; font-weight: 900; font-size: 1.5rem; letter-spacing: -0.02em; }
+.ft-logo img { width: 44px; height: 44px; border-radius: 13px; object-fit: cover; background: rgba(255, 255, 255, 0.1); }
+.ft-logo-accent { color: #6ee7b7; }
+.ft-mission { margin: 1rem 0 0; max-width: 24rem; font-size: 0.95rem; line-height: 1.65; }
+.ft-account { display: flex; gap: 1.25rem; margin-top: 1.25rem; }
+.ft-account a { color: #6ee7b7; font-weight: 700; font-size: 0.9rem; text-decoration: none; }
+.ft-account a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.ft-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+@media (min-width: 640px) { .ft-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.ft-col-title { margin: 0 0 1rem; font-family: var(--font-heading); font-size: 1rem; font-weight: 700; color: #fff; }
+.ft-cols ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+.ft-link { position: relative; color: rgba(255, 255, 255, 0.72); font-size: 0.92rem; text-decoration: none; transition: color 0.15s; }
+.ft-link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; border-radius: 2px; background: #6ee7b7; transform: scaleX(0); transform-origin: left; transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ft-link:hover { color: #fff; }
+.ft-link:hover::after, .ft-link:focus-visible::after { transform: scaleX(1); }
+.ft-link:focus-visible { outline: none; color: #fff; }
+
+.ft-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 0 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.85rem; }
+.ft-bottom p { margin: 0; }
+.ft-top { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.2); background: transparent; color: #fff; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: background-color 0.15s, transform 0.15s; }
+.ft-top:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-2px); }
+.ft-top:focus-visible { outline: 3px solid var(--cn-signal); outline-offset: 2px; }

@@ -87,7 +87,7 @@ export default function CommunityVerifyFeed() {
  <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
  <i className="ri-checkbox-circle-line text-3xl tracking-tight text-teal-600"></i>
  </div>
- <p className="font-bold text-slate-800 dark:text-white"style={{ fontFamily:'HKGrotesk'}}>
+ <p className="font-bold text-slate-800 dark:text-white"style={{ fontFamily:'var(--font-heading)'}}>
  All Clear!
  </p>
  <p className="text-[13px] text-slate-500 dark:text-slate-300 mt-2 max-w-sm mx-auto">

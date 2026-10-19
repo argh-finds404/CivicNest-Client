@@ -8,8 +8,8 @@ import useAxiosPublic from'../../hooks/useAxiosPublic';
 import PremiumEventCard from'../cards/PremiumEventCard';
 import MinimalLoader from'../common/MinimalLoader';
 import PageHeader from'../common/PageHeader';
-import CityDiorama from'../Home/CityDiorama';
-import usePublicStats, { statsToPins } from'../../hooks/usePublicStats';
+import PageArt3D from'../three/PageArt3D';
+import usePublicStats from'../../hooks/usePublicStats';
 import { useAuth } from'../../hooks/useAuth';
 import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
@@ -130,7 +130,7 @@ export default function CleanupEventsPage() {
  <span><strong>{publicStats.activeMembers?.toLocaleString()}</strong> neighbours on CivicNest</span>
  </>
  )}
- art={<CityDiorama size="md" pins={statsToPins(publicStats, { issues: false })} />}
+ art={<PageArt3D model="cleanups" label="A recycling bin, a tree and a trash bag on a patch of grass" />}
  />
 
  {/* Content Section */}

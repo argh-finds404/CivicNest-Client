@@ -42,21 +42,51 @@
 }
 .cn-hero-copy { max-width: 34rem; }
 .cn-hero-greet {
-  margin: 0 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1.1rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #a7e3d3;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+}
+.cn-hero-greet-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6ee7b7;
+  box-shadow: 0 0 0 4px rgba(110, 231, 183, 0.18);
 }
 .cn-hero-title {
   margin: 0;
   font-family: var(--font-heading);
-  font-weight: 900;
-  font-size: clamp(2.6rem, 6vw, 4.6rem);
-  line-height: 0.98;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 5.6vw, 4.4rem);
+  line-height: 1.02;
   letter-spacing: -0.035em;
   color: #fff;
   text-wrap: balance;
 }
+.cn-hero-name { color: #6ee7b7; }
+.cn-wave {
+  display: inline-block;
+  font-size: 0.85em;
+  transform-origin: 70% 75%;
+  animation: cn-wave 2.6s ease-in-out 0.6s infinite;
+}
+@keyframes cn-wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  8% { transform: rotate(16deg); }
+  16% { transform: rotate(-10deg); }
+  24% { transform: rotate(14deg); }
+  32% { transform: rotate(-6deg); }
+  40% { transform: rotate(10deg); }
+}
+@media (prefers-reduced-motion: reduce) { .cn-wave { animation: none; } }
 .cn-hero-sub {
   margin: 1.25rem 0 0;
   font-size: 1.05rem;
