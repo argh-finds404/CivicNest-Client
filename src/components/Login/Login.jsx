@@ -1,8 +1,7 @@
-import React, { useState, useContext, useRef } from"react";
+import React, { useState, useRef } from"react";
 import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
-import AuthShowcase from"../common/AuthShowcase";
 import ReviewerAccess from"./ReviewerAccess";
 
 const loginStyles =`
@@ -189,10 +188,10 @@ const Login = () => {
  };
 
  return (
- <div className="h-screen w-full flex bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] overflow-hidden"style={{ fontFamily:"'Raleway', sans-serif", fontWeight: 500 }}>
+ <div className="min-h-screen w-full flex bg-white dark:bg-[#0a120e]"style={{ fontFamily:"var(--font-body)", fontWeight: 500 }}>
  <PageTitle title="Sign In"/>
  {/* Left Side - Clean Form Section */}
- <div className="w-full lg:w-[42%] flex flex-col justify-center px-6 md:px-10 lg:px-12 xl:px-16 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] relative">
+ <div className="w-full lg:w-[42%] flex flex-col justify-center py-20 px-6 md:px-10 lg:px-12 xl:px-16 bg-white dark:bg-[#0a120e] relative">
  <div className="absolute top-8 left-6 md:left-10 lg:left-12 xl:left-16">
  <NavLink to="/"className="flex items-center gap-2 text-[13px] font-bold text-slate-500 dark:text-slate-300 hover:text-slate-900 dark:text-white transition-colors">
  <svg width="16"height="16"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round">
@@ -202,7 +201,7 @@ const Login = () => {
  </NavLink>
  </div>
  
- <div className="w-full max-w-[400px] mx-auto mt-12">
+ <div className="w-full max-w-[400px] mx-auto">
  {/* Logo */}
  <div className="flex items-center gap-2.5 mb-10">
  <div className="w-12 h-12 rounded-[14px] bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] border-2 border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm overflow-hidden flex-shrink-0">
@@ -373,12 +372,42 @@ const Login = () => {
  </div>
  </div>
 
- {/* Right side: the live neighbourhood */}
- <AuthShowcase
- className="hidden lg:flex lg:w-[58%]"
- title="Welcome back to the neighbourhood."
- text="See what's been reported near you, what's been fixed, and where the next cleanup is."
- />
+ {/* Right Side - Hero Image Section (Preserved) */}
+ <div className="hidden lg:flex lg:w-[58%] lg:sticky lg:top-0 lg:h-screen relative overflow-hidden">
+ <div className="absolute inset-0 bg-gradient-to-br from-[#0f766e]/30 via-[#0f766e]/15 to-transparent z-10"></div>
+ <img
+ alt="Community volunteers cleaning a park"className="absolute inset-0 w-full h-full object-cover"src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1470&auto=format&fit=crop"/>
+
+ {/* Overlay Content */}
+ <div className="relative z-20 flex flex-col justify-end p-12 xl:p-16 w-full">
+ <div className="max-w-md">
+ <h2 className="text-white text-3xl tracking-tight xl:text-4xl tracking-tight font-bold leading-tight tracking-tight mb-3 drop-shadow-sm">
+ Restore your local sanctuary.
+ </h2>
+ <p className="text-white/90 text-[13px] font-medium drop-shadow-sm">
+ Join 2,400+ neighbors curating the cleanliness and beauty of our
+ shared public spaces.
+ </p>
+
+ {/* Stats */}
+ <div className="flex items-center gap-4 mt-8">
+ <div>
+ <p className="text-white/70 text-xs uppercase tracking-wider">
+ Active Issues
+ </p>
+ <p className="text-white text-2xl tracking-tight font-bold">1,847</p>
+ </div>
+ <div className="w-px h-8 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/30"></div>
+ <div>
+ <p className="text-white/70 text-xs uppercase tracking-wider">
+ Resolved
+ </p>
+ <p className="text-white text-2xl tracking-tight font-bold">12,492</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
  {/* Toast Notification */}
  {toast.show && (
