@@ -8,6 +8,7 @@ import useAxiosSecure from'../../hooks/useAxiosSecure';
 import toast from'react-hot-toast';
 import { useRole } from'../../hooks/useRole';
 import { useQueryClient } from'@tanstack/react-query';
+import CardImage from'../common/CardImage';
 
 const IssueCard = React.forwardRef(({ issue, isOwnerView }, ref) => {
  const { user } = useAuth();
@@ -133,9 +134,11 @@ const IssueCard = React.forwardRef(({ issue, isOwnerView }, ref) => {
  >
  {/* Image Header */}
  <div className={imageContainerClass}>
- <img 
- src={issue.images?.[0] ||'https://via.placeholder.com/400x300?text=No+Image'} 
- alt={issue.title} 
+ <CardImage
+ src={issue.images?.[0]}
+ alt={issue.title}
+ kind="issue"
+ label={issue.category}
  className={`w-full h-full object-cover transition-transform duration-700 ${!isLocked ?'group-hover:scale-105':''}`}
  />
  

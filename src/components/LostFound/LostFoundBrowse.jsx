@@ -7,7 +7,7 @@ import LostFoundCard from"../cards/LostFoundCard";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
-import PageArt3D from'../three/PageArt3D';
+import PageArt from "../common/PageArt";
 import SectionFilterChips from'../common/SectionFilterChips';
 import { 
  Search, 
@@ -91,7 +91,7 @@ export default function LostFoundBrowse() {
  <PageHeader
  width="calc(80rem + 10%)"
  gutter="5%"
- art={<PageArt3D model="lostfound" label="A magnifying glass searching over a lost key and wallet" />}
+ art={<PageArt scene="lostfound" />}
  title="Lost & found"
  description={typeView ==='lost'
  ? "Lost a wallet, a phone or a pet? Post it here so neighbours know to look out for it."

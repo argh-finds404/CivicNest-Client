@@ -1,0 +1,125 @@
+/* Header artwork (PageArt). Sits on the dark green page header in both themes. */
+.cn-art {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  height: 19rem;
+  margin-inline: auto;
+  display: grid;
+  place-items: center;
+}
+
+.cn-art-glow {
+  position: absolute;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.32), rgba(25, 161, 132, 0.12) 45%, transparent 70%);
+  filter: blur(6px);
+  animation: cn-art-breathe 7s ease-in-out infinite;
+}
+.cn-art-ring {
+  position: absolute;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.cn-art-ring-2 {
+  width: 21rem;
+  height: 21rem;
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.07);
+  animation: cn-art-spin 90s linear infinite;
+}
+
+.cn-art-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 12.5rem;
+  height: 12.5rem;
+  border-radius: 2.25rem;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.16), transparent 55%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 30px 60px -28px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(110, 231, 183, 0.06);
+  backdrop-filter: blur(8px);
+  transform: rotate(-3deg);
+  animation: cn-art-float 8s ease-in-out infinite;
+}
+.cn-art-emblem { width: 8.5rem; height: 8.5rem; overflow: visible; }
+
+/* Emblem paint */
+.cn-art .s { fill: none; stroke: #effffa; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.cn-art .s-soft { stroke: rgba(239, 255, 250, 0.45); stroke-width: 2.6; }
+.cn-art .s-dark { stroke: #0a2b25; stroke-width: 5; }
+.cn-art .s-thick { stroke-width: 9; }
+.cn-art .s-mint { stroke: #6ee7b7; }
+.cn-art .s-signal { stroke: #f2b705; stroke-width: 3.6; }
+.cn-art .s-canopy { stroke: #0f6b5c; stroke-width: 4.5; }
+.cn-art .s-glint { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 3; stroke-linecap: round; }
+.cn-art .f-signal { fill: #f2b705; }
+.cn-art .f-mint { fill: rgba(110, 231, 183, 0.22); }
+.cn-art .f-mint-strong { fill: #6ee7b7; }
+.cn-art .f-coral { fill: #ff8a7a; }
+.cn-art .f-light { fill: #e9fff8; }
+.cn-art .f-white { fill: #ffffff; }
+.cn-art .f-dark { fill: #0a2b25; }
+.cn-art .f-glass { fill: rgba(255, 255, 255, 0.1); }
+.cn-art .f-shadow { fill: rgba(0, 0, 0, 0.28); }
+
+/* Lines draw in once, fills settle in behind them */
+.cn-art .draw {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  animation: cn-art-draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards, cn-art-fill 0.8s ease 0.9s both;
+}
+.cn-art .twinkle { transform-box: fill-box; transform-origin: center; animation: cn-art-twinkle 4s ease-in-out 1.6s infinite; }
+.cn-art .ballot { animation: cn-art-ballot 6s ease-in-out 1.4s infinite; }
+.cn-art .wave { animation: cn-art-draw 1.6s ease 0.15s forwards, cn-art-wave 3.2s ease-in-out 1.8s infinite; }
+.cn-art .wave-2 { animation-delay: 0.15s, 2.2s; }
+.cn-art .lens { transform-box: view-box; transform-origin: 60px 60px; animation: cn-art-search 9s ease-in-out 1.6s infinite; }
+
+/* Floating labels */
+.cn-art-label {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #effffa;
+  white-space: nowrap;
+  background: rgba(8, 40, 34, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  animation: cn-art-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both, cn-art-float 9s ease-in-out infinite;
+}
+.cn-art-label i { color: #6ee7b7; font-size: 0.95rem; }
+.cn-art-label-a { top: 2.4rem; left: 0.5rem; animation-delay: 0.5s, 1s; }
+.cn-art-label-b { bottom: 2.6rem; right: 0.5rem; animation-delay: 0.7s, 3s; }
+.cn-art-label-b i { color: #f2b705; }
+
+@keyframes cn-art-draw { to { stroke-dashoffset: 0; } }
+@keyframes cn-art-fill { from { fill-opacity: 0; } to { fill-opacity: 1; } }
+@keyframes cn-art-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes cn-art-breathe { 0%, 100% { opacity: 0.75; scale: 1; } 50% { opacity: 1; scale: 1.05; } }
+@keyframes cn-art-spin { to { rotate: 360deg; } }
+@keyframes cn-art-in { from { opacity: 0; translate: 0 10px; } }
+@keyframes cn-art-twinkle { 0%, 100% { opacity: 1; scale: 1; } 50% { opacity: 0.45; scale: 0.8; } }
+@keyframes cn-art-ballot { 0%, 55%, 100% { translate: 0 0; } 70%, 85% { translate: 0 7px; } }
+@keyframes cn-art-wave { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes cn-art-search { 0%, 100% { rotate: 0deg; translate: 0 0; } 33% { rotate: -6deg; translate: -3px 2px; } 66% { rotate: 4deg; translate: 3px -1px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-art *, .cn-art { animation: none !important; }
+  .cn-art .draw { stroke-dashoffset: 0; }
+}
