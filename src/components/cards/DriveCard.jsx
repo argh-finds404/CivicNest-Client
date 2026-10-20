@@ -6,7 +6,7 @@ const DriveCard = ({ drive, onJoin, user }) => {
  const percentFilled = Math.min(((drive.volunteers?.length || 0) / drive.volunteersNeeded) * 100, 100);
 
  return (
- <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 border border-slate-100 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full relative overflow-hidden">
+ <div className="cn-glass-card bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 border border-slate-100 shadow-sm hover:shadow-md transition-shadow group flex flex-col h-full relative overflow-hidden">
  {drive.status ==='upcoming'? (
  <div className="absolute top-0 right-0 bg-[#40826D] text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl z-10 uppercase tracking-wider">
  Upcoming

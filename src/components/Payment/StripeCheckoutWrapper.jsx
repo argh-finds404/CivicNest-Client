@@ -92,7 +92,7 @@ const CheckoutForm = ({ amount, clientSecret, onSuccess }) => {
  Processing...
  </>
  ) : (
- <>Pay ${amount}</>
+ <>Pay ৳{amount}</>
  )}
  </button>
  

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from"react";
 import SEO from "../common/SEO";
 import { useTheme } from'../../hooks/useTheme';
 import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
-import { Link } from"react-router";
+import { Link, useLocation } from"react-router";
 import { motion, AnimatePresence } from"framer-motion";
 import AnimalCard from"../cards/AnimalCard";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
@@ -59,7 +59,9 @@ export default function AnimalsBrowse() {
  return () => document.removeEventListener("mousedown", handleClickOutside);
  }, []);
 
- const [showDriveModal, setShowDriveModal] = useState(false);
+ const location = useLocation();
+ // "Organize a Drive" on the feeding drives page sends people here with the form open
+ const [showDriveModal, setShowDriveModal] = useState(() => !!location.state?.openDriveForm);
  const [driveData, setDriveData] = useState({
  title:"",
  description:"",
@@ -85,7 +87,9 @@ export default function AnimalsBrowse() {
  const res = await axiosPublic.get("/animals", {
  params: {
  urgency: urgencyFilter || undefined,
- status: statusFilter || undefined,
+ // "Adoptable" means rescued and marked adoptable, which the server filters for
+ status: statusFilter ==='adoptable'? undefined : statusFilter || undefined,
+ adoptable: statusFilter ==='adoptable'?'true': undefined,
  type: typeFilter || undefined,
  area: areaFilter || undefined,
  }
@@ -184,7 +188,7 @@ export default function AnimalsBrowse() {
  setStatusFilter('needs-help');
  } else if (filter.value ==='rescued') {
  setUrgencyFilter(null);
- setStatusFilter('rescued');
+ setStatusFilter('adoptable');
  } else {
  setUrgencyFilter(null);
  setStatusFilter(null);
@@ -194,7 +198,7 @@ export default function AnimalsBrowse() {
  (filter.value === null && !urgencyFilter && !statusFilter) ||
  (filter.value ==='emergency'&& urgencyFilter ==='emergency') ||
  (filter.value ==='needs-help'&& statusFilter ==='needs-help') ||
- (filter.value ==='rescued'&& statusFilter ==='rescued')
+ (filter.value ==='rescued'&& statusFilter ==='adoptable')
  ?'ring-2 ring-offset-2 ring-teal-500 shadow-md'+ filter.bg +''+ filter.text
  :'bg-slate-50 dark:bg-[#0a1410] dark:bg-[#0a1410] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]'}`}
  >

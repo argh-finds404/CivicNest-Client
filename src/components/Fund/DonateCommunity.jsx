@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import PaymentGatewaySelector from '../Payment/PaymentGatewaySelector';
 import toast from 'react-hot-toast';
@@ -44,9 +44,15 @@ const DonateCommunity = () => {
     setShowPayment(true);
   };
 
+  const queryClient = useQueryClient();
   const handlePaymentSuccess = () => {
     setShowPayment(false);
     toast.success('Thank you for supporting CivicNest!');
+    // The server records the payment as soon as the gateway confirms it; refresh
+    // now and once more shortly after, in case confirmation lands a moment later
+    const refresh = () => queryClient.invalidateQueries({ queryKey: ['communityDonationSummary'] });
+    refresh();
+    setTimeout(refresh, 3000);
   };
 
   // Milestone Progress calculations

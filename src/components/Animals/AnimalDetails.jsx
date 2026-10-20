@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from"react";
 import { useParams, Link, useNavigate } from"react-router";
 import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { motion } from"framer-motion";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import useAxiosPublic from"../../hooks/useAxiosPublic";
 import { format } from"date-fns";
@@ -182,7 +183,8 @@ export default function AnimalDetails() {
  mutationFn: (adoptable) => axiosSecure.patch(`/animals/${id}/adoptable`, { adoptable }),
  onSuccess: (res) => {
  toast.success(res.data.adoptable ?"Animal is now ready for adoption! 🏠":"Adoption disabled.");
- queryClient.invalidateQueries({ queryKey: ["animals", id] });
+ queryClient.invalidateQueries({ queryKey: ["animals"] });
+ queryClient.invalidateQueries({ queryKey: ["animals-stats"] });
  },
  onError: () => toast.error("Failed to update adoption availability.")
  });
@@ -311,7 +313,7 @@ export default function AnimalDetails() {
  animal.status ==='rescued'?'bg-emerald-500 text-white':
  animal.status ==='in-treatment'?'bg-blue-500 text-white':
  animal.status ==='adopted'?'bg-purple-600 text-white':'bg-orange-500 text-white'}`}>
- {animal.status ==='needs-help'?'Awaiting Rescue': animal.status.replace('-','')}
+ {animal.status ==='needs-help'?'Awaiting Rescue': animal.status.replace('-',' ')}
  </span>
  )}
  </div>

@@ -1,7 +1,7 @@
 import React, { useState } from"react";
 import { useNavigate } from"react-router";
 import { motion } from"framer-motion";
-import { useQuery } from"@tanstack/react-query";
+import { useQuery, useQueryClient } from"@tanstack/react-query";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import { useAuth } from"../../hooks/useAuth";
 import CreditIndicator from"../common/CreditIndicator";
@@ -23,6 +23,7 @@ export default function AddAnimal() {
  const axiosSecure = useAxiosSecure();
  const [loading, setLoading] = useState(false);
 
+ const queryClient = useQueryClient();
  const { data: creditData } = useQuery({
  queryKey: ['credits','animals'],
  queryFn: () => axiosSecure.get('/credits/animals').then(r => r.data),
@@ -51,6 +52,9 @@ export default function AddAnimal() {
  setLoading(true);
  try {
  await axiosSecure.post("/animals", formData);
+ queryClient.invalidateQueries({ queryKey: ["animals"] });
+ queryClient.invalidateQueries({ queryKey: ["animals-stats"] });
+ queryClient.invalidateQueries({ queryKey: ["credits","animals"] });
  toast.success("Animal report submitted successfully!");
  navigate("/animals");
  } catch (error) {

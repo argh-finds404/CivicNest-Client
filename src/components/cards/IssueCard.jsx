@@ -110,7 +110,7 @@ const IssueCard = React.forwardRef(({ issue, isOwnerView }, ref) => {
  const formattedDate = dateToUse ? new Date(dateToUse).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', hour12: true }) :"Unknown Date";
  const authorName = localIssue.isAnonymous ?"Anonymous Member": (localIssue.submittedBy?.name ||"User");
  
- let cardClass ="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] overflow-hidden flex flex-col group transition-all duration-300";
+ let cardClass ="cn-glass-card bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] overflow-hidden flex flex-col group transition-all duration-300";
  let imageContainerClass ="relative w-full h-52 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]";
  
  if (isLocked) {

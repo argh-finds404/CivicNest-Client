@@ -87,7 +87,7 @@ export default function AnimalCard({ animal }) {
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  whileHover={{ y: -4 }}
- className={`bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full flex flex-col ${urgency.stripe}`}
+ className={`cn-glass-card bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full flex flex-col ${urgency.stripe}`}
  >
  {/* Image */}
  <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] shrink-0">
