@@ -8,7 +8,7 @@ import useAxiosPublic from'../../hooks/useAxiosPublic';
 import PremiumEventCard from'../cards/PremiumEventCard';
 import MinimalLoader from'../common/MinimalLoader';
 import PageHeader from'../common/PageHeader';
-import PageArt3D from'../three/PageArt3D';
+import PageArt from "../common/PageArt";
 import usePublicStats from'../../hooks/usePublicStats';
 import { useAuth } from'../../hooks/useAuth';
 import { useRole } from'../../hooks/useRole';
@@ -130,7 +130,7 @@ export default function CleanupEventsPage() {
  <span><strong>{publicStats.activeMembers?.toLocaleString()}</strong> neighbours on CivicNest</span>
  </>
  )}
- art={<PageArt3D model="cleanups" label="A recycling bin, a tree and a trash bag on a patch of grass" />}
+ art={<PageArt scene="cleanups" />}
  />
 
  {/* Content Section */}

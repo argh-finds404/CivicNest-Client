@@ -7,6 +7,7 @@ import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useRole } from'../../hooks/useRole';
 import { useQueryClient } from'@tanstack/react-query';
 import toast from'react-hot-toast';
+import CardImage from'../common/CardImage';
 
 const STATUS_CONFIG = {
  upcoming: { label:'UPCOMING', bg:'bg-teal-600 text-white'},
@@ -55,9 +56,11 @@ export default function CleanupEventCard({ event, onInterested, onGoing, userInt
 
  {}
  <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
- <img
- src={event.coverImages?.[0] ||'https://via.placeholder.com/800x400?text=Cleanup+Event'}
+ <CardImage
+ src={event.coverImages?.[0]}
  alt={event.title}
+ kind="cleanup"
+ label="Cleanup drive"
  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
 
  {/* Gradient overlay */}
