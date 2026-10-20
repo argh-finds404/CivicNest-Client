@@ -136,6 +136,11 @@ const Login = () => {
  }
 
  if (!checkData.exists) {
+ // Reviewer demo emails can't be registered by hand: say what's wrong instead
+ if (/\.reviewer@civicnest\.app$/i.test(email)) {
+ showToastMessage("error","Reviewer logins aren't set up yet","An admin can create them in Admin → Users → Set up reviewer logins.");
+ return;
+ }
  navigate("/Register", { state: { email, fromLogin: true, from: returnTo } });
  return;
  }
