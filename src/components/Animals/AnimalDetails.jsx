@@ -96,11 +96,12 @@ export default function AnimalDetails() {
  animalType: animal.animalType || animal.type,
  condition: animal.condition,
  });
+ if (!res.data?.tip) throw new Error('No tip returned');
  setTip(res.data.tip);
  setShowTip(true);
  } catch (err) {
  console.error(err);
- toast.error('Could not load AI tip.');
+ toast.error(err.response?.data?.message ||'Could not load the first-aid tip. Please try again.');
  } finally {
  setTipLoading(false);
  }

@@ -97,7 +97,7 @@ export default function Footer() {
         <div className="ft-main">
           <div className="ft-brand">
             <Link to="/" className="ft-logo" aria-label="CivicNest home">
-              <img src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png" alt="" width="44" height="44" loading="lazy" />
+              <img src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png" alt="" width="44" height="44" loading="lazy" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src ="/favicon.png"; }}/>
               <span>
                 Civic<span className="ft-logo-accent">Nest</span>
               </span>

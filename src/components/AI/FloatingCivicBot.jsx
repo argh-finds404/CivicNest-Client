@@ -344,7 +344,7 @@ const FloatingCivicBot = () => {
                             : "bg-slate-55 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-700/30"
                         }`}
                       >
-                        {msg.content}
+                        {msg.role === "assistant" ? renderMarkdown(msg.content) : <span className="whitespace-pre-wrap">{msg.content}</span>}
                       </div>
                     </div>
                   ))}

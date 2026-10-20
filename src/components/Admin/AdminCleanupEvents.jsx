@@ -14,7 +14,7 @@ const AdminCleanupEvents = () => {
  setIsLoading(true);
  try {
  const res = await axiosSecure.get('/admin/cleanup-events');
- setEvents(res.data);
+ setEvents(Array.isArray(res.data) ? res.data : []);
  } catch (error) {
  console.error("Failed to fetch community events", error);
  } finally {
@@ -27,24 +27,39 @@ const AdminCleanupEvents = () => {
  }, []);
 
  const handleStatusUpdate = async (id, approvalStatus) => {
+ // Rejecting or cancelling notifies the organiser, so confirm first
+ if (approvalStatus !=='approved') {
+ const confirm = await Swal.fire({
+ icon:'warning',
+ title: approvalStatus ==='cancelled'?'Cancel this event?':'Reject this event?',
+ text:'The organiser will be notified.',
+ showCancelButton: true,
+ confirmButtonText: approvalStatus ==='cancelled'?'Cancel event':'Reject',
+ cancelButtonText:'Keep it',
+ confirmButtonColor:'#dc2626'});
+ if (!confirm.isConfirmed) return;
+ }
  try {
- await axiosSecure.patch(`/admin/cleanup-events/${id}/status`, { approvalStatus });
+ const res = await axiosSecure.patch(`/admin/cleanup-events/${id}/status`, { approvalStatus });
  Swal.fire({
  icon:'success',
  title:`Event ${approvalStatus.charAt(0).toUpperCase() + approvalStatus.slice(1)}`,
- text: approvalStatus ==='approved'?'A global notification has been sent!':'',
+ text: res.data?.message ||'',
  timer: 2000,
  showConfirmButton: false
  });
  queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+ queryClient.invalidateQueries({ queryKey: ['admin-queue'] });
  queryClient.invalidateQueries({ queryKey: ['admin-queue-count'] });
  fetchEvents();
  } catch (error) {
  console.error("Failed to update status", error);
+ // A 409 means someone else already changed it; show the latest state
+ if (error.response?.status === 409) fetchEvents();
  Swal.fire({
  icon:'error',
  title:'Update Failed',
- text:'Could not update event status.'});
+ text: error.response?.data?.message ||'Could not update event status.'});
  }
  };
 

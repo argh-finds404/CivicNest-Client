@@ -1,180 +1,172 @@
-# CivicNest - Community Cleanliness & Citizen Engagement Portal
+# CivicNest
 
-**CivicNest** is a comprehensive, full-stack community cleanliness, incident-reporting, and volunteer mobilization portal. The platform empowers citizens to report local hazards (like garbage piles, road damage, waterlogging, or safety hazards), coordinate volunteer cleanup drives, support community initiatives through crowdfunding, and interact in real-time.
+**CivicNest is a neighbourhood civic platform.** Residents report street problems (garbage, potholes, waterlogging, broken lights), and every report becomes a trackable ticket. Neighbours claim the fix, upload proof, and the community verifies it before the issue closes. Around that core sit cleanup drives, lost & found, animal rescue, polls, a forum, NGOs, donations and an AI assistant.
 
-*   **Live Web App:** [https://civic-nest-client.vercel.app/](https://civic-nest-client.vercel.app/) (mirror: [civicnest-client.netlify.app](https://civicnest-client.netlify.app/))
-*   **Client Repository:** [https://github.com/argh-finds404/CivicNest-Client](https://github.com/argh-finds404/CivicNest-Client)
-*   **Server Repository:** [https://github.com/argh-finds404/CivicNest-Server](https://github.com/argh-finds404/CivicNest-Server)
-
----
-
-## Reviewer Access
-
-Three demo accounts are available, one per role. On the [sign-in page](https://civic-nest-client.vercel.app/Login), the **Reviewer demo** buttons (Admin / Moderator / Member) sign you in with one click, or you can type the details yourself. **Continue with Google** works too and gives you a regular new account.
-
-| Role | Email | Password | What it can do |
-| --- | --- | --- | --- |
-| Admin | `admin.reviewer@civicnest.app` | `CivicNest@2026` | Everything, including users, membership, NGOs, notices, gallery and donations (role changes are blocked for demo accounts) |
-| Moderator | `moderator.reviewer@civicnest.app` | `CivicNest@2026` | Moderation console: issue queue, tickets, cleanup events, forum moderation and rescues |
-| Member | `member.reviewer@civicnest.app` | `CivicNest@2026` | A verified resident: report issues, follow tickets, vote, post in threads and join cleanups |
-
-**Setting the accounts up:** an admin opens **Admin → Users → Set up reviewer logins**, or runs `npm run seed:reviewers` on the server. Both create the three accounts (or reset them to a clean state). Set `VITE_SHOW_REVIEWER_LOGIN=false` to hide the reviewer buttons, or `VITE_REVIEWER_PASSWORD` if the server uses a different password.
-
-**A quick tour:**
-1. Sign in as **Member**, report an issue (you get a ticket code like `CN-2026-000123`) and follow it under **My tickets**.
-2. Sign in as **Moderator**, open **Moderation**, approve the report and move its ticket along. The member's ticket updates.
-3. Sign in as **Admin** for everything else: users and roles, NGOs, notices, donations and the gallery.
-4. Try the light/dark switch, lost & found, animal rescue, polls, cleanups and the CivicBot assistant.
+* **Live app:** [https://civic-nest-client.vercel.app/](https://civic-nest-client.vercel.app/) (mirror: [civicnest-client.netlify.app](https://civicnest-client.netlify.app/))
+* **Client repository:** [argh-finds404/CivicNest-Client](https://github.com/argh-finds404/CivicNest-Client) (this repo)
+* **Server repository:** [argh-finds404/CivicNest-Server](https://github.com/argh-finds404/CivicNest-Server)
 
 ---
 
-## What We Have Implemented & Done
+## Demo logins
 
-### 1. Robust Authentication & Role-Based Authorization (Firebase & JWT)
-*   **Multi-Method Authentication:** Seamless login and register flows using Firebase Authentication, supporting both email/password sign-up (with mandatory email verification checks) and Google One-Tap/Social login.
-*   **JWT Verification:** A secure middleware pipeline that generates JSON Web Tokens (JWT) upon successful authentication. JWTs are passed via request headers to secure API endpoints.
-*   **Role-Based Access Control (RBAC):** Roles are ranked `guest < member < moderator < admin`:
-    *   **Guest:** Can see the home page and the help pages. Every other page sends guests to the login page and brings them back after they sign in.
-    *   **Standard User:** Can report issues, follow their tickets, comment, and view profiles.
-    *   **Member (Verified Resident):** Earned by submitting address proof (utility bill upload). Unlocks forum posting, cleanup event organization, and issue resolution authority.
-    *   **Moderator:** Works the issue queue and ticket desk, reviews cleanup events and rescues, and moderates threads. Cannot manage users, roles, money or site content.
-    *   **Admin:** Complete management console over the queue of membership requests, user roles, incident reports, donations, notices, and forums.
-*   **Route Guards:** `PrivateRoute` (signed in), `StaffRoute` (moderator or admin) and `AdminRoute` (admin only) mirror the server's checks, so the UI never shows a page the API would refuse.
+On the [sign-in page](https://civic-nest-client.vercel.app/Login) the **Reviewer demo** buttons sign you in with one click, or type the details yourself.
 
-### 2. Live Incident Reporting & Verification System (MongoDB)
-*   **Incident Feed:** Citizens can report issues with detailed descriptions, location categories (Wards), images, and priority flags.
-*   **Map Integration:** Interactive OpenStreetMap/Leaflet components visually map out reports based on GPS coordinates.
-*   **Reddit-Style Interaction:** Upvoting system and comment threads on reports, allowing the community to democratically decide which hazards require urgent attention.
-*   **Verification Loop:** Verified residents inspect solved issues, confirm resolutions on-site, and release points to reporters, closing the trust loop.
+| Role | Email | Password |
+| --- | --- | --- |
+| **Admin** | `admin.reviewer@civicnest.app` | `CivicNest@2026` |
+| **Moderator** | `moderator.reviewer@civicnest.app` | `CivicNest@2026` |
+| **Member** (general user) | `member.reviewer@civicnest.app` | `CivicNest@2026` |
 
-### 3. Report Tickets
-*   **A ticket for every report:** Each issue gets a code like `CN-2026-000123`, a priority from its urgency and a target date (24 hours for urgent reports, up to 14 days for low priority ones).
-*   **My tickets:** Reporters follow progress at `/tickets` and `/tickets/:code`, with a status tracker and a full history. The footer's **Track ticket** box opens any code.
-*   **Ticket desk:** Staff filter by status, priority or assignee, pick up tickets, change status or priority and leave notes. Status changes are copied to the issue, so both stay in step.
+**Continue with Google** also works. It creates a regular new account, which starts as a *guest* until its residency is approved.
 
-### 4. Real-Time Interactions (Socket.io)
-*   **Live Feed Refreshes:** Real-time updates push status changes (e.g., when an issue is marked as "In Progress" or "Resolved" by admins/volunteers) instantly to all connected clients.
-*   **Interactive Forums:** Thread-specific typing indicators and active-user lists in discussion rooms.
-*   **Push Notifications:** Instant popups notify users when their posts receive replies, upvotes, or status modifications.
+> These are demo accounts. They are flagged `isDemo`: their roles can't be changed, and they can't change anyone else's role.
+> An admin creates or resets them from **Admin → Users → Set up reviewer logins**, or with `npm run seed:reviewers` on the server.
 
-### 5. Smart CivicBot AI Assistant (Gemini API)
-*   **Report Drafter:** Assists users in structuring detailed, professional incident descriptions from simple bullet points.
-*   **Formal Escalation Letters:** Generates formal complaint templates pre-populated with incident data to send to Ward Commissioners.
-*   **Rescue Manual:** Provides immediate, structured step-by-step assistance when users report stray animals in distress.
+### Five-minute demo
 
-### 6. Crowdfunding & Financial Integration (Stripe Payments)
-*   **Direct Support:** Integrated Stripe checkout flows allowing residents to fund specific neighborhood cleanup events or contribute to the general community cleanliness fund.
-*   **Transparency:** Financial logs tracked securely inside MongoDB, displaying progress bars on target goals for each cleanup drive.
-
-### 7. Gamified Leaderboard & Impact Resume
-*   **Activity Points:** Users earn points for reporting hazards, upvoting valid issues, checking into volunteer events, and verifying resolved complaints.
-*   **Citizen Streaks:** Encourages daily civic engagement through a streak-tracking dashboard.
-*   **Impact Resume PDF:** Direct integration with `jspdf` to generate a professional PDF breakdown of a user's contributions, points, verified events attended, and civic status.
-
-### 8. Volunteer Hub & Cleanup Drives
-*   **Event Scheduling:** Allows verified residents and NGOs to organize official cleanup events.
-*   **Geo-Fenced Check-In:** Volunteers check into cleanup drives on-site using a two-factor validation system (OTP generated by the organizer + GPS verification).
+1. **Member:** open **Report issue**. Write a description, and the AI suggests the category and urgency. Add a photo and submit. You get a ticket code such as `CN-2026-000123`; follow it under **My tickets**.
+2. **Moderator:** open **Moderation → Issue queue**, approve the report, then open the **Ticket desk** to set priority, assign it or add a note. The member's ticket timeline updates.
+3. **Member:** on an approved issue, **Claim issue**, upload proof photos, and the issue moves to *awaiting verification*.
+4. **Other members** press **Verify now**. After three verifications the issue is **solved**, points are paid and the ticket is **resolved**.
+5. **Admin:** users and roles, membership requests, NGOs, notices, donations, the gallery and live stats.
+6. Also try the light/dark switch, CivicBot (bottom-right), the complaint letter on an issue page, lost & found, animal rescue, polls and cleanup drives.
 
 ---
 
-## Technical Architecture & Stack Deep-Dive
+## What each role can do
 
-### 1. Security & Token-Based Authentication Flow
-*   **Firebase Authentication:** Handles Google Single-Sign-On and Email/Password credentials securely on the frontend.
-*   **Token Handshake:** 
-    1. Upon login, the client retrieves the Firebase User IdToken.
-    2. The token is sent to the server for verification via the `Firebase Admin SDK` middleware.
-    3. Custom Axios request interceptors (`useAxiosSecure.js`) automatically attach the Bearer token as an `Authorization` header on all secure requests.
-    4. Token validation ensures that non-verified users, guests, or unauthorized roles are denied access to restricted endpoints.
+Roles are ranked `guest < member < moderator < admin`. The client mirrors the server rules (`src/utils/roles.js`), so the UI never offers an action the API would refuse.
 
-### 2. Dual Payment Gateways (Stripe & SSLCommerz)
-CivicNest features two payment integrations for community cleanup funding and general donations:
-*   **Stripe Gateway:** 
-    *   Uses `@stripe/stripe-js` and `@stripe/react-stripe-js` to render secure, PCI-compliant card input fields (Stripe Elements).
-    *   Initiates `PaymentIntents` on the backend and listens to real-time events via a raw-body `stripe-webhook` endpoint to confirm success.
-*   **SSLCommerz Gateway:** 
-    *   Uses the official Node.js `sslcommerz-lts` package on the backend.
-    *   Initiates sessions via backend redirect URL generation. The user is redirected to the SSLCommerz payment portal, and callbacks (Success, Failure, Cancel) are captured, stored, and verified in MongoDB. A sandbox emulator is written for local development testing.
+| | Guest | Member | Moderator | Admin |
+| --- | :---: | :---: | :---: | :---: |
+| Browse the home page and help pages | ✓ | ✓ | ✓ | ✓ |
+| Report issues, follow tickets, comment, vote, donate | ✓ | ✓ | ✓ | ✓ |
+| Claim and fix issues, verify fixes, post in the forum, create polls, organise cleanups | | ✓ | ✓ | ✓ |
+| Issue queue (approve/reject), ticket desk, review cleanup events, rescues and lost & found | | | ✓ | ✓ |
+| Pin, lock and moderate threads; approve polls | | | ✓ | ✓ |
+| Users and roles, membership requests, NGOs, volunteers, notices, gallery, donations | | | | ✓ |
 
-### 3. Maps & Geospatial Visualizations
-*   **Leaflet & React Leaflet:** Configured to map community incident reports and cleanup event coordinates geographically.
-*   **Customization:** Utilizes custom Leaflet Marker anchors, interactive popups, dynamic center-coordinate matching, and coordinate selection helpers when creating new reports.
+A guest becomes a **member** by sending a residency request (address plus a utility bill photo) that an admin approves.
+Volunteers approved by an admin can post in the forum too.
 
-### 4. Design System & Page Artwork
-*   **Type and colour:** Bricolage Grotesque for headings and Plus Jakarta Sans for text, with shared `--cn-*` colour tokens and matching light and dark themes. The theme follows the device setting until you pick one.
-*   **Page artwork:** Each section header has its own 2D emblem on a glass tile (a map pin for issues, a ballot box for polls, a paw for animals, a magnifying glass for lost & found, a trophy for the leaderboard, and so on). Pure SVG and CSS: the lines draw in once, then it floats gently, and motion stops for people who prefer reduced motion.
-*   **City diorama:** The home page welcome banner keeps the CSS 3D city scene.
-
-### 5. Smooth Momentum Scrolling & Sliders
-*   **Lenis Scroll:** Configured inside a custom React context (`LenisContext.jsx`) with custom `lerp: 0.15` and `duration: 0.7` values to establish smooth momentum scrolling across the portal.
-*   **Swiper:** Powers responsive, high-performance carousel sliding components (e.g. on the homepage).
+Route guards: `PrivateRoute` (signed in), `StaffRoute` (moderator or admin) and `AdminRoute` (admin only). A signed-out visitor who opens a private page is sent to sign in and brought back afterwards.
 
 ---
 
-## Deployment Architecture
+## How an issue gets solved
 
-*   **Frontend Client Hosting:** Deployed on **Vercel** at [https://civic-nest-client.vercel.app/](https://civic-nest-client.vercel.app/), mirrored on Netlify at [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
-*   **Backend Server Hosting:** Deployed on **Render** at [https://civicnest-api.onrender.com](https://civicnest-api.onrender.com)
-*   **Database:** Hosted on a high-availability **MongoDB Atlas** cloud cluster.
+```
+Report ──► Pending review ──► Open ──► Action taken ──► Awaiting verification ──► Solved
+ (member)   (moderator           (member    (resolver uploads     (3 neighbours verify)
+            approves/rejects)     claims)    proof photos)
+```
 
----
+1. **Report:** title, description, category, urgency, location (pin on the map), date and up to 5 photos. Photos upload straight from the browser to ImgBB, and only the image links are sent to the API. The server stores the issue as `pending_review` and creates a ticket (`OPEN`). Reports cost credits, which refill over 72 hours, so the feed can't be spammed.
+2. **Review:** a moderator approves it (the ticket becomes `TRIAGED` and the reporter earns points) or rejects it with a reason. An item can only be reviewed once; a second reviewer gets a clear "already reviewed" message.
+3. **Claim:** a member claims the issue. It moves to `action_taken`, gets a 7-day deadline, and the ticket becomes `IN_PROGRESS`. Staff can also assign someone from the ticket desk. Claim points are paid once per person per issue, so claiming and unclaiming can't farm points.
+4. **Proof:** the resolver uploads after photos (with an optional GPS check) and the issue becomes `pending_verification`.
+5. **Verify:** three other members confirm the fix (not the reporter or the resolver). The issue becomes `solved`: the resolver gets +50, the reporter +25, each verifier +5, any crowdfunding held in escrow is released, and the ticket becomes `RESOLVED`.
 
-## Dependency & Package Breakdown
+Extras on every issue page: upvotes, witnesses, comments, an **AI summary**, share buttons, an **AI complaint letter** to the ward office, an RTI request PDF, and **crowdfunding** (card payment by Stripe or SSLCommerz, held until the fix is verified).
 
-### Client-Side Packages
-*   **Framework:** React 19, Vite 8
-*   **Styles & Theme:** Tailwind CSS v4, DaisyUI v5
-*   **State & Fetching:** TanStack Query (React Query) v5, Axios
-*   **Animations:** Framer Motion, Lottie Player, Canvas Confetti, React Awesome Reveal
-*   **Maps:** Leaflet, React Leaflet
-*   **Scroll:** Lenis
-*   **Charts:** Chart.js, Recharts, React Chartjs 2
-*   **PDF Generation:** jsPDF, jsPDF-AutoTable
-*   **Icons:** Remix Icons, Lucide React, React Icons
-
-### Server-Side Packages
-*   **Server Core:** Node.js, Express.js (v5)
-*   **Database & ODM:** MongoDB Native Driver (v7), Mongoose (v9), Prisma (v6) for tickets and users
-*   **Realtime Communication:** Socket.io (v4)
-*   **Authentication & Security:** Firebase Admin SDK (v13), Express Rate Limit (v8)
-*   **Payment Handlers:** Stripe Node SDK, SSLCommerz LTS SDK
-*   **AI Integration:** Google Generative AI Node SDK (Gemini API)
+**Tickets:** every report has a code such as `CN-2026-000123`, a priority from its urgency (emergency 24 h, high 3 days, normal 7 days, low 14 days) and a full history. Reporters follow them at `/tickets`, and staff work them at **Admin → Tickets**. Changing a ticket's status updates the issue too, so the two always agree.
 
 ---
 
-## Getting Started (Local Setup)
+## AI features (Google Gemini)
 
-### Prerequisites
-*   Node.js (v18 or higher)
-*   npm or yarn
+| Feature | Where | Endpoint |
+| --- | --- | --- |
+| **CivicBot** chat assistant that remembers the conversation | Floating button on every page, and `/ai-assistant` | `POST /ai/chat` |
+| **Report helper:** suggests category and urgency, and offers a polished description | Report issue form | `POST /ai/suggest-issue` |
+| **Discussion summary** of an issue and its comments | Issue page | `POST /ai/summarize` |
+| **Formal complaint letter** to the ward office, including the ticket code | Issue page → Escalate Government Complaint | `POST /ai/complaint-letter` |
+| **Animal first-aid tip** | Animal rescue page | `POST /ai/animal-tip` |
 
-### Installation Steps
+The server holds the Gemini key (`GEMINI_API_KEY`). It uses `gemini-2.5-flash` by default (override with `GEMINI_MODEL`) and switches to `gemini-flash-latest` automatically if a model is retired. Each user has a daily limit, and when the AI is unavailable the app shows a clear message instead of failing silently.
 
-1.  **Clone the client repository:**
-    ```bash
-    git clone https://github.com/argh-finds404/CivicNest-Client.git
-    cd CivicNest-Client
-    ```
+---
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+## Images
 
-3.  **Configure environment variables:**
-    Create a `.env` file in the root folder and add the following keys (based on `.env.example`):
-    ```env
-    VITE_API_URL=http://localhost:3000
-    VITE_apiKey=your_firebase_api_key
-    VITE_authDomain=your_auth_domain
-    VITE_projectId=your_project_id
-    VITE_storageBucket=your_storage_bucket
-    VITE_messagingSenderId=your_messaging_sender_id
-    VITE_appId=your_app_id
-    ```
+* **Uploads** (issue photos, proofs, animals, lost & found, events, avatars) go from the browser to **ImgBB** with `VITE_IMGBB_API_KEY`. ImgBB links don't expire.
+* **Every photo has a fallback.** If a link is missing or broken, cards and galleries show a matching illustration (a paw, a trash can, a key…) instead of a broken image. The logo falls back to the bundled `/favicon.png`.
+* Page artwork (section emblems, the home city scene) is SVG/CSS, so it always loads.
 
-4.  **Run the local development server:**
-    ```bash
-    npm run dev
-    ```
-    The application will be live at `http://localhost:5173`.
+---
+
+## How a request travels (frontend → backend)
+
+```
+React page
+  └─ TanStack Query (cache, retries, refetch)
+       └─ useAxiosSecure ── adds "Authorization: Bearer <Firebase ID token>"
+            │                (401 → sign out, 403 → toast)
+            ▼
+Express API (Render)
+  cors → compression → JSON body parser → router
+       └─ verifyToken   (Firebase Admin checks the token, loads the user's role from MongoDB)
+       └─ role guard    (memberOnly / adminOrMod / adminOnly / creditCheck)
+       └─ handler       (Mongoose + MongoDB, Prisma for tickets)
+            └─ audit log, notifications, Socket.io broadcast
+            ▼
+JSON response → React Query cache → UI updates
+Socket.io (same server) → live feed, forum typing indicators and notifications on every open tab
+```
+
+1. **Sign-in:** Firebase Auth (email/password with email verification, or Google). The client never stores passwords or its own tokens; Firebase refreshes the ID token.
+2. **Every secure call** goes through `src/hooks/useAxiosSecure.js`, which attaches the current Firebase ID token. Public pages use `useAxiosPublic`.
+3. **The server** verifies the token with the Firebase Admin SDK, looks up the user's role in MongoDB, and only then runs the route's role check and handler.
+4. **Live updates:** after a change the server emits Socket.io events (`issueStatusUpdated`, notifications), and open pages refresh themselves.
+
+---
+
+## Features at a glance
+
+* **Issues and tickets:** report, review, claim, prove, verify, escalate, crowdfund; map view; priority queue for staff.
+* **Cleanup drives:** organise an event (staff approve it), RSVP, organiser check-in code with optional GPS, attendance points, funding goal.
+* **Lost & found:** lost and found posts, claims and "I found it" reports, with points when an item is reunited.
+* **Animal rescue:** report an animal in need, volunteers join, AI first-aid tip, adoption requests, feeding drives, donations.
+* **Community:** forum with live typing indicators, polls (staff approve them), notice board, gallery, NGO directory and NGO registration, volunteer hub.
+* **Gamification:** points, streaks, leaderboard, badges, and a downloadable **Civic Impact Resume** PDF on the profile.
+* **Payments:** Stripe (card, BDT) and SSLCommerz for issue funds, animals, events, NGOs and the community fund.
+* **Admin console:** live stats (issues by status and category, 7-day donations), issue queue, ticket desk, users and roles, membership, volunteers, NGOs, notices, posts, donations, and reviewer-account setup.
+* **Design:** glass cards, light and dark themes that follow the device, Bricolage Grotesque and Plus Jakarta Sans fonts, 2D page emblems, respects reduced motion.
+
+---
+
+## Tech stack
+
+**Client:** React 19 · Vite 8 · React Router 7 · Tailwind CSS 4 + daisyUI 5 · TanStack Query 5 · Axios · Firebase Auth · Socket.io client · Framer Motion · Leaflet / React Leaflet · Chart.js + Recharts · jsPDF · Stripe Elements · React Hook Form · SweetAlert2 · Remix Icons + Lucide.
+
+**Server:** Node.js · Express 5 · MongoDB (native driver + Mongoose) · Prisma 6 (tickets) · Firebase Admin · Socket.io · Stripe · SSLCommerz · Google Gemini (`@google/generative-ai`) · express-rate-limit.
+
+**Hosting:** client on Vercel (Netlify mirror), API on Render ([civicnest-api.onrender.com](https://civicnest-api.onrender.com)), database on MongoDB Atlas, images on ImgBB.
+
+---
+
+## Run it locally
+
+Prerequisites: Node.js 18+ and the [server](https://github.com/argh-finds404/CivicNest-Server) running (default `http://localhost:3000`).
+
+```bash
+git clone https://github.com/argh-finds404/CivicNest-Client.git
+cd CivicNest-Client
+npm install
+cp .env.example .env    # then fill in the values below
+npm run dev             # http://localhost:5173
+```
+
+| Variable | What it is |
+| --- | --- |
+| `VITE_API_URL` | The API base URL, e.g. `http://localhost:3000` |
+| `VITE_apiKey`, `VITE_authDomain`, `VITE_projectId`, `VITE_storageBucket`, `VITE_messagingSenderId`, `VITE_appId` | Firebase web app config |
+| `VITE_IMGBB_API_KEY` | ImgBB key for photo uploads |
+| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
+| `VITE_SHOW_REVIEWER_LOGIN` | Optional. `false` hides the reviewer demo buttons |
+| `VITE_REVIEWER_PASSWORD` | Optional. Set it if the server uses a different reviewer password |
+
+For Google sign-in on a new domain, add the domain under **Firebase console → Authentication → Settings → Authorized domains**.
+
+Scripts: `npm run dev`, `npm run build`, `npm run preview`, `npm run lint`.
