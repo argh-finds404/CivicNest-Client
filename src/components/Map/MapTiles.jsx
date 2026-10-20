@@ -17,6 +17,12 @@ const OSM = {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   subdomains: "abc",
 };
+// Esri's public street basemap, a third keyless provider
+const ESRI = {
+  url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+  attribution: "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, OpenStreetMap contributors",
+  subdomains: "abc",
+};
 const CARTO_ATTRIBUTION = `${OSM.attribution} &copy; <a href="https://carto.com/attributions">CARTO</a>`;
 
 // Keyless tile providers, tried in order
@@ -24,10 +30,12 @@ const PROVIDERS = {
   light: [
     { url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", attribution: CARTO_ATTRIBUTION, subdomains: "abcd" },
     OSM,
+    ESRI,
   ],
   dark: [
     { url: "https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png", attribution: CARTO_ATTRIBUTION, subdomains: "abcd" },
     OSM,
+    ESRI,
   ],
 };
 
@@ -57,7 +65,7 @@ export function MapTiles() {
         },
         tileerror: () => {
           failures.current += 1;
-          if (!loadedOnce.current && failures.current >= 3 && index < list.length - 1) {
+          if (!loadedOnce.current && failures.current >= 2 && index < list.length - 1) {
             failures.current = 0;
             setIndex((i) => i + 1);
           }

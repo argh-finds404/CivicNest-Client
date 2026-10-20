@@ -23,12 +23,15 @@ On the [sign-in page](https://civic-nest-client.vercel.app/Login) the **Reviewer
 > These are demo accounts. They are flagged `isDemo`: their roles can't be changed, and they can't change anyone else's role.
 > An admin creates or resets them from **Admin → Users → Set up reviewer logins**, or with `npm run seed:reviewers` on the server.
 
-### Demo content
+### Demo content (dummy data)
+
+> **Note:** the members, issues, drives, animals, lost & found posts and activity you see on the live app are **dummy demo data**, created so reviewers can try every feature. Real users' posts appear alongside them.
 
 The app opens on a lived-in neighbourhood around Dhaka, so there is something to look at straight away:
 * **10 community members** on the leaderboard, with avatars, points and streaks.
 * **12 issues at every stage:** open, being fixed, awaiting verification, solved and one waiting in the moderator queue. They come with tickets, comments, votes, crowdfunding and proof photos.
 * **5 cleanup drives** (3 upcoming, 1 completed, 1 awaiting approval), **5 animal rescues** and **5 lost & found posts**.
+* **A recent-activity feed** (RSVPs, donations, rescues, new reports, fixes) on the home page and the leaderboard.
 
 Demo records are flagged `isDemo` and never touch real users' content. The server adds anything missing on startup. An admin can put everything back to its starting state with **Admin → Users → Reset demo content** (or `npm run seed:demo` on the server). All demo pictures are illustrations bundled with the app in `public/demo/`, so they always load.
 
@@ -56,7 +59,7 @@ Roles are ranked `guest < member < moderator < admin`. The client mirrors the se
 | Pin, lock and moderate threads; approve polls | | | ✓ | ✓ |
 | Users and roles, membership requests, NGOs, volunteers, notices, gallery, donations | | | | ✓ |
 
-A guest becomes a **member** by sending a residency request (address plus a utility bill photo) that an admin approves.
+A guest becomes a **member** by sending a residency request (address plus a utility bill photo) that an admin approves. Signed-in guests see a **Become a member** button in the navbar and the user menu; signed-out visitors see **Join** next to **Log in**. To try it, sign in with Google (new accounts start as guests).
 Volunteers approved by an admin can post in the forum too.
 
 Route guards: `PrivateRoute` (signed in), `StaffRoute` (moderator or admin) and `AdminRoute` (admin only). A signed-out visitor who opens a private page is sent to sign in and brought back afterwards.
@@ -136,7 +139,7 @@ Socket.io (same server) → live feed, forum typing indicators and notifications
 ## Features at a glance
 
 * **Issues and tickets:** report, review, claim, prove, verify, escalate, crowdfund; priority queue for staff.
-* **Community Map:** every issue, upcoming cleanup and animal in need with a location, as coloured pins with photo previews and filters. Tiles come from CARTO (no API key) and switch to OpenStreetMap automatically if CARTO fails.
+* **Live maps (Leaflet):** a real street map on the home page and a full Community Map with every issue, upcoming cleanup and animal in need as coloured pins with photo previews and filters. Street tiles come from CARTO, with automatic fallback to OpenStreetMap and then Esri World Street Map (all free, no API key).
 * **Cleanup drives:** organise an event (staff approve it), RSVP, organiser check-in code with optional GPS, attendance points, funding goal.
 * **Lost & found:** lost and found posts, claims and "I found it" reports, with points when an item is reunited.
 * **Animal rescue:** report an animal in need, volunteers join, AI first-aid tip, adoption requests, feeding drives, donations.

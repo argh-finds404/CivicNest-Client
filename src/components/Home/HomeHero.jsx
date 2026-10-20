@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
-import usePublicStats, { statsToPins } from "../../hooks/usePublicStats";
-import CityDiorama from "./CityDiorama";
+import usePublicStats from "../../hooks/usePublicStats";
+import HeroMap from "./HeroMap";
 
 const fmt = new Intl.NumberFormat("en");
 
@@ -14,12 +14,11 @@ const greeting = () => {
 
 export default function HomeHero({ user, displayName }) {
   const { data: stats } = usePublicStats();
-  const pins = statsToPins(stats);
 
   const firstName = displayName?.split(" ")[0];
 
   return (
-    <section className="cn-hero" data-diorama-host>
+    <section className="cn-hero">
       <div className="cn-hero-inner">
         <div className="cn-hero-copy">
           <p className="cn-hero-greet">
@@ -67,8 +66,8 @@ export default function HomeHero({ user, displayName }) {
         </div>
 
         <div className="cn-hero-map">
-          <CityDiorama pins={pins} />
-          {pins.length > 0 && <p className="cn-hero-map-hint">Latest reports and cleanups. Tap a pin to open it.</p>}
+          <HeroMap />
+          <p className="cn-hero-map-hint">Live map of reports, cleanups and animals in need. Tap a pin to open it.</p>
         </div>
       </div>
     </section>

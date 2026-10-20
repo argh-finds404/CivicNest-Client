@@ -216,6 +216,8 @@ const FireIcon = ({ size = 16, className = "" }) => {
 const Navbar = () => {
  const { user, logOut } = useAuth();
  const [role, isRoleLoading, isVolunteer] = useRole();
+ // Signed in but not yet a verified resident: show the membership call to action
+ const needsMembership = !!user && !isRoleLoading && !atLeast(role,'member') && !isVolunteer;
  const navigate = useNavigate();
  const location = useLocation();
  const [menuOpen, setMenuOpen] = useState(false);
@@ -540,6 +542,15 @@ const Navbar = () => {
   >
   <i className="ri-question-line text-[20px]"></i>
   </Link>
+ {needsMembership && (
+ <Link
+ to="/membership/request"
+ target="_self"
+ className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 text-[12.5px] font-bold rounded-full bg-amber-400 text-slate-900 hover:bg-amber-300 transition-colors shadow-sm whitespace-nowrap">
+ <i className="ri-shield-check-line text-[15px]" aria-hidden="true"></i>
+ Become a member
+ </Link>
+ )}
  {user && (
  <>
  <div className="hidden lg:block">
@@ -602,6 +613,20 @@ const Navbar = () => {
   )}
  </div>
  <div className="h-px bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]"/>
+ <div className="px-3 pt-2">
+ {needsMembership ? (
+ <Link
+ to="/membership/request"target="_self"onClick={() => setMenuOpen(false)}
+ className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-[13px] font-bold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 dark:bg-amber-500/10 dark:text-amber-200 dark:border-amber-500/30 transition-colors">
+ <i className="ri-shield-check-line" aria-hidden="true"></i> Become a member
+ </Link>
+ ) : (
+ <span className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-semibold text-emerald-700 dark:text-emerald-300">
+ <i className="ri-verified-badge-fill" aria-hidden="true"></i>
+ {role ==='admin'?'Admin': role ==='moderator'?'Moderator': isVolunteer && !atLeast(role,'member') ?'Volunteer':'Verified member'}
+ </span>
+ )}
+ </div>
  <div className="py-2">
  <Link 
  to="/profile"target="_self"onClick={() => setMenuOpen(false)}
@@ -633,10 +658,16 @@ const Navbar = () => {
  </AnimatePresence>
  </div>
  ) : (
+ <div className="flex items-center gap-2">
  <Link
  to="/Login"target="_self"className="px-5 py-2 text-[13px] font-semibold text-white bg-[#0f766e] rounded-full hover:bg-[#0d645d] transition-all shadow-sm">
  Log in
  </Link>
+ <Link
+ to="/Register"target="_self"className="hidden sm:inline-flex px-4 py-2 text-[13px] font-bold text-slate-900 bg-amber-400 rounded-full hover:bg-amber-300 transition-all shadow-sm">
+ Join
+ </Link>
+ </div>
  )}
  </div>
  </motion.div>
@@ -747,6 +778,14 @@ const Navbar = () => {
  <span className="material-symbols-outlined text-[20px] opacity-70">find_in_page</span>
  My Lost & Found
  </Link>
+ {needsMembership && (
+ <Link
+ to="/membership/request"target="_self"onClick={() => setDrawerOpen(false)}
+ className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold bg-amber-400 text-slate-900 hover:bg-amber-300 transition-colors">
+ <span className="material-symbols-outlined">verified_user</span>
+ Become a member
+ </Link>
+ )}
  <Link
  to="/profile"target="_self"onClick={() => setDrawerOpen(false)}
  className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#0f766e] bg-[#0f766e]/10 hover:bg-[#0f766e]/20 transition-all font-bold border border-[#0f766e]/20 shadow-sm text-[13px] group backdrop-blur-md mt-1 shrink-0">

@@ -7,6 +7,8 @@ import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
 import PageArt from "../common/PageArt";
 import Podium from'./Podium';
+import { Link } from"react-router";
+import { fallbackTo } from "../../utils/imageFallback";
 import { 
  Trophy, Crown, Medal, Award, Activity, 
  TrendingUp, Users, Star, ArrowUpRight, CheckCircle2 
@@ -25,6 +27,51 @@ const COLORS = {
 };
 
 const ROLE_COLORS = ['#3b82f6','#10b981','#f59e0b','#6b7280'];
+
+const ACTIVITY_META = {
+ new_issue: { icon:"ri-error-warning-line", tone:"bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"},
+ incident_reported: { icon:"ri-error-warning-line", tone:"bg-rose-50 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"},
+ issue_solved: { icon:"ri-checkbox-circle-line", tone:"bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"},
+ drive_joined: { icon:"ri-group-line", tone:"bg-sky-50 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300"},
+ drive_completed: { icon:"ri-leaf-line", tone:"bg-teal-50 text-teal-600 dark:bg-teal-500/15 dark:text-teal-300"},
+ new_cleanup_event: { icon:"ri-calendar-event-line", tone:"bg-teal-50 text-teal-600 dark:bg-teal-500/15 dark:text-teal-300"},
+ cleanup_approved: { icon:"ri-calendar-check-line", tone:"bg-teal-50 text-teal-600 dark:bg-teal-500/15 dark:text-teal-300"},
+ donation_made: { icon:"ri-hand-heart-line", tone:"bg-pink-50 text-pink-600 dark:bg-pink-500/15 dark:text-pink-300"},
+ animal_rescued: { icon:"ri-heart-pulse-line", tone:"bg-violet-50 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300"},
+ lostfound_reunited: { icon:"ri-key-2-line", tone:"bg-amber-50 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"},
+ social_activity: { icon:"ri-chat-3-line", tone:"bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"},
+ poll_created: { icon:"ri-bar-chart-box-line", tone:"bg-indigo-50 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-300"},
+ default: { icon:"ri-sparkling-line", tone:"bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300"},
+};
+
+/** One-line description of a feed event (same feed as the home page) */
+function activityText(item) {
+ const d = item.data || {};
+ switch (item.type) {
+ case"new_issue": return`New report in ${d.area}: ${d.title}`;
+ case"incident_reported": return`${d.reporterName ||"A neighbour"} reported "${d.title}" in ${d.area}`;
+ case"issue_solved": return`Fixed in ${d.area}: ${d.title}`;
+ case"drive_joined": return`${d.count || 1} neighbour(s) joined "${d.driveTitle}"`;
+ case"drive_completed": return`"${d.driveTitle}" finished with ${d.count || 0} volunteers`;
+ case"new_cleanup_event": return`${d.actorName} organised "${d.driveTitle}" in ${d.area}`;
+ case"cleanup_approved": return`Cleanup approved: "${d.title}"`;
+ case"donation_made": return`${d.donor} gave ৳${d.amount} to "${d.title}"`;
+ case"animal_rescued": return`${d.actorName} helped a ${String(d.animalType ||"animal").toLowerCase()} in ${d.location}`;
+ case"lostfound_reunited": return`"${d.itemName}" was returned to its owner`;
+ case"social_activity": return`${d.authorName} posted "${d.title}" in the forum`;
+ case"poll_created": return`${d.actorName} started a poll: "${d.question}"`;
+ default: return"New activity from the community";
+ }
+}
+
+function timeAgo(date) {
+ const mins = Math.max(1, Math.round((Date.now() - new Date(date).getTime()) / 60000));
+ if (mins < 60) return`${mins} min ago`;
+ const hours = Math.round(mins / 60);
+ if (hours < 24) return`${hours} h ago`;
+ const days = Math.round(hours / 24);
+ return days === 1 ?"yesterday":`${days} days ago`;
+}
 
 export default function Leaderboard() {
  const axiosPublic = useAxiosPublic();
@@ -71,59 +118,16 @@ export default function Leaderboard() {
  return { label:"Civic Explorer", style:"bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]"};
  };
 
- // Real activity/achievement log computed from users'badges & roles in DB
- const rawActivities = [];
- users.slice(0, 8).forEach((u) => {
- if (u.badges && u.badges.length > 0) {
- u.badges.forEach((badgeId) => {
- const badgeLabels = {
- first_reporter:"First Reporter badge",
- resolver:"Resolver badge",
- cleanup_crew:"Cleanup Crew badge",
- verified_volunteer:"Verified Volunteer badge",
- civic_hero:"Civic Hero status",
- guardian:"Community Guardian status",
- champion:"Champion status",
- };
- const label = badgeLabels[badgeId] ||`${badgeId.replace(/_/g,'')} badge`;
- rawActivities.push({
- id:`${u._id}-${badgeId}`,
- name: u.name ||"Anonymous Citizen",
- action:`unlocked the ${label}`,
- points: 25,
- photo: u.photoURL
+ // Latest real community activity (same feed as the home page)
+ const { data: activity = [], isLoading: activityLoading } = useQuery({
+ queryKey: ["leaderboard-activity"],
+ queryFn: async () => {
+ const res = await axiosPublic.get("/public/feed", { params: { page: 1, limit: 6 } });
+ return Array.isArray(res.data?.data) ? res.data.data : [];
+ },
+ staleTime: 60 * 1000,
  });
- });
- }
- 
-  if (u.isVolunteer || u.role === 'volunteer') {
-    rawActivities.push({
-      id: `${u._id}-volstatus`,
-      name: u.name || "Anonymous Citizen",
-      action: "registered as an active Community Volunteer",
-      points: 10,
-      photo: u.photoURL
-    });
-  } else if (u.role === 'guest') {
-    rawActivities.push({
-      id: `${u._id}-gueststatus`,
-      name: u.name || "Anonymous Citizen",
-      action: "joined the platform as a Guest",
-      points: 0,
-      photo: u.photoURL
-    });
-  } else {
-    rawActivities.push({
-      id: `${u._id}-memstatus`,
-      name: u.name || "Anonymous Citizen",
-      action: "joined the platform as a Community Member",
-      points: 25,
-      photo: u.photoURL
-    });
-  }
-  });
-
- const activityLog = rawActivities.slice(0, 5);
+ const topPoints = Math.max(1, ...users.map((u) => u.points || 0));
 
  return (
  <div className="min-h-screen bg-[var(--cn-ground)] pb-20">
@@ -245,116 +249,79 @@ export default function Leaderboard() {
  </div>
  </div>
 
- {/* Standings Table & Activity Log Grid */}
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
- 
- {/* Standings Table (Takes 2/3 space) */}
- <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm overflow-hidden lg:col-span-2 flex flex-col justify-between">
- <div>
- <div className="bg-slate-900 px-6 py-4 flex justify-between items-center text-white">
- <span className="font-bold uppercase tracking-wider text-xs">Rank</span>
- <span className="font-bold uppercase tracking-wider text-xs flex-1 text-left pl-14">Citizen</span>
- <span className="font-bold uppercase tracking-wider text-xs text-right pr-6">Achievement</span>
- <span className="font-bold uppercase tracking-wider text-xs text-right">Points</span>
+ {/* Standings + recent activity */}
+ <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+
+ <section className="cn-glass-card border overflow-hidden lg:col-span-2" aria-labelledby="standings-title">
+ <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200/70 dark:border-white/10">
+ <h3 id="standings-title" className="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2" style={{ fontFamily:"var(--font-heading)" }}>
+ <Trophy className="w-5 h-5 text-amber-500"/> All standings
+ </h3>
+ <span className="text-[12px] font-semibold text-slate-500 dark:text-slate-300">{users.length} neighbours</span>
  </div>
- 
- <div className="divide-y divide-slate-100">
+ <ol className="divide-y divide-slate-100 dark:divide-white/5">
  {users.map((user, index) => {
  const achievement = getAchievement(user.points || 0);
+ const pct = Math.round(((user.points || 0) / topPoints) * 100);
+ const medal = ["bg-amber-400 text-amber-950","bg-slate-300 text-slate-800","bg-orange-300 text-orange-950"][index];
  return (
- <div 
- key={user._id} 
- className={`flex items-center justify-between p-5 transition-colors hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] ${
- index === 0 ?"bg-amber-50/20":
- index === 1 ?"bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215]/40":
- index === 2 ?"bg-orange-50/10":""}`}
- >
- <div className="flex items-center gap-4 pl-1">
- <span className={`text-[13px] font-black w-6 text-center ${
- index === 0 ?"text-amber-500":
- index === 1 ?"text-slate-400":
- index === 2 ?"text-orange-500":"text-slate-400"}`}>
- #{index + 1}
+ <li key={user._id} className="flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5 hover:bg-slate-50/70 dark:hover:bg-white/5 transition-colors">
+ <span className={`w-8 h-8 shrink-0 rounded-full grid place-items-center text-[12px] font-black ${medal || "bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-300"}`}>
+ {index + 1}
  </span>
- 
- <div className={`w-10 h-10 rounded-full overflow-hidden shrink-0 border-2 ${
- index === 0 ?"border-amber-400":
- index === 1 ?"border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040]":
- index === 2 ?"border-orange-300":"border-transparent bg-slate-200"}`}>
- {user.photoURL ? (
- <img src={user.photoURL} alt={user.name} className="w-full h-full object-cover"/>
- ) : (
- <span className="flex items-center justify-center h-full text-slate-500 dark:text-slate-300 font-bold bg-slate-200 text-[13px]">
- {user.name?.charAt(0) || user.email?.charAt(0) ||"C"}
- </span>
- )}
+ <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden bg-slate-100 dark:bg-white/10 grid place-items-center text-[13px] font-bold text-slate-500">
+ {user.photoURL
+ ? <img src={user.photoURL} alt="" onError={fallbackTo("/demo/avatar-placeholder.svg")} className="w-full h-full object-cover"/>
+ : (user.name?.charAt(0) || "C")}
  </div>
- 
- <div className="text-left">
- <h4 className="font-bold text-slate-800 dark:text-white text-[13px] md:text-[13px] flex items-center gap-1.5">
- {user.name ||"Anonymous Citizen"}
- {user.isVolunteer && (
- <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"title="Volunteer"></span>
- )}
- </h4>
- <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">{user.role}</span>
+ <div className="flex-1 min-w-0">
+ <div className="flex items-center gap-2 flex-wrap">
+ <span className="font-bold text-[14px] text-slate-900 dark:text-white truncate">{user.name || "Anonymous Citizen"}</span>
+ <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{user.isVolunteer && user.role !== "admin" ? "volunteer" : user.role}</span>
+ </div>
+ <div className="mt-1.5 h-1.5 w-full max-w-[260px] rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden">
+ <div className="h-full rounded-full bg-gradient-to-r from-teal-500 to-emerald-400" style={{ width:`${pct}%` }}/>
  </div>
  </div>
- 
- <div className="hidden sm:block text-right">
- <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${achievement.style}`}>
- {achievement.label}
- </span>
+ <span className={`hidden md:inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold border ${achievement.style}`}>{achievement.label}</span>
+ <div className="text-right shrink-0 w-16">
+ <span className="block font-black text-[15px] text-slate-900 dark:text-white">{(user.points || 0).toLocaleString()}</span>
+ <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400">points</span>
  </div>
- 
- <div className="text-right pr-1">
- <span className="font-black text-slate-800 dark:text-white text-[13px] md:text-[13px]">
- {user.points || 0}
- </span>
- </div>
- </div>
+ </li>
  );
  })}
- </div>
- </div>
- </div>
+ </ol>
+ </section>
 
- {/* Contributor Activity Log (Takes 1/3 space) */}
- <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm p-4 flex flex-col">
- <h3 className="text-[13px] font-bold text-slate-800 dark:text-white mb-6 border-b border-slate-100 pb-4 flex items-center gap-2 tracking-tight">
- <Activity className="w-5 h-5 text-emerald-600"/>
- Recent Contributor Actions
+ <aside className="cn-glass-card border p-5 lg:sticky lg:top-24" aria-labelledby="activity-title">
+ <h3 id="activity-title" className="text-[15px] font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4" style={{ fontFamily:"var(--font-heading)" }}>
+ <Activity className="w-5 h-5 text-emerald-600"/> Recent activity
  </h3>
- 
- <div className="space-y-6 flex-1 overflow-y-auto">
- {activityLog.map((log) => (
- <div key={log.id} className="flex gap-3 text-left">
- <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-200 flex-shrink-0 border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]">
- {log.photo ? (
- <img src={log.photo} alt={log.name} className="w-full h-full object-cover"/>
+ {activityLoading ? (
+ <div className="py-8 flex justify-center"><MinimalLoader /></div>
+ ) : activity.length === 0 ? (
+ <p className="text-[13px] text-slate-500 dark:text-slate-300 py-6 text-center">Nothing yet. Report an issue or join a cleanup to get on the board.</p>
  ) : (
- <span className="flex items-center justify-center h-full text-xs text-slate-500 dark:text-slate-300 font-bold bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
- {log.name?.charAt(0)}
- </span>
+ <ul className="space-y-3.5">
+ {activity.map((item) => {
+ const meta = ACTIVITY_META[item.type] || ACTIVITY_META.default;
+ return (
+ <li key={item._id} className="flex gap-3">
+ <span className={`w-8 h-8 shrink-0 rounded-lg grid place-items-center ${meta.tone}`}><i className={meta.icon} aria-hidden="true"/></span>
+ <div className="min-w-0">
+ <p className="text-[13px] leading-snug text-slate-700 dark:text-slate-200">{activityText(item)}</p>
+ <span className="text-[11px] text-slate-400">{timeAgo(item.createdAt)}</span>
+ </div>
+ </li>
+ );
+ })}
+ </ul>
  )}
- </div>
- <div>
- <p className="text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] leading-snug">
- <span className="font-extrabold text-slate-900 dark:text-white">{log.name}</span> {log.action}
- </p>
- <span className={`text-xs font-bold flex items-center gap-1 mt-1 ${log.points > 0 ? 'text-emerald-600' : 'text-slate-400 dark:text-slate-500'}`}>
- <CheckCircle2 className="w-3.5 h-3.5"/>
- {log.points > 0 ? `+${log.points} Points Credited` : '0 Points Credited'}
- </span>
- </div>
- </div>
- ))}
- 
- {activityLog.length === 0 && (
- <div className="text-center text-slate-500 dark:text-slate-300 text-[13px] py-10">No recent activity</div>
- )}
- </div>
- </div>
+ <Link to="/recent-activities" className="mt-5 cn-btn cn-btn-ghost cn-btn-sm w-full justify-center">
+ See all activity <ArrowUpRight className="w-4 h-4"/>
+ </Link>
+ </aside>
 
  </div>
 
