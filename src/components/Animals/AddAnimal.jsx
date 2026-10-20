@@ -8,6 +8,7 @@ import CreditIndicator from"../common/CreditIndicator";
 import BackButton from"../common/BackButton";
 import toast from'react-hot-toast';
 import { FaDog, FaCat, FaCow, FaCrow, FaPaw } from"react-icons/fa6";
+import PremiumImageUploader from'../common/PremiumImageUploader';
 
 const ANIMAL_TYPES = [
  { value:'Dog', icon: <FaDog />, label:'Dog'},
@@ -191,18 +192,12 @@ export default function AddAnimal() {
  </div>
 
  {/* Image */}
- <div className="space-y-2">
- <label className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] flex items-center gap-2">
- <i className="ri-image-add-line text-teal-600"></i> Photo (Optional)
- </label>
- <div className="relative">
- <input 
- type="url"name="image"value={formData.image} 
- onChange={handleChange}
- placeholder="https://..."className="w-full bg-slate-50 dark:bg-[#0a1410] dark:bg-[#0a1410] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-xl pl-11 pr-4 py-3 outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500/50 transition-all"/>
- <i className="ri-link absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
- </div>
- </div>
+ <PremiumImageUploader
+ label="Photo (Optional)"
+ maxCount={1}
+ onUploadComplete={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+ onRemove={() => setFormData((prev) => ({ ...prev, image:"" }))}
+ />
 
  <div className="pt-4 flex justify-end gap-4">
  <button
