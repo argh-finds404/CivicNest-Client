@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from"react";
-import { useNavigate, useSearchParams } from"react-router";
+import { useLocation, useNavigate, useSearchParams } from"react-router";
 import { motion } from"framer-motion";
-import { useQuery } from"@tanstack/react-query";
+import { useQuery, useQueryClient } from"@tanstack/react-query";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import { useAuth } from"../../hooks/useAuth";
 import CreditIndicator from"../common/CreditIndicator";
 import BackButton from"../common/BackButton";
+import PremiumImageUploader from"../common/PremiumImageUploader";
 import toast from'react-hot-toast';
 import { 
  Cat, 
@@ -40,7 +41,11 @@ export default function AddLostFound() {
  const [searchParams, setSearchParams] = useSearchParams();
  const [loading, setLoading] = useState(false);
 
- const initialType = searchParams.get('type') ==='found'?'found':'lost';
+ const { pathname } = useLocation();
+ const queryClient = useQueryClient();
+ // "Report found" links go to /lost-found/add-found; ?type= wins when present
+ const typeParam = searchParams.get('type');
+ const initialType = typeParam ? (typeParam ==='found'?'found':'lost') : (pathname.endsWith('add-found') ?'found':'lost');
  const [type, setType] = useState(initialType);
  const [uploadedImages, setUploadedImages] = useState([]);
 
@@ -93,6 +98,9 @@ export default function AddLostFound() {
  };
 
  await axiosSecure.post("/lost-found", payload);
+ queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+ queryClient.invalidateQueries({ queryKey: ["lostfound-stats"] });
+ queryClient.invalidateQueries({ queryKey: ["credits","lostFound"] });
  toast.success(type ==='lost'?"Lost item reported successfully!":"Found item reported successfully!");
  navigate(`/lost-found?type=${type}`);
  } catch (error) {

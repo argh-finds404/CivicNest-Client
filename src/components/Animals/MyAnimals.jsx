@@ -61,6 +61,10 @@ const MyAnimals = () => {
  };
 
  const getStatusBadge = (animal) => {
+ // A rejected rescue goes back to needs-help, so check this before the status
+ if (animal.rescueVerificationStatus ==='rejected') {
+ return <span className="px-2.5 py-1 bg-rose-100 text-rose-700 text-xs font-bold border border-rose-200 rounded-full">✗ Proof Rejected</span>;
+ }
  if (animal.status ==='rescued') {
  if (animal.rescueVerificationStatus ==='pending') {
  return <span className="px-2.5 py-1 bg-amber-100 text-amber-700 text-xs font-bold border border-amber-200 rounded-full">⏳ Awaiting Verification</span>;

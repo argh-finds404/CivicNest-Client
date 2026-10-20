@@ -46,7 +46,7 @@ export default function CleanupEventCard({ event, onInterested, onGoing, userInt
  const isPast = new Date(event.eventDate) < new Date();
 
  return (
- <article className="group relative
+ <article className="cn-glass-card group relative
  bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] 
  border border-slate-100 
  rounded-xl overflow-hidden

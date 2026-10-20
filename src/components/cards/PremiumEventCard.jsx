@@ -110,7 +110,7 @@ export default function PremiumEventCard({ event, currentUser, userInterested, u
  };
 
  return (
- <article className="flex flex-col h-auto bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/80 overflow-hidden">
+ <article className="cn-glass-card flex flex-col h-auto bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/80 overflow-hidden">
  {/* Landscape banner */}
  <div className="relative w-full aspect-[16/9] shrink-0 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
  <img
