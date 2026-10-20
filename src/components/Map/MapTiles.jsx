@@ -17,26 +17,25 @@ const OSM = {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   subdomains: "abc",
 };
-// Esri's public street basemap, a third keyless provider
-const ESRI = {
+// Esri's public basemaps (keyless)
+const ESRI_ATTRIBUTION = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, OpenStreetMap contributors";
+const ESRI_STREETS = {
   url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
-  attribution: "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, OpenStreetMap contributors",
+  attribution: ESRI_ATTRIBUTION,
   subdomains: "abc",
 };
-const CARTO_ATTRIBUTION = `${OSM.attribution} &copy; <a href="https://carto.com/attributions">CARTO</a>`;
+const ESRI_DARK = {
+  url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+  attribution: ESRI_ATTRIBUTION,
+  subdomains: "abc",
+  maxZoom: 16,
+};
 
-// Keyless tile providers, tried in order
+// Real street maps that need no API key, tried in order. (CARTO's basemaps
+// now return "API key required" images instead of failing, so they're not used.)
 const PROVIDERS = {
-  light: [
-    { url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", attribution: CARTO_ATTRIBUTION, subdomains: "abcd" },
-    OSM,
-    ESRI,
-  ],
-  dark: [
-    { url: "https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png", attribution: CARTO_ATTRIBUTION, subdomains: "abcd" },
-    OSM,
-    ESRI,
-  ],
+  light: [OSM, ESRI_STREETS],
+  dark: [ESRI_DARK, OSM],
 };
 
 /**
@@ -58,7 +57,7 @@ export function MapTiles() {
       url={provider.url}
       attribution={provider.attribution}
       subdomains={provider.subdomains}
-      maxZoom={19}
+      maxZoom={provider.maxZoom || 19}
       eventHandlers={{
         tileload: () => {
           loadedOnce.current = true;

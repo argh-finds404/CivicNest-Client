@@ -139,7 +139,7 @@ Socket.io (same server) → live feed, forum typing indicators and notifications
 ## Features at a glance
 
 * **Issues and tickets:** report, review, claim, prove, verify, escalate, crowdfund; priority queue for staff.
-* **Live maps (Leaflet):** a real street map on the home page and a full Community Map with every issue, upcoming cleanup and animal in need as coloured pins with photo previews and filters. Street tiles come from CARTO, with automatic fallback to OpenStreetMap and then Esri World Street Map (all free, no API key).
+* **Community Map (Leaflet):** a real street map at `/map` with every issue, upcoming cleanup and animal in need as coloured pins with photo previews and filters. Tiles come from OpenStreetMap (Esri's dark grey map in dark mode), with Esri / OpenStreetMap as automatic backups. All free, no API key needed. The home page keeps its 3D neighbourhood scene.
 * **Cleanup drives:** organise an event (staff approve it), RSVP, organiser check-in code with optional GPS, attendance points, funding goal.
 * **Lost & found:** lost and found posts, claims and "I found it" reports, with points when an item is reunited.
 * **Animal rescue:** report an animal in need, volunteers join, AI first-aid tip, adoption requests, feeding drives, donations.

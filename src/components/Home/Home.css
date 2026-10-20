@@ -116,26 +116,8 @@
 .cn-dot-event { background: var(--cn-signal); }
 
 .cn-hero-map { position: relative; }
-.cn-hero-livemap {
-  position: relative;
-  height: clamp(300px, 42vw, 440px);
-  border-radius: 1.5rem;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.05);
-  isolation: isolate;
-}
-.cn-hero-livemap .leaflet-container { background: #dfe9e4; font: inherit; }
-.cn-hero-livemap-open {
-  position: absolute; right: 12px; bottom: 26px; z-index: 500;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 14px; border-radius: 999px;
-  background: rgba(15, 23, 42, 0.82); color: #fff; font-size: 0.8rem; font-weight: 700;
-  backdrop-filter: blur(6px);
-}
-.cn-hero-livemap-open:hover { background: #0f766e; }
 .cn-hero-map-hint {
-  margin: 0.75rem 0 0;
+  margin: -0.5rem 0 0;
   text-align: center;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
