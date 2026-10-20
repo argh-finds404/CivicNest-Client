@@ -231,9 +231,11 @@ const NGOProfile = () => {
  <p className="text-teal-800/80 text-[13px] font-medium">
  Record your support for this organization. Your contribution helps them continue their community work.
  </p>
- {ngo.totalSupporters && (
+ {(Number(ngo.totalDonations) > 0 || Number(ngo.totalSupporters) > 0) && (
  <p className="text-teal-700/60 text-xs mt-2">
- {ngo.totalSupporters} people have shown support
+ {Number(ngo.totalDonations) > 0 && <>৳{Number(ngo.totalDonations).toLocaleString()} donated</>}
+ {Number(ngo.totalDonations) > 0 && Number(ngo.totalSupporters) > 0 &&" · "}
+ {Number(ngo.totalSupporters) > 0 && <>{ngo.totalSupporters} people have shown support</>}
  </p>
  )}
  </div>

@@ -42,7 +42,7 @@ export default function NGOCard({ ngo }) {
  <motion.div 
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
- className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow group flex flex-col h-full">
+ className="cn-glass-card bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow group flex flex-col h-full">
  <div className="flex items-center gap-4 mb-6">
  <div className="w-16 h-16 rounded-lg overflow-hidden border border-slate-100 shadow-sm shrink-0">
  <CardImage src={ngo.logoUrl} alt={ngo.name} kind="ngo" label={ngo.name} compact />

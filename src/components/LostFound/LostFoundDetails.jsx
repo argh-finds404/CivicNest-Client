@@ -55,7 +55,8 @@ export default function LostFoundDetails() {
  },
  onSuccess: () => {
  toast.success(item.type ==='lost'?"Report submitted successfully.":"Claim submitted successfully.");
- queryClient.invalidateQueries({ queryKey: ["lost-found", id] });
+ queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+ queryClient.invalidateQueries({ queryKey: ["lostfound-stats"] });
  setShowClaimForm(false);
  setStatement('');
  setContactPhone('');
@@ -69,7 +70,8 @@ export default function LostFoundDetails() {
  mutationFn: (payload) => axiosSecure.post(`/lost-found/${id}/reunite`, payload),
  onSuccess: () => {
  toast.success("Item marked as reunited!");
- queryClient.invalidateQueries({ queryKey: ["lost-found", id] });
+ queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+ queryClient.invalidateQueries({ queryKey: ["lostfound-stats"] });
  },
  onError: (err) => toast.error(err.response?.data?.message ||"Failed to mark reunited.")
  });
@@ -78,7 +80,8 @@ export default function LostFoundDetails() {
  mutationFn: (payload) => axiosSecure.post(`/lost-found/${id}/flag-suspicious`, payload),
  onSuccess: () => {
  toast.success("Flagged as suspicious. Admin notified.");
- queryClient.invalidateQueries({ queryKey: ["lost-found", id] });
+ queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+ queryClient.invalidateQueries({ queryKey: ["lostfound-stats"] });
  },
  onError: (err) => toast.error(err.response?.data?.message ||"Failed to flag.")
  });
@@ -258,7 +261,7 @@ export default function LostFoundDetails() {
  </div>
  )}
 
- {item.status ==='open'&& !isOwner && !showClaimForm && !alreadyActioned && (
+ {item.status ==='open'&& !isExpired && !isOwner && !showClaimForm && !alreadyActioned && (
  <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
  <button 
  onClick={() => setShowClaimForm(true)}

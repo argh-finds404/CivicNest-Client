@@ -5,6 +5,7 @@ import SocialFeedCard from'../cards/SocialFeedCard';
 import MinimalLoader from'../common/MinimalLoader';
 import BackButton from'../common/BackButton';
 import PageTitle from'../common/PageTitle';
+import useAxiosPublic from'../../hooks/useAxiosPublic';
 
 const PublicProfile = () => {
  const { id } = useParams();
