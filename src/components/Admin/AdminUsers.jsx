@@ -2,14 +2,16 @@ import React, { useState, useEffect } from'react';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import MinimalLoader from'../common/MinimalLoader';
 import Swal from'sweetalert2';
+import ReviewerLoginsPanel from'./ReviewerLoginsPanel';
 
 const AdminUsers = () => {
  const [users, setUsers] = useState([]);
  const [isLoading, setIsLoading] = useState(true);
  const axiosSecure = useAxiosSecure();
 
- const fetchUsers = async () => {
- setIsLoading(true);
+ // quiet: refresh the table without swapping the page for a loader
+ const fetchUsers = async ({ quiet = false } = {}) => {
+ if (!quiet) setIsLoading(true);
  try {
  const res = await axiosSecure.get('/admin/users');
  setUsers(res.data);
@@ -65,6 +67,8 @@ const AdminUsers = () => {
  </div>
  </div>
  
+ <ReviewerLoginsPanel onDone={() => fetchUsers({ quiet: true })} />
+
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-[2rem] shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4">
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">

@@ -15,6 +15,7 @@ import L from'leaflet';
 import DatePicker from'react-datepicker';
 import'react-datepicker/dist/react-datepicker.css';
 import TimePicker from'react-time-picker';
+import PremiumImageUploader from'../common/PremiumImageUploader';
 import'react-time-picker/dist/TimePicker.css';
 import'react-clock/dist/Clock.css';
 
@@ -235,16 +236,15 @@ export default function OrganizeEventForm() {
  </div>
 
  <div>
- <label className="block text-[13px] font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
- <i className="ri-image-add-line text-teal-600"></i>
- Event Banner / Poster URL
- </label>
- <input 
- {...register("coverImage")}
- className="w-full bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] rounded-lg p-3 focus:outline-none focus:border-teal-500"placeholder="https://example.com/poster.jpg (Optional)"/>
+ <PremiumImageUploader
+ label="Event banner / poster (optional)"
+ maxCount={1}
+ onUploadComplete={(url) => setValue('coverImage', url)}
+ onRemove={() => setValue('coverImage','')}
+ />
  <p className="text-slate-500 dark:text-slate-300 text-xs mt-1.5 flex items-center gap-1">
  <i className="ri-information-line"></i>
- Provide a direct link to an image. This will be shown on the event card to attract volunteers!
+ Shown on the event card to attract volunteers.
  </p>
  </div>
  </div>

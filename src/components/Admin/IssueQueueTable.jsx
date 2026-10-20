@@ -45,7 +45,7 @@ export default function IssueQueueTable() {
  refetchInterval: 10000 // Refetch every 10 seconds for real-time feel
  });
 
- const queue = data ? data.pages.flatMap(page => page.issues) : [];
+ const queue = data ? data.pages.flatMap(page => page?.issues || []) : [];
 
  const approveMutation = useMutation({
  mutationFn: async ({ issueId, type }) => {
