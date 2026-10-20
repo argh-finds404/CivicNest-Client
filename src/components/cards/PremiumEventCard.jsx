@@ -67,30 +67,16 @@ function ParticleBurst({ particles, active }) {
  );
 }
 
-export default function PremiumEventCard({ event, currentUser, userInterested, userGoing, onInterested, onGoing, compact = true }) {
+export default function PremiumEventCard({ event, userInterested, userGoing, onInterested, onGoing, compact = true }) {
  const dateObj = new Date(event.eventDate);
  const month = dateObj.toLocaleString('en-US', { month:'short'}).toUpperCase();
  const day = dateObj.getDate();
  const displayName = displayOrganizerName(event.organizer);
 
- let previewAttendees = event.goingPreview?.length ? [...event.goingPreview] : [
- { _id:'dummy1', photoURL:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=60', name:'Alex'},
- { _id:'dummy2', photoURL:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60', name:'Sarah'},
- { _id:'dummy3', photoURL:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=60', name:'Mike'},
- ];
-
- if ((userInterested || userGoing) && currentUser) {
- if (!previewAttendees.some(a => a._id === currentUser.uid)) {
- previewAttendees = [{
- _id: currentUser.uid,
- photoURL: currentUser.photoURL,
- name: currentUser.displayName || currentUser.email,
- }, ...previewAttendees];
- }
- }
-
- let goingCount = event.goingCount || 12;
- if (userGoing || userInterested) goingCount += 1;
+ // Real sign-ups only; the server's `going` list already includes the current user once they join
+ const going = Array.isArray(event.going) ? event.going : [];
+ const previewAttendees = (event.goingPreview?.length ? event.goingPreview : going).slice(0, 3);
+ const goingCount = going.length || event.goingCount || 0;
  const extraCount = Math.max(0, goingCount - previewAttendees.length);
 
  const [burstKey, setBurstKey] = useState({ type: null, key: 0 });
@@ -216,7 +202,7 @@ export default function PremiumEventCard({ event, currentUser, userInterested, u
  {extraCount > 0 && (
  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-300">+{extraCount}</span>
  )}
- <span className="text-[10px] text-slate-400">{goingCount} attending</span>
+ <span className="text-[10px] text-slate-400">{goingCount > 0 ?`${goingCount} attending`:"Be the first to join"}</span>
  </div>
 
  <Link

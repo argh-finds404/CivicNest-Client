@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from'framer-motion';
 import toast from'react-hot-toast';
 import FlairPill from'../common/FlairPill';
 import StatusBadge from'../common/StatusBadge';
+import CardImage from'../common/CardImage';
 import { useAuth } from'../../hooks/useAuth';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 
@@ -210,11 +211,9 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  {hasImages && (
  <div className="w-full relative bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]/50 mt-1 z-20">
  <Link to={isEvent ?`/cleanup-events/${issue._id}`:`/issues/${issue._id}`}>
- <img 
- src={issue.images[0]} 
- alt={issue.title} 
- className={`w-full h-[300px] sm:h-[400px] object-cover ${isLocked ?'opacity-70':''}`}
- />
+ <div className={`w-full h-[300px] sm:h-[400px] ${isLocked ?'opacity-70':''}`}>
+ <CardImage src={issue.images[0]} alt={issue.title} kind={isEvent ?"cleanup":"issue"} label={issue.category} />
+ </div>
  </Link>
  {issue.images.length > 1 && (
  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md border border-white/20">

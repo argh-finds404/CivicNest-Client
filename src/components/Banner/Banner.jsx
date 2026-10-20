@@ -7,7 +7,7 @@ import { Fade, Slide } from'react-awesome-reveal';
 import { Typewriter } from'react-simple-typewriter';
 
 const Banner = () => {
- const images = ["https://www.watsonsreach.com.au/app/uploads/2026/02/About-Banner-1-scaled.png","/banner2.jpg","/banner3.jpg","/banner4.png"];
+ const images = ["/banner2.jpg","/banner3.jpg","/banner4.png"];
 
  return (
  <section className="relative w-full overflow-hidden min-h-[450px] flex items-center justify-center">

@@ -11,6 +11,7 @@ import PageArt from "../common/PageArt";
 import SectionFilterChips from'../common/SectionFilterChips';
 import CreatePollModal from'./CreatePollModal';
 import { useRole } from'../../hooks/useRole';
+import { isStaff } from "../../utils/roles";
 import { 
  Clock, 
  CheckCircle2, 
@@ -107,7 +108,7 @@ export default function PollsBrowse() {
  const [searchQuery, setSearchQuery] = useState('');
  const [role] = useRole();
 
- const isAdminOrMod = role ==='admin';
+ const isAdminOrMod = isStaff(role);
 
  const statusFilters = [
  { label:'Active', value:'active', icon: <Clock className="w-3.5 h-3.5"/> },

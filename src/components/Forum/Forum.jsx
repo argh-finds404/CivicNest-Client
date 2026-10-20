@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from"@tanstack/react-query";
 import useAxiosSecure from"../../hooks/useAxiosSecure";
 import { useAuth } from"../../hooks/useAuth";
 import { useRole } from"../../hooks/useRole";
+import { atLeast } from "../../utils/roles";
 import { socket } from"../../hooks/useSocket";
 import toast from"react-hot-toast";
 import ThreadDetails from"./ThreadDetails";
@@ -35,7 +36,7 @@ export default function Forum() {
  const [isNewThreadOpen, setIsNewThreadOpen] = useState(false);
 
  // Everyone can read the forum; only verified members and volunteers can post
- const canPost = role ==="member"|| role ==="admin"|| isVolunteer;
+ const canPost = atLeast(role,"member") || isVolunteer;
 
  const openNewThread = () => {
  if (!user) return requestLogin("start a discussion");

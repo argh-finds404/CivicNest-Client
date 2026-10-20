@@ -48,32 +48,14 @@ export default function AdminStats() {
 
  const COLORS = ['#0f766e','#f59e0b','#3b82f6','#ef4444','#8b5cf6','#ec4899'];
 
- // Inject dummy data if database is empty for visual preview
- const displayTrend = (stats?.issueTrend && stats.issueTrend.length > 0) ? stats.issueTrend : [
- { name:'OPEN', Issues: 24 },
- { name:'ACTION TAKEN', Issues: 13 },
- { name:'PENDING VERIFICATION', Issues: 8 },
- { name:'SOLVED', Issues: 35 },
- { name:'REJECTED', Issues: 5 }
- ];
-
- const displayCategory = (stats?.categoryBreakdown && stats.categoryBreakdown.length > 0) ? stats.categoryBreakdown : [
- { name:'Waste Management', value: 45 },
- { name:'Roads & Infrastructure', value: 25 },
- { name:'Water & Sanitation', value: 15 },
- { name:'Public Safety', value: 10 },
- { name:'Other', value: 5 }
- ];
-
- const displayTransactions = (stats?.transactionTrend && stats.transactionTrend.length > 0) ? stats.transactionTrend : [
- { day:'Mon', amount: 1200 },
- { day:'Tue', amount: 1900 },
- { day:'Wed', amount: 1500 },
- { day:'Thu', amount: 2800 },
- { day:'Fri', amount: 2400 },
- { day:'Sat', amount: 3800 },
- { day:'Sun', amount: 4200 }
- ];
+ // Live numbers only; each chart shows an empty state until there is data
+ const displayTrend = stats?.issueTrend || [];
+ const displayCategory = stats?.categoryBreakdown || [];
+ const displayTransactions = stats?.transactionTrend || [];
+ const hasDonations = displayTransactions.some((t) => t.amount > 0);
+ const emptyChart = (text) => (
+ <div className="absolute inset-0 grid place-items-center text-center text-[13px] text-slate-400 pointer-events-none">{text}</div>
+ );
 
  const downloadReport = () => {
  if (!stats) return;
@@ -217,8 +199,9 @@ export default function AdminStats() {
  {/* Charts */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4 flex flex-col min-h-[350px]">
- <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Issue Volume by Status <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live / Demo)</span></h4>
+ <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Issue Volume by Status <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live)</span></h4>
  <div className="flex-1 w-full h-[250px] relative">
+ {!statsLoading && displayTrend.length === 0 && emptyChart("No reports yet.")}
  <Bar 
  data={{
  labels: displayTrend.map(d => d.name),
@@ -267,9 +250,10 @@ export default function AdminStats() {
  </div>
 
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4 flex flex-col min-h-[350px]">
- <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Category Breakdown <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live / Demo)</span></h4>
+ <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Category Breakdown <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live)</span></h4>
  <div className="flex-1 w-full h-[250px] relative flex justify-center">
- <div className="w-[300px] h-[250px]">
+ <div className="w-[300px] h-[250px] relative">
+ {!statsLoading && displayCategory.length === 0 && emptyChart("No reports yet.")}
  <Doughnut 
  data={{
  labels: displayCategory.map(c => c.name),
@@ -315,8 +299,9 @@ export default function AdminStats() {
 
  {/* Transactions Line Chart */}
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl shadow-sm border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] p-4 flex flex-col min-h-[350px] lg:col-span-2">
- <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Donations & Transactions Trend <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live / Demo)</span></h4>
+ <h4 className="text-[13px] font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-6 font-display">Donations, last 7 days <span className="text-xs font-normal text-slate-400 ml-2 font-body">(Live)</span></h4>
  <div className="flex-1 w-full h-[250px] relative">
+ {!statsLoading && !hasDonations && emptyChart("No donations in the last 7 days.")}
  <Line 
  data={{
  labels: displayTransactions.map(t => t.day),

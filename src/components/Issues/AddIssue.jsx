@@ -147,6 +147,7 @@ const AddIssue = () => {
  location:"",
  area:"",
  incidentDate:"",
+ urgency:"medium",
  mapCoordinates: null,
  isAnonymous: false,
  enableCrowdfunding: false,
@@ -155,16 +156,26 @@ const AddIssue = () => {
  });
 
  const selectedCategory = watch("category");
+ const categoryRef = React.useRef(selectedCategory);
+ categoryRef.current = selectedCategory;
+ const urgencyPicked = React.useRef(false);
  const description = watch("description");
 
  useEffect(() => {
  if (!description || description.length < 30) return;
  const timer = setTimeout(async () => {
  try {
- const res = await axiosSecure.post('/ai/suggest-issue', { description });
+ const res = await axiosSecure.post('/ai/suggest-issue', { description, categories: CATEGORIES.filter((c) => c !=="Custom") });
  if (res.data) {
+ // Fill the category only if the reporter hasn't picked one
+ if (!categoryRef.current && CATEGORIES.includes(res.data.category)) {
  setValue('category', res.data.category, { shouldValidate: true });
- setAiSuggestion(res.data.polishedDescription);
+ }
+ // Suggest urgency until the reporter changes it themselves
+ if (!urgencyPicked.current && ['low','medium','high','emergency'].includes(res.data.urgency)) {
+ setValue('urgency', res.data.urgency);
+ }
+ if (res.data.polishedDescription) setAiSuggestion(res.data.polishedDescription);
  }
  } catch (err) {
  console.error("AI Category suggestion failed:", err);
@@ -190,6 +201,7 @@ const AddIssue = () => {
  location: data.location,
  area: data.area ||"General Area",
  incidentDate: data.incidentDate,
+ urgency: data.urgency ||"medium",
  images: imageUrls,
  coordinates: data.mapCoordinates ? { lat: data.mapCoordinates[0], lng: data.mapCoordinates[1] } : { lat: null, lng: null },
  isAnonymous: data.isAnonymous,
@@ -565,7 +577,7 @@ const AddIssue = () => {
  <ImagePlus className="w-5 h-5 text-slate-400"/> Media & Timing
  </h2>
  
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  <div className="space-y-2">
  <label className="text-[13px] font-semibold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">Date of Incident <span className="text-red-500">*</span></label>
  <div className="relative">
@@ -573,6 +585,19 @@ const AddIssue = () => {
  type="date"className="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] focus:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] focus:ring-2 focus:ring-[#9FE2BF]/40 focus:border-[#40826D] transition-all outline-none text-slate-800 dark:text-white"{...register("incidentDate", { required:"Date is required"})}
  />
  </div>
+ </div>
+
+ <div className="space-y-2">
+ <label htmlFor="issue-urgency" className="text-[13px] font-semibold text-slate-700 dark:text-[#cbd5e1]">How urgent is it?</label>
+ <select
+ id="issue-urgency"
+ className="w-full h-12 px-4 rounded-lg bg-slate-50 dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] focus:ring-2 focus:ring-[#9FE2BF]/40 focus:border-[#40826D] transition-all outline-none text-slate-800 dark:text-white cursor-pointer"
+ {...register("urgency", { onChange: () => { urgencyPicked.current = true; } })}>
+ <option value="low">Low · can wait (fix within 14 days)</option>
+ <option value="medium">Normal (fix within 7 days)</option>
+ <option value="high">High · getting worse (3 days)</option>
+ <option value="emergency">Emergency · danger to people (24 hours)</option>
+ </select>
  </div>
 
  <div className="space-y-2">

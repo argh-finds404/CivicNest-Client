@@ -4,6 +4,7 @@ import useAxiosSecure from"../../hooks/useAxiosSecure";
 import Swal from"sweetalert2";
 import toast from"react-hot-toast";
 import FlairPill from"../common/FlairPill";
+import CardImage from "../common/CardImage";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import AdminIssueDetailDrawer from"./AdminIssueDetailDrawer";
 
@@ -58,6 +59,12 @@ export default function IssueQueueTable() {
  queryClient.invalidateQueries({ queryKey: ["admin-queue-count"] });
  queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
  toast.success("Approved successfully!");
+ queryClient.invalidateQueries({ queryKey: ["staff-tickets"] });
+ },
+ onError: (err) => {
+ // 409 means another staff member already reviewed it, so refresh the list
+ queryClient.invalidateQueries({ queryKey: ["admin-queue"] });
+ toast.error(err.response?.data?.error || err.response?.data?.message || "Couldn't update this item. Please try again.");
  },
  });
 
@@ -72,6 +79,12 @@ export default function IssueQueueTable() {
  queryClient.invalidateQueries({ queryKey: ["admin-queue-count"] });
  queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
  toast.success("Rejected. Poster has been notified.");
+ queryClient.invalidateQueries({ queryKey: ["staff-tickets"] });
+ },
+ onError: (err) => {
+ // 409 means another staff member already reviewed it, so refresh the list
+ queryClient.invalidateQueries({ queryKey: ["admin-queue"] });
+ toast.error(err.response?.data?.error || err.response?.data?.message || "Couldn't update this item. Please try again.");
  },
  });
 
@@ -230,7 +243,7 @@ export default function IssueQueueTable() {
  {/* Left Section: Thumbnail */}
  <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] overflow-hidden shrink-0 border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] relative">
  {issue.images && issue.images[0] ? (
- <img src={issue.images[0]} alt={issue.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+ <CardImage src={issue.images[0]} alt={issue.title} kind={issue._type ==='cleanup_event'?"cleanup":"issue"} compact className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
  ) : (
  <div className="w-full h-full flex items-center justify-center text-slate-400">
  <i className="ri-image-line text-[13px] tracking-tight md:text-2xl tracking-tight"></i>

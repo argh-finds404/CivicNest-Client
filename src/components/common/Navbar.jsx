@@ -460,7 +460,7 @@ const Navbar = () => {
   transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
   className="hidden sm:flex rounded-[12px] bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] border-2 border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm overflow-hidden flex-shrink-0 group-hover:scale-105">
  <img
- src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest"className="w-full h-full object-cover"/>
+ src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest"className="w-full h-full object-cover" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src ="/favicon.png"; }}/>
  </motion.div>
  <div>
  <motion.span
