@@ -232,20 +232,32 @@
 }
 
 .home-action-card {
-  background: var(--cn-surface);
-  border: 1px solid var(--cn-line);
-  border-radius: 1.125rem;
-  padding: 1.25rem;
+  --qa-ink: var(--qa);
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.875rem;
+  width: 100%;
+  padding: 1.25rem;
   text-align: left;
   cursor: pointer;
-  /* Removed CSS transitions to let Framer Motion handle them without stutter/distortion */
+  border-radius: 1.125rem;
+  background: var(--cn-surface);
+  border: 1px solid var(--cn-line);
   box-shadow: 0 1px 0.375rem rgba(15, 23, 42, 0.04);
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
+  animation: home-action-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) var(--qa-delay, 0ms) both;
 }
-/* Removed CSS hover states for border-color and box-shadow to prevent conflicts with Framer Motion */
-
+.home-action-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--qa) 35%, transparent);
+  box-shadow: 0 14px 32px -14px color-mix(in srgb, var(--qa) 45%, transparent);
+}
+.home-action-card:active { transform: translateY(-1px) scale(0.99); }
+.home-action-card:focus-visible { outline: 3px solid var(--cn-signal); outline-offset: 2px; }
+@keyframes home-action-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
 .home-action-icon {
   width: 2.875rem;
   height: 2.875rem;
@@ -254,21 +266,51 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--qa-ink);
+  background: var(--qa-bg);
+  transition: transform 0.25s, box-shadow 0.25s;
 }
-.home-action-body { flex: 1; }
+.home-action-card:hover .home-action-icon { transform: scale(1.06); }
+.home-action-body { flex: 1; display: block; }
 .home-action-title {
-  font-size: 0.875rem;
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--cn-ink);
   margin: 0 0 0.1875rem;
 }
 .home-action-desc {
+  display: block;
   font-size: 0.75rem;
   color: var(--cn-ink-muted);
   margin: 0;
   line-height: 1.5;
 }
-.home-action-arrow { flex-shrink: 0; }
+.home-action-arrow { flex-shrink: 0; color: #94a3b8; transition: transform 0.25s, color 0.25s; }
+.home-action-card:hover .home-action-arrow { transform: translateX(3px); color: var(--qa-ink); }
+
+/* Dark: glass cards with neon accents */
+.dark .home-action-card {
+  --qa-ink: color-mix(in srgb, var(--qa) 55%, #ecfeff);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)), #0b1613;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.dark .home-action-card:hover {
+  border-color: color-mix(in srgb, var(--qa-ink) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--qa-ink) 25%, transparent), 0 16px 40px -16px color-mix(in srgb, var(--qa-ink) 60%, transparent);
+}
+.dark .home-action-icon {
+  background: color-mix(in srgb, var(--qa-ink) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--qa-ink) 30%, transparent);
+}
+.dark .home-action-card:hover .home-action-icon { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--qa-ink) 50%, transparent), 0 0 18px -4px var(--qa-ink); }
+.dark .home-action-title { color: var(--qa-ink); text-shadow: 0 0 18px color-mix(in srgb, var(--qa-ink) 35%, transparent); }
+.dark .home-action-desc { color: #9fb3ad; }
+@media (prefers-reduced-motion: reduce) {
+  .home-action-card { animation: none; transition: none; }
+}
 
 /* Activity feed */
 .home-activity-list {

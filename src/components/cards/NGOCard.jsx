@@ -7,6 +7,7 @@ import { useMutation } from'@tanstack/react-query';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useAuth } from'../../hooks/useAuth';
 import toast from'react-hot-toast';
+import CardImage from'../common/CardImage';
 
 export default function NGOCard({ ngo }) {
  const [showContact, setShowContact] = useState(false);
@@ -44,7 +45,7 @@ export default function NGOCard({ ngo }) {
  className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100 hover:shadow-md transition-shadow group flex flex-col h-full">
  <div className="flex items-center gap-4 mb-6">
  <div className="w-16 h-16 rounded-lg overflow-hidden border border-slate-100 shadow-sm shrink-0">
- <img src={ngo.logoUrl ||"https://i.ibb.co/X30F6Hk/ngo-placeholder.png"} alt={ngo.name} className="w-full h-full object-cover"/>
+ <CardImage src={ngo.logoUrl} alt={ngo.name} kind="ngo" label={ngo.name} compact />
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 mb-1">

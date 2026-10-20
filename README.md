@@ -94,9 +94,9 @@ CivicNest features two payment integrations for community cleanup funding and ge
 *   **Leaflet & React Leaflet:** Configured to map community incident reports and cleanup event coordinates geographically.
 *   **Customization:** Utilizes custom Leaflet Marker anchors, interactive popups, dynamic center-coordinate matching, and coordinate selection helpers when creating new reports.
 
-### 4. Design System & 3D Scenes
+### 4. Design System & Page Artwork
 *   **Type and colour:** Bricolage Grotesque for headings and Plus Jakarta Sans for text, with shared `--cn-*` colour tokens and matching light and dark themes. The theme follows the device setting until you pick one.
-*   **Per-page 3D models:** Each section header has its own interactive low-poly model built with React Three Fiber (a traffic cone and pothole for issues, a ballot box for polls, a doghouse for animals, a magnifying glass for lost & found, a trophy for the leaderboard, and so on). Drag to turn them. They load only on desktop screens and stop rendering when scrolled out of view.
+*   **Page artwork:** Each section header has its own 2D emblem on a glass tile (a map pin for issues, a ballot box for polls, a paw for animals, a magnifying glass for lost & found, a trophy for the leaderboard, and so on). Pure SVG and CSS: the lines draw in once, then it floats gently, and motion stops for people who prefer reduced motion.
 *   **City diorama:** The home page welcome banner keeps the CSS 3D city scene.
 
 ### 5. Smooth Momentum Scrolling & Sliders
@@ -119,7 +119,6 @@ CivicNest features two payment integrations for community cleanup funding and ge
 *   **Framework:** React 19, Vite 8
 *   **Styles & Theme:** Tailwind CSS v4, DaisyUI v5
 *   **State & Fetching:** TanStack Query (React Query) v5, Axios
-*   **3D:** three.js, React Three Fiber, Drei
 *   **Animations:** Framer Motion, Lottie Player, Canvas Confetti, React Awesome Reveal
 *   **Maps:** Leaflet, React Leaflet
 *   **Scroll:** Lenis

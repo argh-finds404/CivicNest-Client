@@ -6,6 +6,7 @@ import MinimalLoader from'../common/MinimalLoader.jsx';
 import BackButton from'../common/BackButton';
 import { Plus, Search, HelpCircle, MapPin, Clock, Eye, AlertTriangle, ShieldCheck, Mail, Phone, Camera, Check } from'lucide-react';
 import toast from'react-hot-toast';
+import CardImage from'../common/CardImage';
 
 const MyLostFound = () => {
  const [items, setItems] = useState([]);
@@ -135,10 +136,7 @@ const MyLostFound = () => {
  <div>
  {/* Item Image */}
  <div className="relative h-44 bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
- <img 
- src={item.image ||'/lost-found-placeholder.jpg'} 
- alt={item.itemName} 
- className="w-full h-full object-cover"/>
+ <CardImage src={item.image} alt={item.itemName} kind={item.category ||"item"} label={item.category} />
  <span className={`absolute top-3 right-3 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border shadow-sm ${
  isLost ?'bg-rose-500 text-white border-rose-450/20 shadow-sm':'bg-emerald-600 text-white border-emerald-500/20 shadow-sm'}`}>
  {item.type.toUpperCase()}

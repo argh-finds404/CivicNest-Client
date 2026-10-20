@@ -7,6 +7,14 @@ import { useQueryClient, useMutation } from'@tanstack/react-query';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useAuth } from'../../hooks/useAuth';
 import AnimalDonationModal from'../Animals/AnimalDonationModal';
+import CardImage from'../common/CardImage';
+
+// "3 months ago"; empty for a missing or bad date instead of crashing the page
+const timeAgo = (value) => {
+ const d = new Date(value);
+ return value && !Number.isNaN(d.getTime()) ? formatDistanceToNow(d, { addSuffix: true }) :"";
+};
+
 
 const URGENCY_CONFIG = {
  emergency: { bg:'bg-red-500', text:'text-white', label:'Emergency', pulse: true, stripe:'border-l-[3px] border-red-500'},
@@ -83,9 +91,11 @@ export default function AnimalCard({ animal }) {
  >
  {/* Image */}
  <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] shrink-0">
- <img
- src={animal.image ||'/animal-placeholder.jpg'}
+ <CardImage
+ src={animal.image}
  alt={`${animal.animalType} — ${animal.condition}`}
+ kind={["dog","cat","bird"].includes(String(animal.animalType).toLowerCase()) ? animal.animalType : "animal"}
+ label={animal.animalType}
  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
 
  {/* Urgency badge */}
@@ -131,7 +141,7 @@ export default function AnimalCard({ animal }) {
  </div>
  <div className="flex items-center gap-2">
  <span>⏰</span>
- <span>{formatDistanceToNow(new Date(animal.date), { addSuffix: true })}</span>
+ <span>{timeAgo(animal.date || animal.createdAt)}</span>
  </div>
  {animal.volunteerCount > 0 && (
  <div className="flex items-center gap-2 text-xs font-semibold text-teal-600">
