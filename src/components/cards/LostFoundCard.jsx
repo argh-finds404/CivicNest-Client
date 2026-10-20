@@ -8,6 +8,14 @@ import { useAuth } from'../../hooks/useAuth';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useRole } from'../../hooks/useRole';
 import { useQueryClient } from'@tanstack/react-query';
+import CardImage from'../common/CardImage';
+
+// "3 months ago"; empty for a missing or bad date instead of crashing the page
+const timeAgo = (value) => {
+ const d = new Date(value);
+ return value && !Number.isNaN(d.getTime()) ? formatDistanceToNow(d, { addSuffix: true }) :"";
+};
+
 
 const TYPE_CONFIG = {
  lost: {
@@ -80,9 +88,11 @@ export default function LostFoundCard({ item }) {
  >
  {/* Image */}
  <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
- <img
- src={item.image ||'/lost-found-placeholder.jpg'}
+ <CardImage
+ src={item.image}
  alt={`${item.itemName} — ${item.category}`}
+ kind={item.category ||"item"}
+ label={item.category}
  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-750 ease-out"/>
 
  {/* Resolved Overlay */}
@@ -180,7 +190,7 @@ export default function LostFoundCard({ item }) {
  </div>
  <div className="flex items-center gap-1.5">
  <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0"/>
- <span>{formatDistanceToNow(new Date(item.dateLostFound || item.date), { addSuffix: true })}</span>
+ <span>{timeAgo(item.dateLostFound || item.date || item.createdAt)}</span>
  </div>
  </div>
 

@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from'framer-motion';
 import PremiumDropdown from'../common/PremiumDropdown';
 import { socket } from'../../hooks/useSocket';
 import PageHeader from'../common/PageHeader';
-import PageArt3D from'../three/PageArt3D';
+import PageArt from "../common/PageArt";
 import usePublicStats from'../../hooks/usePublicStats';
 
 const AllIssues = () => {
@@ -127,7 +127,7 @@ const AllIssues = () => {
  <span><strong>{stats.issuesResolved?.toLocaleString()}</strong> fixed so far</span>
  </>
  )}
- art={<PageArt3D model="issues" label="A traffic cone and warning sign beside a pothole" />}
+ art={<PageArt scene="issues" />}
  />
 
  {}

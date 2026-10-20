@@ -801,8 +801,9 @@ export default function Home() {
  <h2 className="home-section-title tracking-tight">Quick Actions</h2>
  <div className="home-actions-grid">
  {QUICK_ACTIONS.map((a, i) => (
- <motion.button
+ <button
  key={a.id}
+ type="button"
  onClick={() => {
  if (a.id ==="report") {
  setShowReportModal(true);
@@ -810,31 +811,17 @@ export default function Home() {
  navigate(a.path);
  }
  }}
- initial="initial"animate="animate"whileHover="hover"whileTap="tap"variants={{
- initial: { opacity: 0, y: 16 },
- animate: { opacity: 1, y: 0, backgroundColor:"#ffffff", borderColor:"#e2e8f0", transition: { delay: 0.1 * i, duration: 0.2, ease:"easeOut"} },
- hover: { y: -4, boxShadow:"0 12px 32px rgba(0,0,0,0.1)", backgroundColor: a.bg, borderColor:"transparent", transition: { duration: 0.2, ease:"easeOut"} },
- tap: { scale: 0.98 }
- }}
- className="home-action-card">
- <motion.div
- className="home-action-icon"variants={{
- initial: { backgroundColor: a.bg, boxShadow:"none"},
- animate: { backgroundColor: a.bg, boxShadow:"none", transition: { duration: 0.2, ease:"easeOut"} },
- hover: { backgroundColor:"#ffffff", boxShadow:"0 2px 8px rgba(0,0,0,0.05)", transition: { duration: 0.2, ease:"easeOut"} }
- }}
- style={{ color: a.color }}
- >
- {a.icon}
- </motion.div>
- <div className="home-action-body">
- <p className="home-action-title">{a.title}</p>
- <p className="home-action-desc">{a.desc}</p>
- </div>
- <svg width="16"height="16"viewBox="0 0 24 24"fill="none"stroke="#94a3b8"strokeWidth="2.5"strokeLinecap="round"className="home-action-arrow">
+ className="home-action-card"
+ style={{"--qa": a.color,"--qa-bg": a.bg,"--qa-delay":`${i * 60}ms`}}>
+ <span className="home-action-icon">{a.icon}</span>
+ <span className="home-action-body">
+ <span className="home-action-title">{a.title}</span>
+ <span className="home-action-desc">{a.desc}</span>
+ </span>
+ <svg width="16"height="16"viewBox="0 0 24 24"fill="none"stroke="currentColor"strokeWidth="2.5"strokeLinecap="round"className="home-action-arrow"aria-hidden="true">
  <polyline points="9 18 15 12 9 6"/>
  </svg>
- </motion.button>
+ </button>
  ))}
  </div>
  </section>

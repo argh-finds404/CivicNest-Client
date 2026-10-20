@@ -50,7 +50,7 @@ import { useRole } from "../../hooks/useRole";
 
 import VolunteerDirectoryCard from "./VolunteerDirectoryCard.jsx";
 import PageHeader from "../common/PageHeader";
-import PageArt3D from "../three/PageArt3D";
+import PageArt from "../common/PageArt";
 import usePublicStats from "../../hooks/usePublicStats";
 import { Sprout, CheckCircle, Users } from "lucide-react";
 
@@ -194,7 +194,7 @@ export default function VolunteerHub() {
  <span><strong>{publicStats.openIssues}</strong> open issues that need hands</span>
  </>
  )}
- art={<PageArt3D model="volunteers" label="A shovel in fresh soil beside a sapling and a watering can" />}
+ art={<PageArt scene="volunteers" />}
  />
 
  {}

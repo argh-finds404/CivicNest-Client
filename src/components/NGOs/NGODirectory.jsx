@@ -7,7 +7,7 @@ import { motion } from'framer-motion';
 import { Building2 } from'lucide-react';
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
-import PageArt3D from'../three/PageArt3D';
+import PageArt from "../common/PageArt";
 import SectionFilterChips from'../common/SectionFilterChips';
 import NGOCard from'../cards/NGOCard.jsx';
 
@@ -68,7 +68,7 @@ export default function NGODirectory() {
  <PageHeader
  width="calc(80rem + 10%)"
  gutter="5%"
- art={<PageArt3D model="ngos" label="A community hall with a heart above it" />}
+ art={<PageArt scene="ngos" />}
  title="NGOs"
  description="Local organisations doing the long-term work: shelters, clean-water groups, youth clubs. Find one to support, or register yours."
  actions={

@@ -3,6 +3,7 @@ import { useQuery } from'@tanstack/react-query';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import MinimalLoader from'../common/MinimalLoader';
 import { Link } from'react-router';
+import CardImage from'../common/CardImage';
 
 export default function MyOrganizedEvents() {
  const axiosSecure = useAxiosSecure();
@@ -96,7 +97,7 @@ export default function MyOrganizedEvents() {
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {attending.map(event => (
  <div key={event._id} className="bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] rounded-xl p-4 flex gap-4 items-center shadow-sm">
- <img src={event.coverImages?.[0] ||'https://via.placeholder.com/80'} alt=""className="w-16 h-16 rounded-xl object-cover"/>
+ <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0"><CardImage src={event.coverImages?.[0]} alt="" kind="cleanup" compact /></div>
  <div className="flex-1">
  <h4 className="font-bold text-slate-800 dark:text-white truncate line-clamp-1">{event.title}</h4>
  <p className="text-xs text-slate-500 dark:text-slate-300 mt-1">
