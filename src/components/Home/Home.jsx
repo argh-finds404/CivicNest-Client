@@ -380,12 +380,14 @@ export default function Home() {
  setIsFeedLoading(true);
  try {
  const res = await axiosPublic.get('/public/feed', { params: { page, limit: 10 } });
+ // Never let an odd response (e.g. while the API is waking up) break the page
+ const items = Array.isArray(res.data?.data) ? res.data.data : [];
  if (page === 1) {
- setFeedData(res.data.data);
+ setFeedData(items);
  } else {
- setFeedData(prev => [...prev, ...res.data.data]);
+ setFeedData(prev => [...prev, ...items]);
  }
- setHasMore(res.data.hasMore);
+ setHasMore(!!res.data?.hasMore);
  } catch (error) {
  console.error("Error fetching feed:", error);
  } finally {
@@ -477,8 +479,8 @@ export default function Home() {
  // Refresh feed data immediately
  try {
  const feedRes = await axiosPublic.get('/public/feed', { params: { page: 1, limit: 10 } });
- setFeedData(feedRes.data.data);
- setHasMore(feedRes.data.hasMore);
+ setFeedData(Array.isArray(feedRes.data?.data) ? feedRes.data.data : []);
+ setHasMore(!!feedRes.data?.hasMore);
  } catch (err) {
  console.error("Error refreshing feed:", err);
  }

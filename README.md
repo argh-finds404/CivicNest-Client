@@ -2,7 +2,7 @@
 
 **CivicNest** is a comprehensive, full-stack community cleanliness, incident-reporting, and volunteer mobilization portal. The platform empowers citizens to report local hazards (like garbage piles, road damage, waterlogging, or safety hazards), coordinate volunteer cleanup drives, support community initiatives through crowdfunding, and interact in real-time.
 
-*   **Live Web App:** [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
+*   **Live Web App:** [https://civic-nest-client.vercel.app/](https://civic-nest-client.vercel.app/) (mirror: [civicnest-client.netlify.app](https://civicnest-client.netlify.app/))
 *   **Client Repository:** [https://github.com/argh-finds404/CivicNest-Client](https://github.com/argh-finds404/CivicNest-Client)
 *   **Server Repository:** [https://github.com/argh-finds404/CivicNest-Server](https://github.com/argh-finds404/CivicNest-Server)
 
@@ -10,7 +10,7 @@
 
 ## Reviewer Access
 
-Three demo accounts are available, one per role. On the login page, the **Reviewing CivicNest?** panel signs you in with one click, or you can type the details yourself:
+Three demo accounts are available, one per role. On the [sign-in page](https://civic-nest-client.vercel.app/Login), the **Reviewer demo** buttons (Admin / Moderator / Member) sign you in with one click, or you can type the details yourself. **Continue with Google** works too and gives you a regular new account.
 
 | Role | Email | Password | What it can do |
 | --- | --- | --- | --- |
@@ -18,7 +18,13 @@ Three demo accounts are available, one per role. On the login page, the **Review
 | Moderator | `moderator.reviewer@civicnest.app` | `CivicNest@2026` | Moderation console: issue queue, tickets, cleanup events, forum moderation and rescues |
 | Member | `member.reviewer@civicnest.app` | `CivicNest@2026` | A verified resident: report issues, follow tickets, vote, post in threads and join cleanups |
 
-The server's `npm run seed:reviewers` script creates these accounts and resets them to a clean state. Set `VITE_SHOW_REVIEWER_LOGIN=false` to hide the panel, or `VITE_REVIEWER_PASSWORD` if the server was seeded with a different password.
+**Setting the accounts up:** an admin opens **Admin → Users → Set up reviewer logins**, or runs `npm run seed:reviewers` on the server. Both create the three accounts (or reset them to a clean state). Set `VITE_SHOW_REVIEWER_LOGIN=false` to hide the reviewer buttons, or `VITE_REVIEWER_PASSWORD` if the server uses a different password.
+
+**A quick tour:**
+1. Sign in as **Member**, report an issue (you get a ticket code like `CN-2026-000123`) and follow it under **My tickets**.
+2. Sign in as **Moderator**, open **Moderation**, approve the report and move its ticket along. The member's ticket updates.
+3. Sign in as **Admin** for everything else: users and roles, NGOs, notices, donations and the gallery.
+4. Try the light/dark switch, lost & found, animal rescue, polls, cleanups and the CivicBot assistant.
 
 ---
 
@@ -107,7 +113,7 @@ CivicNest features two payment integrations for community cleanup funding and ge
 
 ## Deployment Architecture
 
-*   **Frontend Client Hosting:** Deployed on **Netlify** at [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
+*   **Frontend Client Hosting:** Deployed on **Vercel** at [https://civic-nest-client.vercel.app/](https://civic-nest-client.vercel.app/), mirrored on Netlify at [https://civicnest-client.netlify.app/](https://civicnest-client.netlify.app/)
 *   **Backend Server Hosting:** Deployed on **Render** at [https://civicnest-api.onrender.com](https://civicnest-api.onrender.com)
 *   **Database:** Hosted on a high-availability **MongoDB Atlas** cloud cluster.
 
