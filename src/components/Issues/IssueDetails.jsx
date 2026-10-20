@@ -230,14 +230,13 @@ const IssueDetails = () => {
  };
 
  const handleContributeSuccess = (payload) => {
- const updatedRaised = (issue.crowdfunding?.raised || 0) + payload.amount;
- setIssue({
- ...issue,
+ setIssue((prev) => ({
+ ...prev,
  crowdfunding: {
- ...issue.crowdfunding,
- raised: updatedRaised
+ ...prev.crowdfunding,
+ raisedAmount: (prev.crowdfunding?.raisedAmount || 0) + payload.amount
  }
- });
+ }));
  };
 
  const handleWitnessToggle = async () => {
@@ -263,15 +262,20 @@ const IssueDetails = () => {
  }
  try {
  const res = await axiosSecure.post(`/issues/${id}/verify`);
- setIssue({ ...issue, verifications: res.data.verifications, status: res.data.status });
- toast.success("Verification submitted!");
+ setIssue((prev) => ({
+ ...prev,
+ verifications: res.data.verifications || [...(prev.verifications || []), user.uid],
+ verificationCount: res.data.verificationCount ?? prev.verificationCount,
+ status: res.data.status,
+ }));
+ toast.success(res.data.solved ?"Verified: this issue is now marked solved!":"Verification submitted!");
  } catch (error) {
- toast.error("Failed to verify resolution");
+ toast.error(error.response?.data?.error || error.response?.data?.message ||"Failed to verify resolution");
  }
  };
 
  const handleProofUploaded = (proofs) => {
- setIssue({ ...issue, resolutionProofs: proofs, status:'pending_verification'});
+ setIssue((prev) => ({ ...prev, resolutionProofs: proofs || prev.resolutionProofs, status:'pending_verification'}));
  };
 
  const handleClaim = async () => {
@@ -548,7 +552,10 @@ const IssueDetails = () => {
 
  const isClaimer = issue.assignedTo?.email === user?.email;
  const isReporter = issue.submittedBy?.userId === user?.uid;
- const isAssigned = !!issue.assignedTo;
+ // assignedTo always exists with empty fields; someone is assigned when it names an email
+ const isAssigned = !!issue.assignedTo?.email;
+ // The vote endpoints return userVote; on first load work it out from the vote lists
+ const myVote = issue.userVote ?? (user?.uid && issue.upvotes?.includes(user.uid) ?'up': user?.uid && issue.downvotes?.includes(user.uid) ?'down': null);
  const isClaimable = issue.approvalStatus ==='approved'&& issue.status ==='open'&& !isAssigned
  && !isReporter;
 
@@ -708,11 +715,11 @@ const IssueDetails = () => {
  <button 
  onClick={() => handleVote("upvote")}
  disabled={issue.approvalStatus !=='approved'|| isReporter}
- className={`flex items-center gap-1.5 px-4 py-2 rounded-xl transition-all font-bold text-[13px] border ${issue.userVote ==='up'?'text-emerald-600 bg-emerald-50 border-emerald-200 shadow-sm':'text-slate-600 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-emerald-600'} disabled:opacity-50 disabled:cursor-not-allowed`}
+ className={`flex items-center gap-1.5 px-4 py-2 rounded-xl transition-all font-bold text-[13px] border ${myVote ==='up'?'text-emerald-600 bg-emerald-50 border-emerald-200 shadow-sm':'text-slate-600 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-emerald-600'} disabled:opacity-50 disabled:cursor-not-allowed`}
  >
- <i className={issue.userVote ==='up'?"ri-thumb-up-fill text-[13px]":"ri-thumb-up-line text-[13px]"}></i> 
+ <i className={myVote ==='up'?"ri-thumb-up-fill text-[13px]":"ri-thumb-up-line text-[13px]"}></i> 
  <span className="hidden sm:inline">Upvote</span>
- {issue.upvotes?.length > 0 && <span className={`ml-1 px-2 py-0.5 rounded-md text-xs ${issue.userVote ==='up'?'bg-emerald-100 text-emerald-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{issue.upvotes.length}</span>}
+ {issue.upvotes?.length > 0 && <span className={`ml-1 px-2 py-0.5 rounded-md text-xs ${myVote ==='up'?'bg-emerald-100 text-emerald-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{issue.upvotes.length}</span>}
  </button>
  </div>
 
@@ -734,11 +741,11 @@ const IssueDetails = () => {
  <button 
  onClick={() => handleVote("downvote")}
  disabled={issue.approvalStatus !=='approved'|| isReporter}
- className={`flex items-center gap-1.5 px-4 py-2 rounded-xl transition-all font-bold text-[13px] border ${issue.userVote ==='down'?'text-rose-500 bg-rose-50 border-rose-200 shadow-sm':'text-slate-600 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-rose-500'} disabled:opacity-50 disabled:cursor-not-allowed`}
+ className={`flex items-center gap-1.5 px-4 py-2 rounded-xl transition-all font-bold text-[13px] border ${myVote ==='down'?'text-rose-500 bg-rose-50 border-rose-200 shadow-sm':'text-slate-600 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-rose-500'} disabled:opacity-50 disabled:cursor-not-allowed`}
  >
- <i className={issue.userVote ==='down'?"ri-thumb-down-fill text-[13px]":"ri-thumb-down-line text-[13px]"}></i> 
+ <i className={myVote ==='down'?"ri-thumb-down-fill text-[13px]":"ri-thumb-down-line text-[13px]"}></i> 
  <span className="hidden sm:inline">Downvote</span>
- {issue.downvotes?.length > 0 && <span className={`ml-1 px-2 py-0.5 rounded-md text-xs ${issue.userVote ==='down'?'bg-rose-100 text-rose-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{issue.downvotes.length}</span>}
+ {issue.downvotes?.length > 0 && <span className={`ml-1 px-2 py-0.5 rounded-md text-xs ${myVote ==='down'?'bg-rose-100 text-rose-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{issue.downvotes.length}</span>}
  </button>
  </div>
  </div>
@@ -1020,17 +1027,17 @@ const IssueDetails = () => {
  <div className="flex justify-between items-end mb-2">
  <div>
  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600/70 block mb-1">Raised</span>
- <span className="text-2xl tracking-tight font-bold text-emerald-800">৳{issue.crowdfunding.raised}</span>
+ <span className="text-2xl tracking-tight font-bold text-emerald-800">৳{(issue.crowdfunding.raisedAmount || 0).toLocaleString()}</span>
  </div>
  <div className="text-right">
  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600/70 block mb-1">Goal</span>
- <span className="text-[13px] font-bold text-emerald-900/50">৳{issue.crowdfunding.goal}</span>
+ <span className="text-[13px] font-bold text-emerald-900/50">৳{(issue.crowdfunding.targetAmount || 0).toLocaleString()}</span>
  </div>
  </div>
  <div className="w-full bg-emerald-200/50 rounded-full h-2.5 overflow-hidden">
  <motion.div 
  initial={{ width: 0 }}
- animate={{ width:`${Math.min(((issue.crowdfunding.raisedAmount || issue.crowdfunding.raised || 0) / Math.max(issue.crowdfunding.targetAmount || issue.crowdfunding.goal || 1, 1)) * 100, 100)}%`}}
+ animate={{ width:`${Math.min(((issue.crowdfunding.raisedAmount || 0) / Math.max(issue.crowdfunding.targetAmount || 1, 1)) * 100, 100)}%`}}
  transition={{ duration: 1, ease:"easeOut"}}
  className="bg-emerald-500 h-full rounded-full relative">
  </motion.div>

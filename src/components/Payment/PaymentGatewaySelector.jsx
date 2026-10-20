@@ -10,6 +10,8 @@ const PaymentGatewaySelector = ({ amount, currency ='BDT', donationType, referen
  const [isProcessingSSL, setIsProcessingSSL] = useState(false);
  const [isProcessingStripe, setIsProcessingStripe] = useState(false);
  const [clientSecret, setClientSecret] = useState(null);
+ // The amount that clientSecret was created for: a changed amount needs a new payment
+ const [secretAmount, setSecretAmount] = useState(null);
  const axiosSecure = useAxiosSecure();
 
   const handleSSLCommerz = async () => {
@@ -36,7 +38,7 @@ const PaymentGatewaySelector = ({ amount, currency ='BDT', donationType, referen
 
   const handleStripe = async () => {
     setSelectedMethod('card');
-    if (clientSecret) {
+    if (clientSecret && Number(secretAmount) === Number(amount)) {
       setSelectedGateway('stripe');
       return;
     }
@@ -50,6 +52,7 @@ const PaymentGatewaySelector = ({ amount, currency ='BDT', donationType, referen
         referenceId: referenceId || null
       });
       setClientSecret(res.data.clientSecret);
+      setSecretAmount(amount);
       setSelectedGateway('stripe');
     } catch (err) {
       console.error("Failed to fetch payment intent:", err);

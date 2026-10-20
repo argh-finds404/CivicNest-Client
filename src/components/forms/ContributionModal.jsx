@@ -1,135 +1,122 @@
 import React, { useState } from'react';
 import toast from'react-hot-toast';
 import { motion, AnimatePresence } from'framer-motion';
-import useAxiosSecure from'../../hooks/useAxiosSecure';
-import MinimalLoader from'../common/MinimalLoader.jsx';
+import PaymentGatewaySelector from'../Payment/PaymentGatewaySelector';
 
+const PRESETS = [100, 250, 500, 1000];
+// Card payments can't go below roughly ৳60, so that's the floor for every gateway
+const MIN_AMOUNT = 60;
+
+/**
+ * Fund an issue's repair. The amount is only added to the issue once the
+ * payment succeeds (the server records it from the payment gateway).
+ */
 const ContributionModal = ({ issueId, isOpen, onClose, onContributeSuccess }) => {
- const axiosSecure = useAxiosSecure();
- const [amount, setAmount] = useState(100);
- const [name, setName] = useState("");
- const [phone, setPhone] = useState("");
- const [message, setMessage] = useState("");
- const [isSubmitting, setIsSubmitting] = useState(false);
+ const [amount, setAmount] = useState(250);
+ const [paying, setPaying] = useState(false);
 
- const handleSubmit = async (e) => {
- e.preventDefault();
- if (amount < 10) {
- toast.error("Minimum contribution is 10 BDT");
- return;
- }
-
- setIsSubmitting(true);
- try {
- const payload = {
- issueId,
- amount: Number(amount),
- name,
- phone,
- message
+ const close = () => {
+ setPaying(false);
+ onClose();
  };
 
- await axiosSecure.post('/contributions', payload);
-
- toast.success("Thank you for your contribution!");
- if (onContributeSuccess) onContributeSuccess(payload);
- onClose();
- // Reset form
- setAmount(100);
- setName("");
- setPhone("");
- setMessage("");
- } catch (error) {
- toast.error(error.message);
- } finally {
- setIsSubmitting(false);
+ const startPayment = (e) => {
+ e.preventDefault();
+ if (!amount || amount < MIN_AMOUNT) {
+ toast.error(`The minimum contribution is ৳${MIN_AMOUNT}.`);
+ return;
  }
+ setPaying(true);
  };
 
  return (
  <AnimatePresence>
  {isOpen && (
  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- <motion.div 
+ <motion.div
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- onClick={onClose}
- className="absolute inset-0 bg-black/60 backdrop-blur-sm"></motion.div>
- 
- <motion.div 
- initial={{ opacity: 0, scale: 0.9, y: 20 }}
+ onClick={close}
+ className="absolute inset-0 bg-black/60"/>
+
+ <motion.div
+ initial={{ opacity: 0, scale: 0.96, y: 12 }}
  animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.9, y: 20 }}
- transition={{ type:"spring", bounce: 0.3, duration: 0.4 }}
- className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg shadow-2xl max-w-md w-full overflow-hidden relative z-10">
- <button 
- onClick={onClose} 
- className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-slate-300 transition-colors w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
- <i className="ri-close-line text-[13px] tracking-tight"></i>
+ exit={{ opacity: 0, scale: 0.96, y: 12 }}
+ transition={{ duration: 0.2 }}
+ className="relative w-full max-w-md"
+ role="dialog"
+ aria-modal="true"
+ aria-labelledby="contribute-title">
+ {paying ? (
+ <PaymentGatewaySelector
+ amount={amount}
+ donationType="issue"
+ referenceId={issueId}
+ onClose={() => setPaying(false)}
+ onSuccess={() => {
+ toast.success("Thank you! Your contribution has been added to this fix.");
+ onContributeSuccess?.({ amount: Number(amount) });
+ close();
+ }}
+ />
+ ) : (
+ <form onSubmit={startPayment} className="cn-glass-card border overflow-hidden">
+ <div className="p-6 pb-4 flex items-start gap-4">
+ <span className="w-12 h-12 shrink-0 rounded-2xl grid place-items-center bg-emerald-500/12 text-emerald-600 dark:text-emerald-300 border border-emerald-500/25">
+ <i className="ri-hand-coin-fill text-2xl" aria-hidden="true"/>
+ </span>
+ <div className="flex-1">
+ <h2 id="contribute-title" className="text-lg font-bold text-slate-900 dark:text-white" style={{ fontFamily:'var(--font-heading)'}}>Help fund this fix</h2>
+ <p className="text-[13px] text-slate-500 dark:text-slate-300 mt-0.5">Your money is held for this repair and added once the payment goes through.</p>
+ </div>
+ <button type="button" onClick={close} aria-label="Close" className="w-8 h-8 grid place-items-center rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 cursor-pointer">
+ <i className="ri-close-line text-lg" aria-hidden="true"/>
  </button>
-
- <div className="bg-emerald-600 p-4 text-white text-center">
- <div className="w-16 h-16 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
- <i className="ri-hand-heart-fill text-3xl tracking-tight"></i>
- </div>
- <h3 className="font-bold text-2xl tracking-tight mb-1 tracking-tight">Support This Issue</h3>
- <p className="text-emerald-100 text-[13px]">Your contribution will help resolve this problem faster.</p>
  </div>
 
- <form onSubmit={handleSubmit} className="p-4 space-y-4">
- <div className="form-control">
- <label className="label"><span className="label-text font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">Amount (BDT) <span className="text-red-500">*</span></span></label>
- <div className="flex items-center gap-2">
- {[100, 500, 1000].map(val => (
- <button 
- key={val}
- type="button"onClick={() => setAmount(val)}
- className={`flex-1 py-2 rounded-lg border font-semibold transition-colors ${amount === val ?'bg-emerald-50 text-emerald-600 border-emerald-200':'bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215]'}`}
- >
- ৳{val}
+ <div className="px-6 pb-6 space-y-4">
+ <div className="grid grid-cols-4 gap-2">
+ {PRESETS.map((preset) => (
+ <button
+ key={preset}
+ type="button"
+ onClick={() => setAmount(preset)}
+ aria-pressed={amount === preset}
+ className={`py-2.5 rounded-xl border-2 text-[13px] font-bold cursor-pointer transition-colors ${
+ amount === preset
+ ?'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-200'
+ :'border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-200 hover:border-emerald-300'}`}>
+ ৳{preset}
  </button>
  ))}
  </div>
- <input 
- type="number"className="input input-bordered w-full mt-3 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-[13px] font-bold"value={amount}
- onChange={e => setAmount(e.target.value)}
- min="10"required
- />
- </div>
 
- <div className="form-control">
- <label className="label"><span className="label-text font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">Name <span className="text-red-500">*</span></span></label>
- <input 
- type="text"placeholder="How should we address you?"className="input input-bordered focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"value={name}
- onChange={e => setName(e.target.value)}
- required
- />
+ <label className="block">
+ <span className="text-xs font-semibold text-slate-500 dark:text-slate-300">Or enter an amount</span>
+ <div className="relative mt-1.5">
+ <span className="absolute inset-y-0 left-4 flex items-center font-bold text-slate-400">৳</span>
+ <input
+ type="number"
+ min={MIN_AMOUNT}
+ step="1"
+ value={amount}
+ onChange={(e) => setAmount(Number(e.target.value))}
+ className="w-full pl-9 pr-4 py-3 rounded-xl border-2 border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 text-slate-900 dark:text-white font-bold text-[15px] focus:outline-none focus:border-emerald-500"/>
  </div>
+ </label>
 
- <div className="form-control">
- <label className="label"><span className="label-text font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">Phone Number <span className="text-red-500">*</span></span></label>
- <input 
- type="tel"placeholder="e.g. +8801700000000"className="input input-bordered focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"value={phone}
- onChange={e => setPhone(e.target.value)}
- required
- />
- </div>
-
- <div className="form-control">
- <label className="label"><span className="label-text font-bold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">Message (Optional)</span></label>
- <textarea 
- className="textarea textarea-bordered h-20 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"placeholder="Leave a word of encouragement..."value={message}
- onChange={e => setMessage(e.target.value)}
- ></textarea>
- </div>
-
- <button 
- type="submit"className="btn w-full bg-emerald-600 hover:bg-emerald-700 text-white border-none mt-2"disabled={isSubmitting}
- >
- {isSubmitting ? <MinimalLoader /> :`Contribute ৳${amount}`}
+ <button
+ type="submit"
+ disabled={!amount || amount < MIN_AMOUNT}
+ className="cn-btn cn-btn-primary w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+ <i className="ri-secure-payment-line" aria-hidden="true"/> Continue to payment · ৳{amount ||0}
  </button>
+ <p className="text-[11px] text-center text-slate-400">Minimum ৳{MIN_AMOUNT}. Paid securely by card or SSLCommerz.</p>
+ </div>
  </form>
+ )}
  </motion.div>
  </div>
  )}

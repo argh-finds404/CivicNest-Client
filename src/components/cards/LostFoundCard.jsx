@@ -84,7 +84,7 @@ export default function LostFoundCard({ item }) {
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  whileHover={{ y: -4 }}
- className={`bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040] transition-all duration-300 ${typeConfig.stripe} ${typeConfig.tint} ${item.status ==='reunited'?'opacity-85':''} ${isExpired ?'opacity-60':''}`}
+ className={`cn-glass-card bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-lg border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/80 overflow-hidden shadow-sm hover:shadow-xl hover:border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040] transition-all duration-300 ${typeConfig.stripe} ${typeConfig.tint} ${item.status ==='reunited'?'opacity-85':''} ${isExpired ?'opacity-60':''}`}
  >
  {/* Image */}
  <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
@@ -112,7 +112,7 @@ export default function LostFoundCard({ item }) {
  </div>
 
  {/* Reward Overlay Badge */}
- {item.reward && item.reward > 0 && (
+ {Number(item.reward) > 0 && (
  <div className="absolute bottom-3 right-3 z-10">
  <span className="bg-amber-500 text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md border border-amber-400/40">
  ৳{item.reward} Reward
@@ -162,7 +162,7 @@ export default function LostFoundCard({ item }) {
  <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] px-2 py-0.5 rounded">
  {item.category}
  </span>
- {item.reward && item.reward > 0 && (
+ {Number(item.reward) > 0 && (
  <span className="text-[10px] font-black text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100/50">
  ৳{item.reward} Reward
  </span>

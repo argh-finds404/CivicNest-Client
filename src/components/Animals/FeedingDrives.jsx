@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from'react';
 import { motion } from'framer-motion';
+import { Link } from'react-router';
 import DriveCard from'../cards/DriveCard';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
@@ -52,7 +53,7 @@ const FeedingDrives = () => {
  console.error("Failed to join drive:", error);
  Swal.fire({
  title:'Error',
- text:'Failed to join the drive. Please try again later.',
+ text: error.response?.data?.message ||'Failed to join the drive. Please try again later.',
  icon:'error',
  confirmButtonColor:'#d33'});
  }
@@ -81,9 +82,9 @@ const FeedingDrives = () => {
  <h2 className="text-2xl tracking-tight font-bold text-slate-800 dark:text-white tracking-tight">Upcoming Drives</h2>
  <p className="text-slate-500 dark:text-slate-300 text-[13px]">Find a drive near you and volunteer your time or resources.</p>
  </div>
- <button className="btn bg-[#40826D] hover:bg-[#326756] text-white rounded-full border-none px-8 shadow-md">
- Organize a Drive
- </button>
+ <Link to="/animals" state={{ openDriveForm: true }} className="cn-btn cn-btn-primary">
+ <i className="ri-add-line" aria-hidden="true" /> Organize a Drive
+ </Link>
  </div>
 
  {isLoading ? (

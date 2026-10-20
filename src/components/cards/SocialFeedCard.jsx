@@ -80,6 +80,12 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  const isRejected = issue.approvalStatus ==='rejected'|| issue.status ==='rejected';
  const isLocked = isPending || isRejected;
  const isEvent = issue._type ==='cleanup_event';
+ // Issues carry crowdfunding.{raisedAmount,targetAmount}; cleanup events carry funding{Raised,Goal}
+ const funding = isEvent
+ ? (issue.fundingEnabled ? { raised: issue.fundingRaised || 0, goal: issue.fundingGoal || 0 } : null)
+ : (issue.crowdfunding?.enabled ? { raised: issue.crowdfunding.raisedAmount || 0, goal: issue.crowdfunding.targetAmount || 0 } : null);
+ // The vote endpoints return userVote; on first load work it out from the vote lists
+ const myVote = localIssue.userVote ?? (user?.uid && localIssue.upvotes?.includes(user.uid) ?'up': user?.uid && localIssue.downvotes?.includes(user.uid) ?'down': null);
 
  const dateToUse = issue.submittedAt || issue.createdAt || issue.incidentDate || issue.eventDate || new Date();
  const formattedDate = new Date(dateToUse).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', hour12: true });
@@ -108,7 +114,7 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  const displayLocation = typeof issue.location ==='string'? issue.location : issue.location?.address;
 
  // Glassmorphism base
- let cardStateClasses ="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/80 backdrop-blur-xl border-white/60 shadow-lg hover:shadow-xl";
+ let cardStateClasses ="cn-glass-card bg-white dark:bg-[#0a120e]";
  if (isEvent) {
  cardStateClasses ="bg-gradient-to-br from-teal-50/90 to-emerald-50/90 backdrop-blur-xl border-teal-200/60 shadow-md hover:shadow-lg ring-1 ring-teal-500/20";
  } else if (isLocked) {
@@ -203,7 +209,7 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  {/* Image Section */}
  {hasImages && (
  <div className="w-full relative bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]/50 mt-1 z-20">
- <Link to={`/issues/${issue._id}`}>
+ <Link to={isEvent ?`/cleanup-events/${issue._id}`:`/issues/${issue._id}`}>
  <img 
  src={issue.images[0]} 
  alt={issue.title} 
@@ -241,24 +247,24 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  {!isLocked && (
  <>
  {/* Crowdfunding Mini-bar */}
- {issue.crowdfunding?.enabled && (
+ {funding && (
  <div className="px-6 py-3.5 bg-gradient-to-r from-emerald-50/80 to-teal-50/80 border-y border-emerald-100/50 flex items-center justify-between gap-5 relative z-20">
  <div className="flex items-center gap-2.5 text-emerald-800 font-bold text-[13px] whitespace-nowrap">
  <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center shadow-sm">
  <i className="ri-hand-coin-fill text-emerald-600 text-[13px]"></i>
  </div>
- <span>৳{issue.crowdfunding.raised || issue.crowdfunding.raisedAmount || 0}</span>
- <span className="text-emerald-900/40 font-normal text-xs uppercase tracking-tight">/ ৳{issue.crowdfunding.goal || issue.crowdfunding.targetAmount || 0}</span>
+ <span>৳{funding.raised.toLocaleString()}</span>
+ <span className="text-emerald-900/40 font-normal text-xs uppercase tracking-tight">/ ৳{funding.goal.toLocaleString()}</span>
  </div>
  <div className="w-full bg-emerald-100 rounded-full h-1.5 mt-1 overflow-hidden">
- <div className="bg-emerald-500 h-1.5 rounded-full"style={{ width:`${Math.min(((issue.crowdfunding.raisedAmount || issue.crowdfunding.raised || 0) / Math.max(issue.crowdfunding.targetAmount || issue.crowdfunding.goal || 1, 1)) * 100, 100)}%`}}
+ <div className="bg-emerald-500 h-1.5 rounded-full"style={{ width:`${Math.min((funding.raised / Math.max(funding.goal, 1)) * 100, 100)}%`}}
  ></div>
  </div>
  </div>
  )}
 
  {/* Social Actions */}
- <div className={`px-6 py-4 flex items-center gap-4 relative z-20 ${!hasImages && !issue.crowdfunding?.enabled ?'border-t border-slate-100/80':''}`}>
+ <div className={`px-6 py-4 flex items-center gap-4 relative z-20 ${!hasImages && !funding ?'border-t border-slate-100/80':''}`}>
  
  {/* Voting System (Only for non-events) */}
  {!isEvent && (
@@ -280,10 +286,10 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  </AnimatePresence>
  <button 
  onClick={() => handleVote("upvote")}
- className={`flex items-center justify-center h-10 px-3 sm:px-4 rounded-full transition-all font-bold text-[13px] border ${localIssue.userVote ==='up'?'text-emerald-600 bg-emerald-50 border-emerald-200 shadow-sm':'text-slate-500 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-emerald-600'}`}
+ className={`flex items-center justify-center h-10 px-3 sm:px-4 rounded-full transition-all font-bold text-[13px] border ${myVote ==='up'?'text-emerald-600 bg-emerald-50 border-emerald-200 shadow-sm':'text-slate-500 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-emerald-600'}`}
  >
- <i className={localIssue.userVote ==='up'?"ri-arrow-up-circle-fill text-[13px] tracking-tight":"ri-arrow-up-circle-line text-[13px] tracking-tight"}></i> 
- {localIssue.upvotes?.length > 0 && <span className={`ml-1.5 px-2 py-0.5 rounded-full text-xs ${localIssue.userVote ==='up'?'bg-emerald-100 text-emerald-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{localIssue.upvotes.length}</span>}
+ <i className={myVote ==='up'?"ri-arrow-up-circle-fill text-[13px] tracking-tight":"ri-arrow-up-circle-line text-[13px] tracking-tight"}></i> 
+ {localIssue.upvotes?.length > 0 && <span className={`ml-1.5 px-2 py-0.5 rounded-full text-xs ${myVote ==='up'?'bg-emerald-100 text-emerald-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{localIssue.upvotes.length}</span>}
  </button>
  </div>
 
@@ -304,10 +310,10 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  </AnimatePresence>
  <button 
  onClick={() => handleVote("downvote")}
- className={`flex items-center justify-center h-10 px-3 sm:px-4 rounded-full transition-all font-bold text-[13px] border ${localIssue.userVote ==='down'?'text-rose-500 bg-rose-50 border-rose-200 shadow-sm':'text-slate-500 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-rose-500'}`}
+ className={`flex items-center justify-center h-10 px-3 sm:px-4 rounded-full transition-all font-bold text-[13px] border ${myVote ==='down'?'text-rose-500 bg-rose-50 border-rose-200 shadow-sm':'text-slate-500 dark:text-slate-300 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] hover:text-rose-500'}`}
  >
- <i className={localIssue.userVote ==='down'?"ri-arrow-down-circle-fill text-[13px] tracking-tight":"ri-arrow-down-circle-line text-[13px] tracking-tight"}></i> 
- {localIssue.downvotes?.length > 0 && <span className={`ml-1.5 px-2 py-0.5 rounded-full text-xs ${localIssue.userVote ==='down'?'bg-rose-100 text-rose-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{localIssue.downvotes.length}</span>}
+ <i className={myVote ==='down'?"ri-arrow-down-circle-fill text-[13px] tracking-tight":"ri-arrow-down-circle-line text-[13px] tracking-tight"}></i> 
+ {localIssue.downvotes?.length > 0 && <span className={`ml-1.5 px-2 py-0.5 rounded-full text-xs ${myVote ==='down'?'bg-rose-100 text-rose-700':'bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-500 dark:text-slate-300'}`}>{localIssue.downvotes.length}</span>}
  </button>
  </div>
  </div>

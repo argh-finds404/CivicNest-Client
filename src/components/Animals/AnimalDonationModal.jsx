@@ -1,5 +1,6 @@
 import React, { useState } from'react';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
+import { useQueryClient } from'@tanstack/react-query';
 import toast from'react-hot-toast';
 
 import PaymentGatewaySelector from'../Payment/PaymentGatewaySelector';
@@ -8,6 +9,7 @@ export default function AnimalDonationModal({ animal, onClose }) {
  const [amount, setAmount] = useState('');
  const [showPayment, setShowPayment] = useState(false);
  const [isSuccess, setIsSuccess] = useState(false);
+ const queryClient = useQueryClient();
 
  const predefinedAmounts = [200, 500, 1000, 2000];
 
@@ -28,6 +30,13 @@ export default function AnimalDonationModal({ animal, onClose }) {
  onSuccess={() => {
  setShowPayment(false);
  setIsSuccess(true);
+ // Show the new total: now, and again once the gateway's confirmation lands
+ const refresh = () => {
+ queryClient.invalidateQueries({ queryKey: ["animals", animal._id] });
+ queryClient.invalidateQueries({ queryKey: ["my-contributions"] });
+ };
+ refresh();
+ setTimeout(refresh, 3000);
  }}
  />
  </div>

@@ -15,7 +15,7 @@ const MyContributions = () => {
  setIsLoading(true);
  try {
  const res = await axiosSecure.get(`/contributions/${user.email}`);
- setContributions(res.data);
+ setContributions(Array.isArray(res.data) ? res.data : []);
  } catch (error) {
  console.error("Failed to fetch contributions", error);
  } finally {
