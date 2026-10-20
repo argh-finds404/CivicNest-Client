@@ -19,6 +19,7 @@ import {
 } from'lucide-react';
 import toast from'react-hot-toast';
 import { useRole } from'../../hooks/useRole';
+import { isStaff } from "../../utils/roles";
 import { requestLogin } from'../../utils/requestLogin';
 import { Bar as ChartJSBar } from'react-chartjs-2';
 import { 
@@ -272,7 +273,7 @@ export default function PollCard({ poll }) {
  const shouldShowResults = (showResults || userVoted || hasEnded) && !isChangingVote;
 
  const isPending = localPoll.status ==='pending';
- const isAdminOrMod = role ==='admin';
+ const isAdminOrMod = isStaff(role);
  const isLocked = isPending && !isAdminOrMod;
 
  return (

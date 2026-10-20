@@ -5,6 +5,7 @@ import useAxiosPublic from'../../hooks/useAxiosPublic';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { useAuth } from'../../hooks/useAuth';
 import { useRole } from'../../hooks/useRole';
+import { isStaff } from "../../utils/roles";
 import { socket } from'../../hooks/useSocket';
 import MinimalLoader from'../common/MinimalLoader';
 import toast from'react-hot-toast';
@@ -563,7 +564,7 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  }
 
  const hasUpvoted = user && thread.upvotes?.includes(user.email);
- const isAdmin = role ==='admin';
+ const isAdmin = isStaff(role);
 
  // Group messages logic (consecutive from same user within 5 minutes)
  const isMessageGrouped = (index) => {

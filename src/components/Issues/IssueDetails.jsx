@@ -4,6 +4,7 @@ import toast from'react-hot-toast';
 import { motion, AnimatePresence } from'framer-motion';
 import FlairPill from'../common/FlairPill';
 import StatusBadge from'../common/StatusBadge';
+import CardImage, { MediaFallback } from'../common/CardImage';
 import CommentBox from'../forms/CommentBox';
 import ContributionModal from'../forms/ContributionModal';
 import ResolutionProofPanel from'./ResolutionProofPanel';
@@ -19,6 +20,7 @@ import SEO from'../common/SEO';
 
 const ImageCarousel = ({ images }) => {
  const [currentIndex, setCurrentIndex] = useState(0);
+ const [failed, setFailed] = useState({});
 
  if (!images || images.length === 0) return null;
 
@@ -26,8 +28,12 @@ const ImageCarousel = ({ images }) => {
  <div className="mb-2">
  <div className="relative w-full h-[400px] md:h-[500px] rounded-t-[1.5rem] overflow-hidden bg-slate-900 shadow-inner group">
  <AnimatePresence mode="wait">
+ {failed[images[currentIndex]] ? (
+ <MediaFallback key={`fallback-${currentIndex}`} kind="issue" label="Photo unavailable" />
+ ) : (
  <motion.img 
  key={currentIndex}
+ onError={() => setFailed((prev) => ({ ...prev, [images[currentIndex]]: true }))}
  src={images[currentIndex]} 
  initial={{ opacity: 0, scale: 1.05 }}
  animate={{ opacity: 1, scale: 1 }}
@@ -35,6 +41,7 @@ const ImageCarousel = ({ images }) => {
  transition={{ duration: 0.4 }}
  className="w-full h-full object-contain"alt={`Issue photo ${currentIndex + 1}`}
  />
+ )}
  </AnimatePresence>
  
  {images.length > 1 && (
@@ -61,7 +68,7 @@ const ImageCarousel = ({ images }) => {
  onClick={() => setCurrentIndex(idx)}
  className={`relative flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden transition-all duration-300 ${currentIndex === idx ?'ring-2 ring-[#40826D] ring-offset-2 scale-105':'opacity-60 hover:opacity-100'}`}
  >
- <img src={img} className="w-full h-full object-cover"alt={`Thumbnail ${idx + 1}`} />
+ <CardImage src={img} alt={`Thumbnail ${idx + 1}`} kind="issue" compact />
  </button>
  ))}
  </div>
@@ -115,10 +122,11 @@ const IssueDetails = () => {
  const handleGenerateLetter = async () => {
  setLetterLoading(true);
  try {
- const commentsText = comments.map(c => c.body).join('.');
- const contentText =`Issue: ${issue.title}. Description: ${issue.description}. Comments: ${commentsText}`;
  const res = await axiosSecure.post('/ai/complaint-letter', {
- content: contentText,
+ issueTitle: issue.title,
+ issueDescription: issue.description,
+ location: [issue.location, issue.area].filter(Boolean).join(', '),
+ ticketCode: issue.ticketCode,
  });
  setGeneratedLetter(res.data.letter);
  setLetterModalOpen(true);
@@ -323,10 +331,11 @@ const IssueDetails = () => {
       setLetterLoading(true);
       toast.loading("Generating complaint letter...");
       try {
-        const commentsText = comments.map(c => c.body).join('.');
-        const contentText = `Issue: ${issue.title}. Description: ${issue.description}. Comments: ${commentsText}`;
         const res = await axiosSecure.post('/ai/complaint-letter', {
-          content: contentText,
+          issueTitle: issue.title,
+          issueDescription: issue.description,
+          location: [issue.location, issue.area].filter(Boolean).join(', '),
+          ticketCode: issue.ticketCode,
         });
         letter = res.data.letter;
         setGeneratedLetter(letter);
@@ -550,8 +559,19 @@ const IssueDetails = () => {
  const authorName = issue.isAnonymous ?"Anonymous Member": issue.submittedBy?.name ||"User";
  const authorPhoto = issue.submittedBy?.photoURL;
 
- const isClaimer = issue.assignedTo?.email === user?.email;
- const isReporter = issue.submittedBy?.userId === user?.uid;
+ const isClaimer = !!user?.email && issue.assignedTo?.email === user.email;
+ const isReporter = !!user?.uid && issue.submittedBy?.userId === user.uid;
+
+ const shareTo = (network) => {
+ const url = encodeURIComponent(window.location.href);
+ const text = encodeURIComponent(`${issue.title} · reported on CivicNest`);
+ const links = {
+ x:`https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+ facebook:`https://www.facebook.com/sharer/sharer.php?u=${url}`,
+ whatsapp:`https://wa.me/?text=${text}%20${url}`,
+ };
+ window.open(links[network],"_blank","noopener,noreferrer");
+ };
  // assignedTo always exists with empty fields; someone is assigned when it names an email
  const isAssigned = !!issue.assignedTo?.email;
  // The vote endpoints return userVote; on first load work it out from the vote lists
@@ -1123,7 +1143,7 @@ const IssueDetails = () => {
  )}
 
  {/* State 5: Verification Required */}
- {issue.resolutionProofs?.length > 0 && issue.status !=='solved'&& (
+ {issue.resolutionProofs?.length > 0 && issue.status ==='pending_verification'&& (
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-5 border border-amber-200 shadow-sm relative overflow-hidden">
  <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
  
@@ -1139,13 +1159,17 @@ const IssueDetails = () => {
  <span>Progress</span>
  <span>{issue.verifications?.length || 0} / 3</span>
  </div>
- <div className="w-full bg-amber-100 rounded-full h-1.5">
+ <div className="w-full bg-amber-100 dark:bg-amber-500/15 rounded-full h-1.5">
  <div className="bg-amber-500 h-full rounded-full transition-all duration-500"style={{ width:`${Math.min(((issue.verifications?.length || 0) / 3) * 100, 100)}%`}}></div>
  </div>
  </div>
 
  <div className="relative z-10">
- {!issue.verifications?.includes(user?.uid) ? (
+ {isReporter || isClaimer ? (
+ <p className="text-xs font-semibold text-amber-700 dark:text-amber-300 text-center">
+ {isClaimer ?"Neighbours will check your proof and verify the fix.":"Other neighbours will verify this fix. Reporters can't verify their own issue."}
+ </p>
+ ) : !issue.verifications?.includes(user?.uid) ? (
  <button 
  onClick={handleVerifyResolution}
  className="w-full py-2.5 bg-amber-500 text-white hover:bg-amber-600 font-bold text-[13px] rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
@@ -1164,9 +1188,9 @@ const IssueDetails = () => {
  <div className="bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-5 border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm text-center">
  <h4 className="font-bold text-slate-800 dark:text-white mb-4 text-[10px] uppercase tracking-widest">Share issues across platforms</h4>
  <div className="flex justify-center gap-4">
- <button className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-black hover:border-black hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-twitter-x-line text-[13px]"></i></button>
- <button className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-[#4267B2] hover:border-[#4267B2] hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-facebook-fill text-[13px]"></i></button>
- <button className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-[#25D366] hover:border-[#25D366] hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-whatsapp-line text-[13px]"></i></button>
+ <button type="button" onClick={() => shareTo("x")} aria-label="Share on X" className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-black hover:border-black hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-twitter-x-line text-[13px]"></i></button>
+ <button type="button" onClick={() => shareTo("facebook")} aria-label="Share on Facebook" className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-[#4267B2] hover:border-[#4267B2] hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-facebook-fill text-[13px]"></i></button>
+ <button type="button" onClick={() => shareTo("whatsapp")} aria-label="Share on WhatsApp" className="w-12 h-12 rounded-full flex items-center justify-center bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-[#25D366] hover:border-[#25D366] hover:text-white transition-colors text-slate-500 dark:text-slate-300 shadow-sm"><i className="ri-whatsapp-line text-[13px]"></i></button>
  </div>
  </div>
  </motion.div>

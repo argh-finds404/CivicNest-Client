@@ -68,13 +68,13 @@ const AllIssues = () => {
  }, [fetchIssues]);
 
  const categories = [
- { label:"Garbage & Waste", count: 142, image:"https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=500&q=80"},
- { label:"Road Damage", count: 87, image:"https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=500&q=80"},
- { label:"Waterlogging", count: 56, image:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=500&q=80"},
- { label:"Utility Problems", count: 34, image:"https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?auto=format&fit=crop&w=500&q=80"},
- { label:"Broken Public Property", count: 21, image:"https://images.unsplash.com/photo-1498677231914-50df6bc1ec22?auto=format&fit=crop&w=500&q=80"},
- { label:"Safety & Crime", count: 45, image:"https://images.unsplash.com/photo-1517737883398-67b14041e21b?auto=format&fit=crop&w=500&q=80"},
- { label:"Environmental Issues", count: 68, image:"https://images.unsplash.com/photo-1611273426858-450d8e814323?auto=format&fit=crop&w=500&q=80"}
+ { label:"Garbage & Waste", image:"https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=500&q=80"},
+ { label:"Road Damage", image:"https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=500&q=80"},
+ { label:"Waterlogging", image:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=500&q=80"},
+ { label:"Utility Problems", image:"https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?auto=format&fit=crop&w=500&q=80"},
+ { label:"Broken Public Property", image:"https://images.unsplash.com/photo-1498677231914-50df6bc1ec22?auto=format&fit=crop&w=500&q=80"},
+ { label:"Safety & Crime", image:"https://images.unsplash.com/photo-1517737883398-67b14041e21b?auto=format&fit=crop&w=500&q=80"},
+ { label:"Environmental Issues", image:"https://images.unsplash.com/photo-1611273426858-450d8e814323?auto=format&fit=crop&w=500&q=80"}
  ];
 
  const sortOptions = [
@@ -166,7 +166,7 @@ const AllIssues = () => {
  <div className="absolute bottom-3 left-3 right-3 text-left">
  <span className="block text-[13px] sm:text-[13px] font-bold text-white leading-tight mb-0.5">{c.label}</span>
  <span className="block text-xs text-slate-300">
- {c.count} Reports
+ View reports <i className="ri-arrow-right-line" aria-hidden="true"/>
  </span>
  </div>
  </button>

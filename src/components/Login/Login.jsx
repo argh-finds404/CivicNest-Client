@@ -223,7 +223,7 @@ const Login = () => {
  <div className="flex items-center gap-2.5 mb-10">
  <div className="w-12 h-12 rounded-[14px] bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] border-2 border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-sm overflow-hidden flex-shrink-0">
  <img
- src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover"/>
+ src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src ="/favicon.png"; }}/>
  </div>
  <div className="flex flex-col">
  <span className="text-[28px] text-[#0f172a] dark:text-white tracking-tight leading-none"style={{ fontFamily:"'Montserrat', sans-serif", fontWeight: 900 }}>

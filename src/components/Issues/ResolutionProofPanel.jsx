@@ -4,6 +4,7 @@ import useAxiosSecure from'../../hooks/useAxiosSecure';
 import { CheckCircle2 } from'lucide-react';
 import { useAuth } from'../../hooks/useAuth';
 import PremiumImageUploader from '../common/PremiumImageUploader';
+import CardImage from '../common/CardImage';
 
 const ResolutionProofPanel = ({ issue, onProofUploaded }) => {
  const { user } = useAuth();
@@ -64,7 +65,9 @@ const ResolutionProofPanel = ({ issue, onProofUploaded }) => {
  {proof.notes && <p className="text-slate-600 dark:text-slate-300 mb-4">{proof.notes}</p>}
  <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
  {proof.images.map((img, i) => (
- <img key={i} src={img} alt="Proof"className="w-24 h-24 object-cover rounded-lg border border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040]"/>
+ <div key={i} className="w-24 h-24 shrink-0 overflow-hidden rounded-lg border border-slate-300 dark:border-[#1e3040]">
+ <CardImage src={img} alt={`Proof photo ${i + 1}`} kind="issue" compact />
+ </div>
  ))}
  </div>
  </div>

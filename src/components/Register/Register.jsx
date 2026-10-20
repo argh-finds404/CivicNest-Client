@@ -354,7 +354,7 @@ export default function Register() {
  <div className="flex items-center gap-3">
  <div className="w-12 h-12 rounded-[14px] bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 backdrop-blur-md border-2 border-white/40 shadow-sm overflow-hidden flex-shrink-0">
  <img
- src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover"/>
+ src="https://i.ibb.co/LD7Xxdky/Gemini-Generated-Image-wmnkxewmnkxewmnk.png"alt="CivicNest Logo"className="w-full h-full object-cover" onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src ="/favicon.png"; }}/>
  </div>
  <div className="flex flex-col">
  <span className="text-[28px] text-white tracking-tight leading-none"style={{ fontFamily:"'Montserrat', sans-serif", fontWeight: 900 }}>
