@@ -532,7 +532,7 @@ const FloatingCivicBot = () => {
 
             {/* Powered by Google Gemini footer */}
             <div className="bg-slate-100 dark:bg-slate-950 p-2 text-[9px] text-slate-500 dark:text-slate-400 text-center border-t border-slate-200 dark:border-slate-900">
-              Powered by Google Gemini · Conversations improve AI safety.
+              Answers by Google Gemini, with built-in help when it is busy.
             </div>
           </motion.div>
         )}

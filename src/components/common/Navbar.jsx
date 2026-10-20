@@ -366,31 +366,17 @@ const Navbar = () => {
  setScrolled(getScrollY() > SCROLL_THRESHOLD);
  }, []);
 
+ // Smooth scrolling moves the real window, so native scroll events cover it
  useEffect(() => {
  updateScrolled();
-
- const lenis = window.lenis;
- if (lenis) {
- return lenis.on("scroll", updateScrolled);
- }
-
  window.addEventListener("scroll", updateScrolled, { passive: true });
  return () => window.removeEventListener("scroll", updateScrolled);
  }, [updateScrolled, location.pathname]);
 
+ // Lock the page while the drawer is open (SmoothScroll pauses on this lock too)
  useEffect(() => {
- const lenis = window.lenis;
-
- if (drawerOpen) {
- lenis?.stop();
- document.body.style.overflow ="hidden";
- } else {
- lenis?.start();
- document.body.style.overflow ="";
- }
-
+ document.body.style.overflow = drawerOpen ?"hidden":"";
  return () => {
- lenis?.start();
  document.body.style.overflow ="";
  };
  }, [drawerOpen]);

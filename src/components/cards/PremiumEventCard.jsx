@@ -2,6 +2,7 @@ import React, { useState } from'react';
 import { motion, AnimatePresence } from'framer-motion';
 import { Link } from'react-router';
 import AttendeeAvatarStack from'../CleanupEvents/AttendeeAvatarStack';
+import { fallbackTo } from "../../utils/imageFallback";
 
 function displayOrganizerName(organizer) {
  const name = organizer?.name?.trim();
@@ -101,7 +102,8 @@ export default function PremiumEventCard({ event, userInterested, userGoing, onI
  <div className="relative w-full aspect-[16/9] shrink-0 overflow-hidden bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040]">
  <img
  src={
- event.coverImages?.[0] ||'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1200&auto=format&fit=crop'}
+ event.coverImages?.[0] ||'/demo/cleanup-lake.svg'}
+ onError={fallbackTo('/demo/cleanup-lake.svg')}
  alt={event.title}
  className="absolute inset-0 w-full h-full object-cover"/>
  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/55 via-transparent to-transparent pointer-events-none"/>
@@ -126,7 +128,8 @@ export default function PremiumEventCard({ event, userInterested, userGoing, onI
  <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-100 shrink-0">
  <img
  src={
- event.organizer?.photoURL ||`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=059669&color=fff`}
+ event.organizer?.photoURL ||'/demo/avatar-placeholder.svg'}
+ onError={fallbackTo('/demo/avatar-placeholder.svg')}
  alt=""className="w-full h-full object-cover"/>
  </div>
  <div className="min-w-0">

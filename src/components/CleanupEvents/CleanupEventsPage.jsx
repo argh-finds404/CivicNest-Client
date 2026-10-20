@@ -13,6 +13,7 @@ import usePublicStats from'../../hooks/usePublicStats';
 import { useAuth } from'../../hooks/useAuth';
 import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
+import { atLeast } from "../../utils/roles";
 
 export default function CleanupEventsPage() {
  const axiosSecure = useAxiosSecure();
@@ -97,7 +98,7 @@ export default function CleanupEventsPage() {
  const userGoing = event?.going?.some(a => a.email === user?.email);
 
  if (!userGoing) {
- if (role !=="member"&& role !=="admin") {
+ if (!atLeast(role, 'member')) {
  return toast.error("Only verified members can volunteer for drives.");
  }
  if (!isVolunteer) {

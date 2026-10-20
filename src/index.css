@@ -981,3 +981,20 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 .dark :is(.text-emerald-700, .text-teal-700):not([class*="dark:text-"]) { color: #6ee7b7; }
 .dark :is(.text-emerald-900\/50, .text-emerald-900\/40, .text-emerald-600\/70, .text-emerald-700\/80, .text-teal-800\/80, .text-teal-700\/60):not([class*="dark:text-"]) { color: rgba(167, 243, 208, 0.7); }
 .dark :is(.bg-emerald-200\/50, .bg-emerald-100):not([class*="dark:bg-"]) { background-color: rgba(110, 231, 183, 0.15); }
+
+/* ── Map pins (components/Map/mapIcons.js) ─────────────────────────────── */
+.cn-map-pin { background: none; border: 0; }
+.cn-map-pin-body {
+  position: relative; display: grid; place-items: center;
+  width: 34px; height: 34px; border-radius: 50% 50% 50% 4px; transform: rotate(-45deg);
+  background: var(--pin); border: 2px solid #fff;
+  box-shadow: 0 6px 14px -4px rgb(15 23 42 / 0.45);
+}
+.cn-map-pin-body i { transform: rotate(45deg); color: #fff; font-size: 16px; line-height: 1; }
+.cn-map-you { background: none; border: 0; }
+.cn-map-you-dot {
+  display: block; width: 22px; height: 22px; border-radius: 9999px;
+  background: #2563eb; border: 3px solid #fff; box-shadow: 0 0 0 6px rgb(37 99 235 / 0.25);
+}
+.leaflet-popup-content { margin: 12px 14px; }
+.dark .leaflet-popup-content-wrapper, .dark .leaflet-popup-tip { background: #0f1a16; color: #e2e8f0; }

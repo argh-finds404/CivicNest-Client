@@ -295,7 +295,7 @@ export default function AnimalDetails() {
  <img src={animal.image} alt={animal.type} className="w-full h-full object-cover"/>
  ) : (
  <div className="w-full h-full relative">
- <img src="https://images.unsplash.com/photo-1548767797641-c90d27c7311f?auto=format&fit=crop&q=80"alt="Animal Rescue Fallback"className="w-full h-full object-cover"/>
+ <img src="/demo/animal-dog.svg" alt="Animal Rescue Fallback"className="w-full h-full object-cover"/>
  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"></div>
  <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
  <i className="ri-image-line text-4xl tracking-tight text-white/50"></i>

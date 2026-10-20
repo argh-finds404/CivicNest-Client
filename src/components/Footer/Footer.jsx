@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 import "./Footer.css";
+import { scrollToTop } from "../../utils/smoothScroll";
 
 const COLUMNS = [
   {
@@ -138,7 +139,7 @@ export default function Footer() {
 
         <div className="ft-bottom">
           <p>© {new Date().getFullYear()} CivicNest. Built for neighbourhoods across Dhaka.</p>
-          <button type="button" className="ft-top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <button type="button" className="ft-top" onClick={() => scrollToTop()}>
             Back to top <i className="ri-arrow-up-line" aria-hidden="true" />
           </button>
         </div>

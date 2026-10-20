@@ -18,6 +18,7 @@ import {
  BADGES,
 } from"./styleInfo";
 import { AuthContext } from"../contexts/AuthContext";
+import { fallbackTo } from "../../utils/imageFallback";
 
 const API_BASE = import.meta.env.VITE_API_URL ||"http://localhost:3000";
 
@@ -336,7 +337,7 @@ export default function Register() {
  exit={{ opacity: 0, scale: 1.02 }}
  transition={{ duration: 0.35, ease:"easeInOut"}}
  className="reg-bg-img-wrapper">
- <img src={IMAGES[bgIndex]} alt="Community action"className="reg-bg-img"/>
+ <img src={IMAGES[bgIndex]} onError={fallbackTo("/demo/cleanup-riverbank.svg")} alt="Community action"className="reg-bg-img"/>
  </motion.div>
  </AnimatePresence>
 

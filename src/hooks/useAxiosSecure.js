@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { useAuth } from "./useAuth";
 import { useNavigate } from "react-router";
@@ -44,9 +45,11 @@ const useAxiosSecure = () => {
         } else if (status === 403) {
           // Signed in but not allowed (e.g. not a verified member yet). Never log out for this.
           const msg = error.response?.data?.error || error.response?.data?.message || "You don't have access to that yet.";
-          window.dispatchEvent(new CustomEvent("app:error-reported", { detail: { message: msg } }));
-        } else {
-          const msg = error.response?.data?.message || error.message || "An API error occurred";
+          toast.error(msg, { id: "forbidden" });
+        } else if (!status || status >= 500) {
+          // Only real failures (server error, no connection) open the help panel;
+          // other 4xx answers are handled by the page that made the request
+          const msg = error.response?.data?.message || error.response?.data?.error || "The server couldn't complete that request.";
           window.dispatchEvent(new CustomEvent('app:error-reported', { detail: { message: msg } }));
         }
         return Promise.reject(error);

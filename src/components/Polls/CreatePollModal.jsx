@@ -6,6 +6,7 @@ import { requestLogin } from'../../utils/requestLogin';
 import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
 import { Check, CheckSquare, HelpCircle, Clock, BarChart3, MessageCircle, Users, ChevronLeft, ChevronRight, CheckCircle2 } from'lucide-react';
+import { atLeast } from "../../utils/roles";
 
 const POLL_TYPES = [
  { value:'single', label:'Single Choice', icon: <Check className="w-5 h-5"/>, description:'Choose one option'},
@@ -124,7 +125,7 @@ export default function CreatePollModal() {
  return;
  }
 
- if (role !=='member'&& role !=='admin') {
+ if (!atLeast(role, 'member')) {
  toast.error('Only members can create polls');
  return;
  }

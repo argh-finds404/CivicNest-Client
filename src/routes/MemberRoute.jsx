@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { useRole } from '../hooks/useRole';
 import MinimalLoader from '../components/common/MinimalLoader.jsx';
+import { atLeast } from "../utils/roles";
 
 const MemberRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -17,12 +18,12 @@ const MemberRoute = ({ children }) => {
     );
   }
 
-  if (user && (role === 'member' || role === 'admin')) {
+  if (user && (atLeast(role, 'member'))) {
     return children;
   }
 
   // If user is logged in but not a member (e.g. guest or standard user), send to membership request
-  if (user && role !== 'member' && role !== 'admin') {
+  if (user && !atLeast(role, 'member')) {
     return <Navigate to="/membership/request" state={{ from: location }} replace />;
   }
 

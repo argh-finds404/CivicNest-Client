@@ -121,6 +121,10 @@ const router = createBrowserRouter([
         element: <PrivateRoute><AddIssue /></PrivateRoute>,
       },
       {
+        path: 'issues/edit/:id',
+        element: <PrivateRoute><EditIssue /></PrivateRoute>,
+      },
+      {
         path: 'issues/:id',
         element: <PrivateRoute><IssueDetails /></PrivateRoute>,
       },

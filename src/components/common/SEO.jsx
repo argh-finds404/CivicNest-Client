@@ -2,7 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SITE_NAME = 'CivicNest';
-const DEFAULT_IMAGE = 'https://civicnest.org/og-default.png'; // Fallback image 1200x630px
+// The site's own logo, served from wherever the app is hosted
+const DEFAULT_IMAGE = typeof window !== 'undefined' ? `${window.location.origin}/favicon.png` : '/favicon.png';
 
 export default function SEO({
   title,

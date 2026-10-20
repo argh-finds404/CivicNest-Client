@@ -19,7 +19,7 @@ import {
 } from'lucide-react';
 import toast from'react-hot-toast';
 import { useRole } from'../../hooks/useRole';
-import { isStaff } from "../../utils/roles";
+import { isStaff, atLeast } from "../../utils/roles";
 import { requestLogin } from'../../utils/requestLogin';
 import { Bar as ChartJSBar } from'react-chartjs-2';
 import { 
@@ -125,7 +125,7 @@ export default function PollCard({ poll }) {
  requestLogin('vote in polls');
  return;
  }
- const isAuthorized = role ==="member"|| role ==="admin"|| isVolunteer;
+ const isAuthorized = atLeast(role, 'member')|| isVolunteer;
  if (!isAuthorized) {
  toast('Verify your residency to vote in community polls.', { icon:'🏡'});
  return;

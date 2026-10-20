@@ -23,6 +23,15 @@ On the [sign-in page](https://civic-nest-client.vercel.app/Login) the **Reviewer
 > These are demo accounts. They are flagged `isDemo`: their roles can't be changed, and they can't change anyone else's role.
 > An admin creates or resets them from **Admin → Users → Set up reviewer logins**, or with `npm run seed:reviewers` on the server.
 
+### Demo content
+
+The app opens on a lived-in neighbourhood around Dhaka, so there is something to look at straight away:
+* **10 community members** on the leaderboard, with avatars, points and streaks.
+* **12 issues at every stage:** open, being fixed, awaiting verification, solved and one waiting in the moderator queue. They come with tickets, comments, votes, crowdfunding and proof photos.
+* **5 cleanup drives** (3 upcoming, 1 completed, 1 awaiting approval), **5 animal rescues** and **5 lost & found posts**.
+
+Demo records are flagged `isDemo` and never touch real users' content. The server adds anything missing on startup. An admin can put everything back to its starting state with **Admin → Users → Reset demo content** (or `npm run seed:demo` on the server). All demo pictures are illustrations bundled with the app in `public/demo/`, so they always load.
+
 ### Five-minute demo
 
 1. **Member:** open **Report issue**. Write a description, and the AI suggests the category and urgency. Add a photo and submit. You get a ticket code such as `CN-2026-000123`; follow it under **My tickets**.
@@ -30,7 +39,7 @@ On the [sign-in page](https://civic-nest-client.vercel.app/Login) the **Reviewer
 3. **Member:** on an approved issue, **Claim issue**, upload proof photos, and the issue moves to *awaiting verification*.
 4. **Other members** press **Verify now**. After three verifications the issue is **solved**, points are paid and the ticket is **resolved**.
 5. **Admin:** users and roles, membership requests, NGOs, notices, donations, the gallery and live stats.
-6. Also try the light/dark switch, CivicBot (bottom-right), the complaint letter on an issue page, lost & found, animal rescue, polls and cleanup drives.
+6. Also try the **Community Map**, CivicBot (bottom-right), the complaint letter on an issue page, lost & found, animal rescue, polls, cleanup drives and the light/dark switch.
 
 ---
 
@@ -84,14 +93,16 @@ Extras on every issue page: upvotes, witnesses, comments, an **AI summary**, sha
 | **Formal complaint letter** to the ward office, including the ticket code | Issue page → Escalate Government Complaint | `POST /ai/complaint-letter` |
 | **Animal first-aid tip** | Animal rescue page | `POST /ai/animal-tip` |
 
-The server holds the Gemini key (`GEMINI_API_KEY`). It uses `gemini-2.5-flash` by default (override with `GEMINI_MODEL`) and switches to `gemini-flash-latest` automatically if a model is retired. Each user has a daily limit, and when the AI is unavailable the app shows a clear message instead of failing silently.
+The server holds the Gemini key (`GEMINI_API_KEY`). It tries `gemini-2.5-flash` first (override with `GEMINI_MODEL`) and moves on to other Flash models if one is retired, out of quota or overloaded.
+
+**The AI buttons never fail.** If Gemini can't answer (no key, quota used up, outage), the server answers with built-in help instead: a guide in the chat, a keyword-based category and urgency, a first-aid checklist, a formal letter template and a short summary. Open `https://civicnest-api.onrender.com/ai/status` to see whether Gemini is configured and the last error it returned (the key itself is never shown).
 
 ---
 
 ## Images
 
 * **Uploads** (issue photos, proofs, animals, lost & found, events, avatars) go from the browser to **ImgBB** with `VITE_IMGBB_API_KEY`. ImgBB links don't expire.
-* **Every photo has a fallback.** If a link is missing or broken, cards and galleries show a matching illustration (a paw, a trash can, a key…) instead of a broken image. The logo falls back to the bundled `/favicon.png`.
+* **Every photo has a fallback.** If a link is missing or broken, cards and galleries show a matching illustration (a paw, a trash can, a key…) instead of a broken image. Default and placeholder pictures are bundled in `public/demo/`, and the logo falls back to the bundled `/favicon.png`.
 * Page artwork (section emblems, the home city scene) is SVG/CSS, so it always loads.
 
 ---
@@ -124,7 +135,8 @@ Socket.io (same server) → live feed, forum typing indicators and notifications
 
 ## Features at a glance
 
-* **Issues and tickets:** report, review, claim, prove, verify, escalate, crowdfund; map view; priority queue for staff.
+* **Issues and tickets:** report, review, claim, prove, verify, escalate, crowdfund; priority queue for staff.
+* **Community Map:** every issue, upcoming cleanup and animal in need with a location, as coloured pins with photo previews and filters. Tiles come from CARTO (no API key) and switch to OpenStreetMap automatically if CARTO fails.
 * **Cleanup drives:** organise an event (staff approve it), RSVP, organiser check-in code with optional GPS, attendance points, funding goal.
 * **Lost & found:** lost and found posts, claims and "I found it" reports, with points when an item is reunited.
 * **Animal rescue:** report an animal in need, volunteers join, AI first-aid tip, adoption requests, feeding drives, donations.
@@ -132,13 +144,13 @@ Socket.io (same server) → live feed, forum typing indicators and notifications
 * **Gamification:** points, streaks, leaderboard, badges, and a downloadable **Civic Impact Resume** PDF on the profile.
 * **Payments:** Stripe (card, BDT) and SSLCommerz for issue funds, animals, events, NGOs and the community fund.
 * **Admin console:** live stats (issues by status and category, 7-day donations), issue queue, ticket desk, users and roles, membership, volunteers, NGOs, notices, posts, donations, and reviewer-account setup.
-* **Design:** glass cards, light and dark themes that follow the device, Bricolage Grotesque and Plus Jakarta Sans fonts, 2D page emblems, respects reduced motion.
+* **Design:** glass cards, light mode by default with a dark mode you can switch on (the choice is remembered), smooth eased scrolling for mouse and trackpad (Lenis; touch devices keep native scrolling), Bricolage Grotesque and Plus Jakarta Sans fonts, 2D page emblems, respects reduced motion.
 
 ---
 
 ## Tech stack
 
-**Client:** React 19 · Vite 8 · React Router 7 · Tailwind CSS 4 + daisyUI 5 · TanStack Query 5 · Axios · Firebase Auth · Socket.io client · Framer Motion · Leaflet / React Leaflet · Chart.js + Recharts · jsPDF · Stripe Elements · React Hook Form · SweetAlert2 · Remix Icons + Lucide.
+**Client:** React 19 · Vite 8 · React Router 7 · Tailwind CSS 4 + daisyUI 5 · TanStack Query 5 · Axios · Firebase Auth · Socket.io client · Framer Motion · Lenis · Leaflet / React Leaflet · Chart.js + Recharts · jsPDF · Stripe Elements · React Hook Form · SweetAlert2 · Remix Icons + Lucide.
 
 **Server:** Node.js · Express 5 · MongoDB (native driver + Mongoose) · Prisma 6 (tickets) · Firebase Admin · Socket.io · Stripe · SSLCommerz · Google Gemini (`@google/generative-ai`) · express-rate-limit.
 

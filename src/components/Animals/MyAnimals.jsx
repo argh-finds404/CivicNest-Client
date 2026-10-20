@@ -6,6 +6,7 @@ import { motion } from'framer-motion';
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import Swal from'sweetalert2';
 import { format } from'date-fns';
+import { fallbackTo } from "../../utils/imageFallback";
 
 const URGENCY_COLORS = {
  emergency:'bg-red-100 text-red-700 border-red-200',
@@ -140,7 +141,7 @@ const MyAnimals = () => {
  <tr key={animal._id} className="hover:bg-slate-50 dark:bg-[#0a1410] dark:bg-[#0a1410]/50 transition-colors text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1]">
  <td className="p-5">
  <img 
- src={animal.image ||'https://images.unsplash.com/photo-1548767797641-c90d27c7311f?auto=format&fit=crop&q=80'} 
+ src={animal.image ||'/demo/animal-dog.svg'} onError={fallbackTo('/demo/animal-dog.svg')} 
  alt={animal.animalType || animal.type} 
  className="w-12 h-12 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0"/>
  </td>

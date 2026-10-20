@@ -1,5 +1,4 @@
 import React, { useState } from'react';
-import { useTheme } from'../../hooks/useTheme';
 import { useParams, Link } from'react-router';
 import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
 import useAxiosSecure from'../../hooks/useAxiosSecure';
@@ -12,17 +11,12 @@ import EventDonationModal from'./EventDonationModal';
 import BackButton from'../common/BackButton';
 import SEO from'../common/SEO';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, Marker, Popup } from 'react-leaflet';
+import { MapTiles } from "../Map/MapTiles";
 import'leaflet/dist/leaflet.css';
-import L from'leaflet';
+import { fallbackTo } from "../../utils/imageFallback";
+import { atLeast } from "../../utils/roles";
 
-// Fix leaflet marker icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
- iconRetinaUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
- iconUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
- shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 export default function CleanupEventDetails() {
  const { id } = useParams();
@@ -30,7 +24,6 @@ export default function CleanupEventDetails() {
  const queryClient = useQueryClient();
  const { user } = useAuth();
  const [role] = useRole();
- const { isDark } = useTheme();
  const { data: statusData } = useQuery({
  queryKey: ["volunteerStatus", user?.email],
  enabled: !!user?.email,
@@ -249,7 +242,7 @@ export default function CleanupEventDetails() {
  {}
  <div className="relative w-full h-[320px] md:h-[450px] bg-slate-950 overflow-hidden pt-16">
  <img
- src={event.coverImages?.[0] ||'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=1200&auto=format&fit=crop'}
+ src={event.coverImages?.[0] ||'/demo/cleanup-lake.svg'} onError={fallbackTo('/demo/cleanup-lake.svg')}
  alt={event.title}
  className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"/>
  {/* Soft elegant glassmorphic/gradient overlay */}
@@ -355,7 +348,7 @@ export default function CleanupEventDetails() {
   {position && (
     <div className="relative h-72 w-full rounded-lg overflow-hidden border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/80 z-0 shadow-sm group">
       <MapContainer center={position} zoom={15} style={{ height:'100%', width:'100%', zIndex: 0 }}>
-        <TileLayer url={isDark ?"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"}/>
+        <MapTiles />
         <Marker position={position}>
           <Popup>
             <div className="p-2 min-w-[200px]" style={{ fontFamily:'var(--font-heading)' }}>
@@ -550,7 +543,7 @@ export default function CleanupEventDetails() {
  toast.error("Please log in to volunteer.");
  return;
  }
- if (role !=="member"&& role !=="admin") {
+ if (!atLeast(role, 'member')) {
  toast.error("Only verified members can volunteer for drives.");
  return;
  }

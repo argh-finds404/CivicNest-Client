@@ -368,9 +368,9 @@ const SocialFeedCard = React.forwardRef(({ issue }, ref) => {
  {/* Edit Post Button for Locked Items */}
  {isLocked && user?.email && (user.email === issue.submittedBy?.email || user.email === issue.email) && (
  <div className="px-6 py-4 bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] relative z-20 border-t border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040]/60 flex justify-end">
- <button className="btn btn-sm bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] shadow-sm">
+ <Link to={isEvent ?`/cleanup-events/${issue._id}`:`/issues/edit/${issue._id}`} className="btn btn-sm bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040] hover:bg-slate-100 dark:bg-[#1e3040] dark:bg-[#1e3040] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] shadow-sm">
  <i className="ri-edit-2-line"></i> {isRejected ?"Edit & Resubmit":"Edit Post"}
- </button>
+ </Link>
  </div>
  )}
 

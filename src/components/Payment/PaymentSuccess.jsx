@@ -2,6 +2,7 @@ import React from'react';
 import { useNavigate, useLocation } from'react-router';
 import { motion } from'framer-motion';
 import confetti from 'canvas-confetti';
+import { scrollToTop } from "../../utils/smoothScroll";
 
 const PaymentSuccess = () => {
  const navigate = useNavigate();
@@ -9,10 +10,7 @@ const PaymentSuccess = () => {
  const state = location.state || {};
 
  React.useEffect(() => {
-   window.scrollTo(0, 0);
-   if (window.lenis) {
-     window.lenis.scrollTo(0, { immediate: true });
-   }
+   scrollToTop({ immediate: true });
 
    // 1. Initial immediate satisfying center burst
    confetti({

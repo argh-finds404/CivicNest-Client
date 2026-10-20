@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from'react';
-import { useTheme } from'../../hooks/useTheme';
 import { useForm, Controller } from'react-hook-form';
 import { useNavigate, Link } from'react-router';
 import { useQuery } from'@tanstack/react-query';
@@ -9,23 +8,17 @@ import { useRole } from'../../hooks/useRole';
 import toast from'react-hot-toast';
 import CreditIndicator from'../common/CreditIndicator';
 import BackButton from'../common/BackButton';
-import { MapContainer, TileLayer, Marker, useMapEvents } from'react-leaflet';
+import { MapContainer, Marker, useMapEvents } from'react-leaflet';
+import { MapTiles } from "../Map/MapTiles";
 import'leaflet/dist/leaflet.css';
-import L from'leaflet';
 import DatePicker from'react-datepicker';
 import'react-datepicker/dist/react-datepicker.css';
 import TimePicker from'react-time-picker';
 import PremiumImageUploader from'../common/PremiumImageUploader';
+import { atLeast } from "../../utils/roles";
 import'react-time-picker/dist/TimePicker.css';
 import'react-clock/dist/Clock.css';
 
-// Fix leaflet icon
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
- iconRetinaUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
- iconUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
- shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 function LocationMarker({ position, setPosition }) {
  useMapEvents({
@@ -56,7 +49,7 @@ export default function OrganizeEventForm() {
  });
  const credits = creditData?.remaining;
 
- const isEligible = role?.toLowerCase() ==='member'|| role?.toLowerCase() ==='admin';
+ const isEligible = atLeast(role?.toLowerCase(), 'member');
 
  const [position, setPosition] = useState(null); // { lat, lng }
  const [isSubmitting, setIsSubmitting] = useState(false);
@@ -126,7 +119,7 @@ export default function OrganizeEventForm() {
  },
  requiredSkills,
  suppliesNeeded,
- coverImages: [data.coverImage ||'https://images.unsplash.com/photo-1618477461853-cf6ed80f4175?auto=format&fit=crop&q=80&w=1200']
+ coverImages: [data.coverImage ||'/demo/cleanup-lake.svg']
  };
 
  await axiosSecure.post('/cleanup-events', payload);
@@ -139,7 +132,6 @@ export default function OrganizeEventForm() {
  }
  };
 
- const { isDark } = useTheme();
 
  return (
  <div className="min-h-screen pb-20 pt-10">
@@ -192,7 +184,7 @@ export default function OrganizeEventForm() {
  To ensure the quality and safety of our community drives, only verified members are allowed to organize cleanup events. Guests must request membership first.
  </p>
  <div className="flex flex-col sm:flex-row gap-4 justify-center">
- <Link to="/request-membership"className="px-8 py-3.5 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-colors shadow-sm">
+ <Link to="/membership/request"className="px-8 py-3.5 bg-teal-600 text-white rounded-xl font-bold hover:bg-teal-700 transition-colors shadow-sm">
  Request Membership
  </Link>
  <BackButton variant="dark"/>
@@ -359,7 +351,7 @@ export default function OrganizeEventForm() {
  <p className="text-xs text-slate-500 dark:text-slate-300 mb-2">Click on the map to set the exact meeting location for volunteers.</p>
  <div className="h-72 w-full rounded-lg overflow-hidden border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] z-0 relative">
  <MapContainer center={[23.8103, 90.4125]} zoom={12} style={{ height:'100%', width:'100%', zIndex: 0 }}>
- <TileLayer url={isDark ?"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"}/>
+ <MapTiles />
  <LocationMarker position={position} setPosition={setPosition} />
  </MapContainer>
  </div>

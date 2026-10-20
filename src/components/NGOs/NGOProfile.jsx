@@ -11,6 +11,7 @@ import { useAuth } from'../../hooks/useAuth';
 import toast from'react-hot-toast';
 import PaymentGatewaySelector from'../Payment/PaymentGatewaySelector';
 import SEO from'../common/SEO';
+import { fallbackTo } from "../../utils/imageFallback";
 
 const NGOProfile = () => {
  const { id } = useParams();
@@ -98,7 +99,7 @@ const NGOProfile = () => {
  <div className="flex flex-col md:flex-row gap-5 items-start">
  {/* Logo */}
  <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden border-4 border-white/20 shadow-xl shrink-0">
- <img src={ngo.logoUrl ||"https://i.ibb.co/X30F6Hk/ngo-placeholder.png"} alt={ngo.name} className="w-full h-full object-cover"/>
+ <img src={ngo.logoUrl ||"/demo/ngo-placeholder.svg"} onError={fallbackTo("/demo/ngo-placeholder.svg")} alt={ngo.name} className="w-full h-full object-cover"/>
  </div>
  
  {/* Info */}

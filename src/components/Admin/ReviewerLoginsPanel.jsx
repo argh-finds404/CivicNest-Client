@@ -10,6 +10,7 @@ export default function ReviewerLoginsPanel({ onDone }) {
   const axiosSecure = useAxiosSecure();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null);
+  const [resetting, setResetting] = useState(false);
 
   const setUp = async () => {
     setBusy(true);
@@ -22,6 +23,21 @@ export default function ReviewerLoginsPanel({ onDone }) {
       toast.error(err.response?.data?.error || "Couldn't set up reviewer logins.");
     } finally {
       setBusy(false);
+    }
+  };
+
+  // Puts the demo neighbourhood (members, issues, cleanups, animals, lost &
+  // found) back to its starting state; real content is never touched
+  const resetDemo = async () => {
+    setResetting(true);
+    try {
+      await axiosSecure.post("/admin/demo-content");
+      toast.success("Demo content has been reset.");
+      onDone?.();
+    } catch (err) {
+      toast.error(err.response?.data?.error || "Couldn't reset the demo content.");
+    } finally {
+      setResetting(false);
     }
   };
 
@@ -46,6 +62,16 @@ export default function ReviewerLoginsPanel({ onDone }) {
         <button type="button" onClick={setUp} disabled={busy} className="cn-btn cn-btn-primary cn-btn-sm shrink-0 disabled:opacity-60">
           <i className={busy ? "ri-loader-4-line animate-spin" : "ri-user-add-line"} aria-hidden="true" />
           {busy ? "Setting up…" : result ? "Reset again" : "Set up reviewer logins"}
+        </button>
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-slate-200/70 dark:border-white/10 flex flex-col sm:flex-row sm:items-center gap-3">
+        <p className="flex-1 text-[13px] text-slate-500 dark:text-slate-300">
+          <span className="font-semibold text-slate-700 dark:text-slate-200">Demo content:</span> sample members, issues, cleanup drives, animals and lost &amp; found posts load automatically. Reset them here after a demo.
+        </p>
+        <button type="button" onClick={resetDemo} disabled={resetting} className="cn-btn cn-btn-ghost cn-btn-sm shrink-0 disabled:opacity-60">
+          <i className={resetting ? "ri-loader-4-line animate-spin" : "ri-refresh-line"} aria-hidden="true" />
+          {resetting ? "Resetting…" : "Reset demo content"}
         </button>
       </div>
 

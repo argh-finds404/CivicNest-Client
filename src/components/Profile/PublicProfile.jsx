@@ -6,6 +6,7 @@ import MinimalLoader from'../common/MinimalLoader';
 import BackButton from'../common/BackButton';
 import PageTitle from'../common/PageTitle';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
+import { fallbackTo } from "../../utils/imageFallback";
 
 const PublicProfile = () => {
  const { id } = useParams();
@@ -94,7 +95,8 @@ const PublicProfile = () => {
  <BackButton variant="light"/>
  </div>
  <img 
- src={profile.coverPhoto} 
+ src={profile.coverPhoto ||"/demo/cleanup-riverbank.svg"} 
+ onError={fallbackTo("/demo/cleanup-riverbank.svg")}
  alt="Cover"className="w-full h-full object-cover"/>
  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
  </div>

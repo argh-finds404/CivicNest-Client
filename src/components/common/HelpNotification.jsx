@@ -21,7 +21,7 @@ export default function HelpNotification() {
 
     const handleGlobalError = (event) => {
       // Only display for meaningful failures (ignore extension errors or trivial bugs)
-      if (event.message && !event.message.includes('ResizeObserver')) {
+      if (event.message && !event.message.includes('ResizeObserver') && !/stripe/i.test(event.message)) {
         triggerNotification(`Error: ${event.message}`);
       }
     };
@@ -30,7 +30,8 @@ export default function HelpNotification() {
       const reason = event.reason;
       const message = reason?.message || (typeof reason === 'string' ? reason : 'Unhandled asynchronous rejection');
       // Skip auth state changes or network offline errors
-      if (message && !message.includes('auth') && !message.includes('ResizeObserver')) {
+      // Stripe.js is often blocked by ad blockers; payments show their own message
+      if (message && !message.includes('auth') && !message.includes('ResizeObserver') && !/stripe/i.test(message)) {
         triggerNotification(message);
       }
     };

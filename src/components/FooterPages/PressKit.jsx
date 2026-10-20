@@ -15,10 +15,10 @@ export default function PressKit() {
  });
 
  const assets = [
- { title:'Primary Logo', format:'PNG', size:'1.2 MB', bg:'bg-emerald-500'},
- { title:'Secondary Logo', format:'SVG', size:'45 KB', bg:'bg-[#0f766e]'},
- { title:'Brand Guidelines', format:'PDF', size:'3.4 MB', bg:'bg-slate-800'},
- { title:'Campaign Assets', format:'ZIP', size:'12 MB', bg:'bg-blue-600'},
+ { title:'CivicNest Logo', format:'PNG', size:'620 KB', bg:'bg-emerald-500', href:'/favicon.png', icon:'image'},
+ { title:'Cleanup Drive Illustration', format:'SVG', size:'14 KB', bg:'bg-[#0f766e]', href:'/demo/cleanup-lake.svg', icon:'forest'},
+ { title:'Civic Issue Illustration', format:'SVG', size:'12 KB', bg:'bg-slate-800', href:'/demo/issue-pothole.svg', icon:'construction'},
+ { title:'Animal Rescue Illustration', format:'SVG', size:'8 KB', bg:'bg-blue-600', href:'/demo/animal-cat.svg', icon:'pets'},
  ];
 
  return (
@@ -89,15 +89,15 @@ export default function PressKit() {
  {assets.map((asset, i) => (
  <div key={asset.title} className="group relative bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] rounded-lg p-4 border border-slate-100 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50 transition-all duration-300">
  <div className={`w-12 h-12 rounded-xl ${asset.bg} mb-6 flex items-center justify-center text-white shadow-inner`}>
- <span className="material-symbols-outlined text-[24px]">folder_zip</span>
+ <span className="material-symbols-outlined text-[24px]">{asset.icon}</span>
  </div>
  <h3 className="font-bold text-slate-900 dark:text-white text-[13px] mb-1 tracking-tight">{asset.title}</h3>
  <p className="text-[13px] text-slate-500 dark:text-slate-300 mb-6 font-medium">{asset.format} • {asset.size}</p>
  
- <button className="flex items-center gap-2 text-[13px] font-bold text-emerald-600 group-hover:text-emerald-700 transition-colors w-full justify-between">
+ <a href={asset.href} download className="flex items-center gap-2 text-[13px] font-bold text-emerald-600 group-hover:text-emerald-700 transition-colors w-full justify-between">
  Download Asset
- <span className="material-symbols-outlined text-[20px] transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
- </button>
+ <span className="material-symbols-outlined text-[20px] transform group-hover:translate-x-1 transition-transform">download</span>
+ </a>
  </div>
  ))}
  </div>

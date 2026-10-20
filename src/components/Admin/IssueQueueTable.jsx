@@ -121,6 +121,32 @@ export default function IssueQueueTable() {
  }
  };
 
+ // Approves every selected item that is still waiting for review
+ const handleBulkApprove = async () => {
+ const pending = queue.filter((i) => selectedIssues.includes(i._id) && i.approvalStatus ==="pending_review");
+ if (!pending.length) {
+ toast("None of the selected items are waiting for review.");
+ return;
+ }
+ const result = await Swal.fire({
+ title:`Approve ${pending.length} item${pending.length === 1 ?"":"s"}?`,
+ text:"They will become publicly visible.",
+ icon:"question",
+ showCancelButton: true,
+ confirmButtonText:"Yes, approve",
+ confirmButtonColor:"#15803d",
+ });
+ if (!result.isConfirmed) return;
+ const outcomes = await Promise.allSettled(
+ pending.map((i) => axiosSecure.patch(i._type ==="cleanup_event"?`/admin/cleanup-events/${i._id}/approve`:`/admin/issues/${i._id}/approve`))
+ );
+ const done = outcomes.filter((o) => o.status ==="fulfilled").length;
+ ["admin-queue","admin-queue-counts","admin-queue-count","admin-stats","staff-tickets"].forEach((key) => queryClient.invalidateQueries({ queryKey: [key] }));
+ setSelectedIssues([]);
+ if (done === pending.length) toast.success(`Approved ${done} item${done === 1 ?"":"s"}.`);
+ else toast.error(`Approved ${done} of ${pending.length}; the rest were already reviewed.`);
+ };
+
  const toggleSelectAll = (e) => {
  if (e.target.checked) {
  setSelectedIssues(queue.map(i => i._id));
@@ -211,9 +237,10 @@ export default function IssueQueueTable() {
  {selectedIssues.length > 0 && (
  <div className="flex items-center gap-4 text-[13px] bg-teal-50 px-4 py-2.5 rounded-xl border border-teal-200 shadow-inner relative z-10">
  <span className="font-extrabold text-teal-800 tracking-tight">{selectedIssues.length} selected</span>
- <button className="px-4 py-2 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] text-teal-700 rounded-lg font-bold hover:bg-teal-100 transition-colors shadow-sm border border-teal-100 flex items-center gap-2">
- Bulk Action <i className="ri-arrow-down-s-line"></i>
+ <button type="button" onClick={handleBulkApprove} className="px-4 py-2 bg-white dark:bg-[#0a120e] text-teal-700 dark:text-teal-300 rounded-lg font-bold hover:bg-teal-100 transition-colors shadow-sm border border-teal-100 dark:border-teal-500/30 flex items-center gap-2 cursor-pointer">
+ <i className="ri-check-double-line"></i> Approve selected
  </button>
+ <button type="button" onClick={() => setSelectedIssues([])} className="px-3 py-2 rounded-lg font-semibold text-slate-500 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-white/5 cursor-pointer">Clear</button>
  </div>
  )}
  </div>

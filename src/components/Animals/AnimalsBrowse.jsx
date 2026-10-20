@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from"react";
 import SEO from "../common/SEO";
-import { useTheme } from'../../hooks/useTheme';
 import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
 import { Link, useLocation } from"react-router";
 import { motion, AnimatePresence } from"framer-motion";
@@ -10,7 +9,8 @@ import useAxiosPublic from"../../hooks/useAxiosPublic";
 import MinimalLoader from'../common/MinimalLoader.jsx';
 import PageHeader from'../common/PageHeader';
 import PageArt from "../common/PageArt";
-import { MapContainer, TileLayer, Marker, Popup } from"react-leaflet";
+import { MapContainer, Marker, Popup } from"react-leaflet";
+import { MapTiles } from "../Map/MapTiles";
 import"leaflet/dist/leaflet.css";
 import L from"leaflet";
 import Swal from"sweetalert2";
@@ -36,7 +36,6 @@ const QUICK_FILTERS = [
 const ANIMAL_TYPES = ['Dog','Cat','Cow','Bird','Other'];
 
 export default function AnimalsBrowse() {
- const { isDark } = useTheme();
  const axiosSecure = useAxiosSecure();
  const axiosPublic = useAxiosPublic();
  const queryClient = useQueryClient();
@@ -361,25 +360,9 @@ export default function AnimalsBrowse() {
  zoom={12} 
  scrollWheelZoom={true} 
  className="w-full h-full z-0">
- <TileLayer
- attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'url={isDark ?"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"}/>
- {animals.map(animal => {
- let lat = animal.coordinates?.lat;
- let lng = animal.coordinates?.lng;
- 
- // Generate deterministic, stable coordinates based on animal ID to prevent jumping on re-renders
- if (!lat || !lng) {
- const idStr = animal._id ||"";
- let hash = 0;
- for (let i = 0; i < idStr.length; i++) {
- hash = idStr.charCodeAt(i) + ((hash << 5) - hash);
- }
- const latOffset = ((hash % 100) / 1000) - 0.05; // range: -0.05 to +0.05
- const lngOffset = (((hash >> 8) % 100) / 1000) - 0.05; // range: -0.05 to +0.05
- lat = 23.75 + latOffset;
- lng = 90.38 + lngOffset;
- }
- 
+ <MapTiles />
+ {animals.filter(animal => Number.isFinite(animal.coordinates?.lat) && Number.isFinite(animal.coordinates?.lng)).map(animal => {
+ const { lat, lng } = animal.coordinates;
  return (
  <Marker key={animal._id} position={[lat, lng]}>
  <Popup>

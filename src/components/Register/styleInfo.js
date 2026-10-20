@@ -33,12 +33,7 @@ export const STATS = [
   { value: "4.9★", label: "Community Rating" },
 ];
 
-export const AVATARS = [
-  "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop&crop=faces",
-  "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop&crop=faces",
-  "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop&crop=faces",
-  "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop&crop=faces",
-];
+export const AVATARS = ["/demo/avatar-2.svg", "/demo/avatar-1.svg", "/demo/avatar-5.svg", "/demo/avatar-6.svg"];
 
 export const STEPS = ["fullName", "email", "photoURL", "password"];
 

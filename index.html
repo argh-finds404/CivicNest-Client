@@ -6,8 +6,10 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <script>
       (function(){
-        var t = localStorage.getItem('civicnest-theme');
-        var d = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Light unless the visitor chose dark with the theme switch
+        var t = null;
+        try { t = localStorage.getItem('civicnest-theme-choice'); } catch (e) {}
+        var d = t === 'dark';
         var r = document.documentElement;
         if (d) r.classList.add('dark');
         r.setAttribute('data-theme', d ? 'dark' : 'light');
@@ -25,7 +27,7 @@
     <meta name="description" content="CivicNest — report civic issues, find lost items, rescue animals, and organize cleanup drives in your community." />
     <meta property="og:title" content="CivicNest" />
     <meta property="og:description" content="Report civic issues, find lost items, and volunteer in your community." />
-    <meta property="og:image" content="/og-default.png" />
+    <meta property="og:image" content="/favicon.png" />
     <meta property="og:type" content="website" />
     <title>CivicNest</title>
     <style>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from'react';
-import { useTheme } from'../../hooks/useTheme';
 import { useForm, Controller } from'react-hook-form';
 import toast from'react-hot-toast';
 import { useNavigate, useParams } from'react-router';
@@ -10,7 +9,8 @@ import useAxiosSecure from'../../hooks/useAxiosSecure';
 import BackButton from'../common/BackButton';
 
 // Map
-import { MapContainer, TileLayer, Marker, useMapEvents } from"react-leaflet";
+import { MapContainer, Marker, useMapEvents } from"react-leaflet";
+import { MapTiles } from "../Map/MapTiles";
 import L from"leaflet";
 import"leaflet/dist/leaflet.css";
 
@@ -23,6 +23,7 @@ import PremiumImageUploader from '../common/PremiumImageUploader';
 import iconRetinaUrl from'leaflet/dist/images/marker-icon-2x.png';
 import iconUrl from'leaflet/dist/images/marker-icon.png';
 import shadowUrl from'leaflet/dist/images/marker-shadow.png';
+import { atLeast } from "../../utils/roles";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -120,7 +121,6 @@ const EditIssue = () => {
  const { user } = useAuth();
  const [role, isRoleLoading, isVolunteer] = useRole();
  const axiosSecure = useAxiosSecure();
- const { isDark } = useTheme();
  const [isSubmitting, setIsSubmitting] = useState(false);
  const [uploadedImages, setUploadedImages] = useState([]);
  const mapCenter = [23.8103, 90.4125];
@@ -131,7 +131,7 @@ const EditIssue = () => {
  enabled: !!id,
  });
 
- const isPremiumUser = role ==='member'|| role ==='admin'|| isVolunteer;
+ const isPremiumUser = atLeast(role, 'member')|| isVolunteer;
 
  const { register, handleSubmit, control, watch, setValue, reset, formState: { errors } } = useForm({
  defaultValues: {
@@ -394,7 +394,7 @@ const EditIssue = () => {
  </div>
  <div className="h-[340px] w-full rounded-xl overflow-hidden border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] shadow-inner z-0 relative group">
  <MapContainer center={mapCenter} zoom={13} className="h-full w-full z-0">
- <TileLayer url={isDark ?"https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png":"https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"}/>
+ <MapTiles />
  <Controller
  name="mapCoordinates"control={control}
  render={({ field }) => (

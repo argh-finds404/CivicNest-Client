@@ -15,6 +15,7 @@ import HelpNotification from '../common/HelpNotification';
 import ConnectionStatusBanner from '../common/ConnectionStatusBanner';
 import ScrollProgressButton from '../common/ScrollProgressButton';
 import AuthPrompt from '../common/AuthPrompt';
+import SmoothScroll from '../SmoothScroll/SmoothScroll';
 
 const getPageTitle = (pathname) => {
  if (pathname ==='/'|| pathname ==='/home') return'Home';
@@ -138,6 +139,7 @@ const Layout = () => {
  <AuthPrompt />
  {/* New pages start at the top; Back/Forward restore where you were */}
  <ScrollRestoration />
+ <SmoothScroll />
  <Toaster 
  position="bottom-right"containerStyle={{ zIndex: 99999 }}
  toastOptions={{

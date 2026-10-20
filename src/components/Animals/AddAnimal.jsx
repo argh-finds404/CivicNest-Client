@@ -9,6 +9,7 @@ import BackButton from"../common/BackButton";
 import toast from'react-hot-toast';
 import { FaDog, FaCat, FaCow, FaCrow, FaPaw } from"react-icons/fa6";
 import PremiumImageUploader from'../common/PremiumImageUploader';
+import { fallbackTo } from "../../utils/imageFallback";
 
 const ANIMAL_TYPES = [
  { value:'Dog', icon: <FaDog />, label:'Dog'},
@@ -73,7 +74,7 @@ export default function AddAnimal() {
  {/* Background Image & Overlay */}
  <div className="absolute inset-0">
  <img 
- src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80"alt="Animal Rescue"className="w-full h-full object-cover"/>
+ src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&q=80" onError={fallbackTo("/demo/animal-dog.svg")} alt="Animal Rescue"className="w-full h-full object-cover"/>
  <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 to-teal-900/80 backdrop-blur-sm"></div>
  </div>
 

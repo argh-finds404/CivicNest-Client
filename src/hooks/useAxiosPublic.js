@@ -10,8 +10,12 @@ const useAxiosPublic = () => {
     const interceptor = axiosPublic.interceptors.response.use(
       (response) => response,
       (error) => {
-        const msg = error.response?.data?.message || error.message || "An error occurred";
-        window.dispatchEvent(new CustomEvent('app:error-reported', { detail: { message: msg } }));
+        // Only server errors open the help panel; pages handle the rest themselves
+        const status = error.response?.status;
+        if (status >= 500) {
+          const msg = error.response?.data?.message || error.response?.data?.error || "The server couldn't complete that request.";
+          window.dispatchEvent(new CustomEvent('app:error-reported', { detail: { message: msg } }));
+        }
         return Promise.reject(error);
       }
     );

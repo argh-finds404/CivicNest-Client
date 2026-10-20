@@ -53,6 +53,7 @@ import PageHeader from "../common/PageHeader";
 import PageArt from "../common/PageArt";
 import usePublicStats from "../../hooks/usePublicStats";
 import { Sprout, CheckCircle, Users } from "lucide-react";
+import { atLeast } from "../../utils/roles";
 
 const TABS = [
  { key:"drives", label:"Upcoming Drives", icon:"ri-calendar-event-line"},
@@ -108,7 +109,7 @@ export default function VolunteerHub() {
  });
  const isVolunteer = statusData?.volunteer?.approvalStatus ==="approved";
  const isPendingVolunteer = statusData?.volunteer?.approvalStatus ==="pending";
- const isMember = role ==="member"|| role ==="admin";
+ const isMember = atLeast(role, 'member');
 
  // Redirect to drives if trying to access directory without being volunteer or pending volunteer
  useEffect(() => {
@@ -163,7 +164,7 @@ export default function VolunteerHub() {
  actions={
  !user ? (
  <Link to="/login" state={{ from: "/volunteers" }} className="cn-btn cn-btn-signal">Log in to volunteer</Link>
- ) : role !=="member"&& role !=="admin"? (
+ ) : !atLeast(role, 'member')? (
  <>
  <Link to="/membership/request" className="cn-btn cn-btn-signal">
  <i className="ri-shield-check-line text-base" aria-hidden="true" />

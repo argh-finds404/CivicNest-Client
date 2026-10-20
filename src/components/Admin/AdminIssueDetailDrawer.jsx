@@ -198,11 +198,10 @@ export default function AdminIssueDetailDrawer({ issue, onClose }) {
 
  useEffect(() => {
  if (!issue) return undefined;
+ // SmoothScroll pauses itself while the page is locked like this
  document.body.style.overflow ='hidden';
- window.lenis?.stop();
  return () => {
  document.body.style.overflow ='';
- window.lenis?.start();
  };
  }, [issue]);
 

@@ -10,7 +10,6 @@ import BackButton from'../common/BackButton.jsx';
 import CommunityVerifyFeed from"../Issues/CommunityVerifyFeed";
 
 const VERIFICATION_METHODS = [
- { id:'photo', label:'Photo Upload', icon:'ri-camera-line', description:'Upload a photo of your participation'},
  { id:'geolocation', label:'GPS Check-in', icon:'ri-map-pin-line', description:'Verify your location at the event'},
  { id:'organizer', label:'Organizer Approval', icon:'ri-user-star-line', description:'Get verified by event organizer'},
 ];
@@ -621,23 +620,6 @@ export default function VolunteerDashboard() {
  </div>
  ) : (
  <div className="space-y-6">
- {selectedMethod ==="photo"&& (
- <div>
- <label className="block text-[13px] font-semibold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-2">
- Upload Photo
- </label>
- <div className="border-2 border-dashed border-slate-300 dark:border-[#1e3040] dark:border-[#1e3040] rounded-xl p-5 text-center hover:border-teal-500 transition-colors cursor-pointer">
- <i className="ri-upload-cloud-line text-4xl tracking-tight text-slate-400 mb-2 block"></i>
- <p className="text-slate-600 dark:text-slate-300">
- Click to upload or drag and drop
- </p>
- <p className="text-xs text-slate-400 mt-1">
- PNG, JPG up to 10MB
- </p>
- </div>
- </div>
- )}
-
  {selectedMethod ==="geolocation"&& (
  <div>
  <label className="block text-[13px] font-semibold text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] mb-2">
@@ -648,10 +630,7 @@ export default function VolunteerDashboard() {
  <p className="text-slate-600 dark:text-slate-300 mb-4">
  Enable GPS to verify your location
  </p>
- <button className="px-6 py-3 bg-teal-600 text-white font-semibold rounded-xl hover:bg-teal-700 transition-colors">
- <i className="ri-gps-line mr-2"></i>
- Check In
- </button>
+ <p className="text-xs font-semibold text-teal-700 dark:text-teal-300">Press <b>Submit Verification</b> below to check in.</p>
  </div>
  </div>
  )}
@@ -666,10 +645,7 @@ export default function VolunteerDashboard() {
  <p className="text-slate-600 dark:text-slate-300 mb-4">
  The event organizer will verify your participation
  </p>
- <button className="px-6 py-3 bg-amber-600 text-white font-semibold rounded-xl hover:bg-amber-700 transition-colors">
- <i className="ri-send-line mr-2"></i>
- Send Request
- </button>
+ <p className="text-xs font-semibold text-amber-700 dark:text-amber-300">Press <b>Submit Verification</b> below to send the request.</p>
  </div>
  </div>
  )}

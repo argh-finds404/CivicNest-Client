@@ -1,17 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ThemeContext } from "./theme";
 
-const STORAGE_KEY = "civicnest-theme";
+// Only an explicit choice is saved, so everyone else starts in light mode.
+// (The old "civicnest-theme" key also stored the device default, so it is ignored.)
+const STORAGE_KEY = "civicnest-theme-choice";
 
-/** Saved choice, else the device setting (same rule as the inline script in index.html) */
+/** Saved choice, else light (same rule as the inline script in index.html) */
 const initialTheme = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === "dark" || saved === "light") return saved;
   } catch {
-    // storage blocked: fall through to the device setting
+    // storage blocked: use the default
   }
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "light";
+};
+
+const remember = (theme) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, theme);
+  } catch {
+    // not persisted; the choice still applies for this visit
+  }
 };
 
 /**
@@ -35,19 +45,24 @@ export function ThemeProvider({ children }) {
     root.classList.toggle("dark", theme === "dark");
     root.dataset.theme = theme;
     root.style.colorScheme = theme;
-    try {
-      localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      // not persisted; the choice still applies for this visit
-    }
     return () => {
       clearTimeout(timer);
       root.classList.remove("theme-switching");
     };
   }, [theme]);
 
-  const setTheme = useCallback((t) => setThemeState(t === "dark" ? "dark" : "light"), []);
-  const toggle = useCallback(() => setThemeState((t) => (t === "dark" ? "light" : "dark")), []);
+  const setTheme = useCallback((t) => {
+    const next = t === "dark" ? "dark" : "light";
+    remember(next);
+    setThemeState(next);
+  }, []);
+  const toggle = useCallback(() => {
+    setThemeState((t) => {
+      const next = t === "dark" ? "light" : "dark";
+      remember(next);
+      return next;
+    });
+  }, []);
   const value = useMemo(() => ({ theme, isDark: theme === "dark", toggle, setTheme }), [theme, toggle, setTheme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

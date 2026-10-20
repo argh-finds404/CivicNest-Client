@@ -16,6 +16,8 @@ import toast from"react-hot-toast";
 import"./Home.css";
 import { aggregateFeed } from"../../utils/feedAggregator";
 import ActivityTicker from"./ActivityTicker";
+import { fallbackTo } from "../../utils/imageFallback";
+import { atLeast } from "../../utils/roles";
 
 function MembershipPromo({ user, role, navigate }) {
  const displayName = user?.displayName || user?.email?.split("@")[0] ||"Neighbour";
@@ -358,7 +360,7 @@ export default function Home() {
  const navigate = useNavigate();
  const axiosPublic = useAxiosPublic();
 
- const isVerifiedMemberOrStaff = role ==='member'|| role ==='admin'|| isVolunteer;
+ const isVerifiedMemberOrStaff = atLeast(role, 'member')|| isVolunteer;
  const isGuestOrUnverified = !user || !isVerifiedMemberOrStaff;
 
  const { data: upcomingData, isLoading: isUpcomingLoading } = useQuery({
@@ -1090,7 +1092,7 @@ export default function Home() {
  <div className="flex gap-4">
  <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm">
  <img 
- src={event.coverImages?.[0] ||'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1000'} 
+ src={event.coverImages?.[0] ||'/demo/cleanup-lake.svg'} onError={fallbackTo('/demo/cleanup-lake.svg')} 
  alt={event.title}
  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
  </div>
@@ -1104,7 +1106,7 @@ export default function Home() {
  </div>
  <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
  <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-300">
- <img src={event.organizer?.photoURL ||`https://ui-avatars.com/api/?name=${event.organizer?.name}&background=random`} alt="host"className="w-6 h-6 rounded-full"/>
+ <img src={event.organizer?.photoURL ||'/demo/avatar-placeholder.svg'} onError={fallbackTo('/demo/avatar-placeholder.svg')} alt="host"className="w-6 h-6 rounded-full"/>
  <span>{event.organizer?.name?.includes('@') ?'Community Member': (event.organizer?.name ||'Community Member')}</span>
  </div>
  <span className="text-xs font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full group-hover:bg-teal-600 group-hover:text-white transition-colors">

@@ -68,13 +68,13 @@ const AllIssues = () => {
  }, [fetchIssues]);
 
  const categories = [
- { label:"Garbage & Waste", image:"https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=500&q=80"},
- { label:"Road Damage", image:"https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=500&q=80"},
- { label:"Waterlogging", image:"https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?auto=format&fit=crop&w=500&q=80"},
- { label:"Utility Problems", image:"https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?auto=format&fit=crop&w=500&q=80"},
- { label:"Broken Public Property", image:"https://images.unsplash.com/photo-1498677231914-50df6bc1ec22?auto=format&fit=crop&w=500&q=80"},
- { label:"Safety & Crime", image:"https://images.unsplash.com/photo-1517737883398-67b14041e21b?auto=format&fit=crop&w=500&q=80"},
- { label:"Environmental Issues", image:"https://images.unsplash.com/photo-1611273426858-450d8e814323?auto=format&fit=crop&w=500&q=80"}
+ { label:"Garbage & Waste", image:"/demo/issue-garbage.svg"},
+ { label:"Road Damage", image:"/demo/issue-pothole.svg"},
+ { label:"Waterlogging", image:"/demo/issue-waterlogging.svg"},
+ { label:"Utility Problems", image:"/demo/issue-streetlight.svg"},
+ { label:"Broken Public Property", image:"/demo/issue-bench.svg"},
+ { label:"Safety & Crime", image:"/demo/issue-safety.svg"},
+ { label:"Environmental Issues", image:"/demo/issue-canal.svg"}
  ];
 
  const sortOptions = [
@@ -97,7 +97,7 @@ const AllIssues = () => {
  const handleImageError = (e) => {
  if (e.target.dataset.fallback) return;
  e.target.dataset.fallback ="1";
- e.target.src =`https://picsum.photos/seed/${e.target.alt}/500/400`;
+ e.target.src ="/demo/issue-pothole.svg";
  };
 
  return (
@@ -139,14 +139,14 @@ const AllIssues = () => {
  className={`relative flex flex-col items-start justify-end w-full aspect-[4/3] rounded-md p-3 overflow-hidden transition-all duration-300 group ${category ===""?'ring-2 ring-slate-800 ring-offset-2 ring-offset-background':'hover:opacity-95'}`}
  >
  <img 
- src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=500&q=80"alt="All Reports"onError={handleImageError}
+ src="/demo/cleanup-riverbank.svg"alt="All Reports"onError={handleImageError}
  className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500"/>
  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-slate-900/20"></div>
 
  <i className="ri-list-check-2 text-2xl tracking-tight text-white/80 mb-auto relative z-10"></i>
  <div className="relative z-10">
  <span className="block text-[13px] sm:text-[13px] font-bold text-white text-left">All Active Reports</span>
- <span className="block text-xs text-slate-300 mt-0.5 text-left">453 Total</span>
+ <span className="block text-xs text-slate-300 mt-0.5 text-left">{stats?.totalIssuesReported != null ?`${stats.totalIssuesReported.toLocaleString()} reported`:"View all reports"}</span>
  </div>
  </button>
  
@@ -173,13 +173,6 @@ const AllIssues = () => {
  ))}
  </div>
 
- {}
- <div className="flex justify-center mt-4">
- <button className="text-[13px] font-bold text-slate-500 dark:text-slate-300 hover:text-[#40826D] transition-colors flex items-center gap-1 bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] border border-slate-200 dark:border-[#1e3040] dark:border-[#1e3040] px-5 py-2.5 rounded-full shadow-sm">
- Load More Categories
- <i className="ri-arrow-down-s-line"></i>
- </button>
- </div>
  </div>
 
  <div className="max-w-2xl mx-auto px-4">

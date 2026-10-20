@@ -3,6 +3,9 @@ import { NavLink, useNavigate, useLocation } from"react-router";
 import { useAuth } from"../../hooks/useAuth";
 import PageTitle from"../common/PageTitle";
 import ReviewerAccess from"./ReviewerAccess";
+import { fallbackTo } from "../../utils/imageFallback";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../firebase/firebase.init";
 
 const loginStyles =`
 .login-checkbox {
@@ -79,6 +82,25 @@ const Login = () => {
  const [showPassword, setShowPassword] = useState(false);
  const [rememberMe, setRememberMe] = useState(false);
  const [emailLoading, setEmailLoading] = useState(false);
+
+ // Sends Firebase's reset link to the email typed in the form
+ const handleForgotPassword = async (e) => {
+ const email = e.currentTarget.form?.email?.value.trim();
+ if (!email) {
+ showToastMessage("error","Email needed","Type your email above, then press Forgot Password again.");
+ return;
+ }
+ if (/\.reviewer@civicnest\.app$/i.test(email)) {
+ showToastMessage("error","Demo account","Reviewer demo accounts use the password shown on this page.");
+ return;
+ }
+ try {
+ await sendPasswordResetEmail(auth, email);
+ showToastMessage("success","Check your inbox",`If an account exists for ${email}, a reset link is on its way.`);
+ } catch (err) {
+ showToastMessage("error","Couldn't send the link", err.code ==="auth/invalid-email"?"That email address doesn't look right.":"Please try again in a moment.");
+ }
+ };
  const [googleLoading, setGoogleLoading] = useState(false);
  const [checking, setChecking] = useState(false);
  const formRef = useRef(null);
@@ -310,10 +332,12 @@ const Login = () => {
  Remember me
  </span>
  </label>
- <a
- href="#"className="text-[13px] font-medium text-[#0f766e] hover:underline transition-all">
+ <button
+ type="button"
+ onClick={handleForgotPassword}
+ className="text-[13px] font-medium text-[#0f766e] hover:underline transition-all cursor-pointer">
  Forgot Password?
- </a>
+ </button>
  </div>
 
  {/* Sign In Button */}
@@ -393,7 +417,7 @@ const Login = () => {
  <div className="hidden lg:flex lg:w-[58%] lg:sticky lg:top-0 lg:h-screen relative overflow-hidden">
  <div className="absolute inset-0 bg-gradient-to-br from-[#0f766e]/30 via-[#0f766e]/15 to-transparent z-10"></div>
  <img
- alt="Community volunteers cleaning a park"className="absolute inset-0 w-full h-full object-cover"src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1470&auto=format&fit=crop"/>
+ alt="Community volunteers cleaning a park"className="absolute inset-0 w-full h-full object-cover"src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=1470&auto=format&fit=crop" onError={fallbackTo("/demo/cleanup-trees.svg")}/>
 
  {/* Overlay Content */}
  <div className="relative z-20 flex flex-col justify-end p-12 xl:p-16 w-full">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { scrollToTop } from "../../utils/smoothScroll";
 
 export default function ScrollProgressButton() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -34,16 +35,7 @@ export default function ScrollProgressButton() {
     };
   }, []);
 
-  const scrollToTop = () => {
-    if (window.lenis) {
-      window.lenis.scrollTo(0);
-    } else {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  };
+  const goToTop = () => scrollToTop();
 
   // Radial progress calculations
   const radius = 20;
@@ -62,7 +54,7 @@ export default function ScrollProgressButton() {
           whileTap={{ scale: 0.95 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={scrollToTop}
+          onClick={goToTop}
           aria-label="Scroll to top"
           className="fixed bottom-[6.25rem] right-8 z-45 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer shadow-[0_8px_30px_rgba(15,118,110,0.15)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-colors duration-300 border border-slate-200/50 dark:border-[#1e3040]/50 bg-white/90 dark:bg-[#0a120e]/95 backdrop-blur-md"
         >

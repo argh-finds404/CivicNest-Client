@@ -1,4 +1,4 @@
-/** Current vertical scroll position (native scrolling; smooth-scroll was removed for performance) */
+/** Current vertical scroll position (Lenis drives the real window scroll, so this stays accurate) */
 export function getScrollY() {
   return window.scrollY;
 }

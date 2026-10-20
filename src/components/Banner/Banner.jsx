@@ -5,6 +5,7 @@ import'swiper/css';
 import'swiper/css/effect-fade';
 import { Fade, Slide } from'react-awesome-reveal';
 import { Typewriter } from'react-simple-typewriter';
+import { Link } from "react-router";
 
 const Banner = () => {
  const images = ["/banner2.jpg","/banner3.jpg","/banner4.png"];
@@ -51,9 +52,9 @@ const Banner = () => {
  <Fade delay={600} duration={1000}>
  <div className="flex flex-wrap items-center gap-4 mb-8">
  <span className="font-bold text-[13px] text-white/80">I'm interested in:</span>
- <button className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Cleanups</button>
- <button className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Funding</button>
- <button className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Community Events</button>
+ <Link to="/cleanup-events" className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Cleanups</Link>
+ <Link to="/fund" className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Funding</Link>
+ <Link to="/volunteers" className="px-5 py-2 rounded-full border border-white/40 hover:bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d]/20 transition-colors backdrop-blur-sm text-[13px] font-bold shadow-sm">Community Events</Link>
  </div>
  </Fade>
 

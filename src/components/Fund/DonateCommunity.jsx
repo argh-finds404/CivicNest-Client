@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import PaymentGatewaySelector from '../Payment/PaymentGatewaySelector';
 import toast from 'react-hot-toast';
+import { scrollToTop } from "../../utils/smoothScroll";
 
 const DonateCommunity = () => {
   const [amount, setAmount] = useState(250);
@@ -12,10 +13,7 @@ const DonateCommunity = () => {
   const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    if (window.lenis) {
-      window.lenis.scrollTo(0, { immediate: true });
-    }
+    scrollToTop({ immediate: true });
   }, []);
 
   const { data: summary, isLoading } = useQuery({
