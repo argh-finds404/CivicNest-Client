@@ -1,6 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+
+const IMGBB_KEY = import.meta.env.VITE_IMGBB_API_KEY;
+
+const toBase64 = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(reader.result.split(',')[1]);
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+});
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_SIZE_MB = 5;
@@ -22,6 +32,7 @@ function PremiumImageUploader({ onUploadComplete, onRemove, label = 'Upload Imag
     initialImages.map((url, idx) => ({ id: `init-${idx}`, url, progress: 100, preview: url, name: `Existing Image ${idx + 1}`, size: 0 }))
   ); // [{ url, deleteHash, progress, preview, name, size, id }]
   const cancelRefs = useRef({});
+  const axiosSecure = useAxiosSecure();
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files).slice(0, maxCount - images.length);
@@ -43,24 +54,29 @@ function PremiumImageUploader({ onUploadComplete, onRemove, label = 'Upload Imag
     cancelRefs.current[id] = source;
 
     try {
-      const formData = new FormData();
-      formData.append('image', file);
+      const config = {
+        cancelToken: source.token,
+        onUploadProgress: (e) => {
+          // capped at 99 so the success tick only shows once we actually have a URL
+          const pct = Math.min(99, Math.round((e.loaded / (e.total || file.size)) * 100));
+          setImages(prev => prev.map(img =>
+            img.id === id ? { ...img, progress: pct } : img
+          ));
+        },
+      };
 
-      const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
-        formData,
-        {
-          cancelToken: source.token,
-          onUploadProgress: (e) => {
-            const pct = Math.round((e.loaded / e.total) * 100);
-            setImages(prev => prev.map(img =>
-              img.id === id ? { ...img, progress: pct } : img
-            ));
-          },
-        }
-      );
+      let url, delete_hash;
+      if (IMGBB_KEY) {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await axios.post(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, formData, config);
+        ({ url, delete_hash } = res.data.data);
+      } else {
+        // No ImgBB key configured: the server relays the image to freeimage.host
+        const res = await axiosSecure.post('/upload-image', { base64: await toBase64(file) }, config);
+        url = res.data.url;
+      }
 
-      const { url, delete_hash } = res.data.data;
       setImages(prev => prev.map(img =>
         img.id === id ? { ...img, url, deleteHash: delete_hash, progress: 100 } : img
       ));
@@ -69,7 +85,7 @@ function PremiumImageUploader({ onUploadComplete, onRemove, label = 'Upload Imag
     } catch (err) {
       if (!axios.isCancel(err)) {
         setImages(prev => prev.filter(img => img.id !== id));
-        toast.error('Upload failed. Please try again.');
+        toast.error(err.response?.data?.error?.message || err.response?.data?.error || 'Upload failed. Please try again.');
       }
     } finally {
       URL.revokeObjectURL(preview); // free memory
@@ -123,7 +139,7 @@ function PremiumImageUploader({ onUploadComplete, onRemove, label = 'Upload Imag
           {images.map(img => (
             <div key={img.id} className="relative rounded-xl overflow-hidden aspect-square bg-slate-100 dark:bg-slate-800 ring-1 ring-slate-200 dark:ring-slate-700 shadow-sm group">
 
-              <img src={img.preview || img.url} alt={img.name}
+              <img src={img.url || img.preview} alt={img.name}
                    className="w-full h-full object-cover" />
 
               {/* Progress overlay */}
