@@ -283,7 +283,7 @@ const IssueDetails = () => {
  return;
  }
  try {
- const res = await axiosSecure.post(`/issues/${id}/verify`);
+ const res = await axiosSecure.post(`/issues/${id}/verify`, {});
  setIssue((prev) => ({
  ...prev,
  verifications: res.data.verifications || [...(prev.verifications || []), user.uid],
