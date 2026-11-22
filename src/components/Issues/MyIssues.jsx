@@ -28,14 +28,16 @@ const MyIssues = () => {
  useEffect(() => {
  fetchIssues(true); // show loader only on initial mount
 
- const handleUpdate = (data) => {
+ const handleUpdate = () => {
  fetchIssues(false); // background refresh
  };
 
  socket.on('issueStatusUpdated', handleUpdate);
+ socket.on('connect', handleUpdate);
 
  return () => {
  socket.off('issueStatusUpdated', handleUpdate);
+ socket.off('connect', handleUpdate);
  };
  }, [fetchIssues]);
 

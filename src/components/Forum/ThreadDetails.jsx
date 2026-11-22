@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from'react';
 import { useQuery, useMutation, useQueryClient } from'@tanstack/react-query';
 import { Link } from'react-router';
 import useAxiosPublic from'../../hooks/useAxiosPublic';
@@ -91,12 +91,13 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  queryFn: async () => {
  const res = await axiosSecure.get(`/forum/${id}`);
  return res.data;
- }
+ },
+ staleTime: 0,
  });
 
  // Sync query data with local state
  useEffect(() => {
- if (thread && thread._id === id) {
+ if (thread && String(thread._id) === String(id)) {
  setMessages(thread.replies || []);
  setHasMore(thread.hasMore || false);
  // Scroll to bottom on load
@@ -201,58 +202,104 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  setFocusedMentionIdx(0);
  }, [mentionSuggestions]);
 
- // Handle room joining, leaving, and real-time socket events
+ const onBackRef = useRef(onBack);
  useEffect(() => {
- // Join room with identity payload to enable real-time active status tracking
- if (user) {
- socket.emit("join_thread", {
- threadId: id,
- userEmail: user.email,
- userName: user.displayName || user.email,
- userPhoto: user.photoURL || null
- });
- } else {
- socket.emit("join_thread", { threadId: id });
- }
+ onBackRef.current = onBack;
+ }, [onBack]);
 
- setTypingUsers(new Map());
- setShowNewMessageIndicator(false);
-
- const handleNewMessage = ({ threadId, reply }) => {
- if (threadId === id) {
+ const appendReplyToState = useCallback((reply, forceScroll = false) => {
+ if (!reply) return;
  setMessages(prev => {
- if (prev.some(m => m._id === reply._id)) return prev;
+ if (prev.some(m => String(m._id) === String(reply._id))) return prev;
  return [...prev, reply];
+ });
+ queryClient.setQueryData(['thread', id], old => {
+ if (!old) return old;
+ const existing = old.replies || [];
+ if (existing.some(m => String(m._id) === String(reply._id))) return old;
+ return {
+ ...old,
+ replies: [...existing, reply],
+ replyCount: (old.replyCount || existing.length) + 1,
+ };
  });
 
  const container = listRef.current;
  if (container) {
- const isAtBottom = container.scrollHeight - container.clientHeight - container.scrollTop < 180;
+ const isAtBottom = forceScroll || (container.scrollHeight - container.clientHeight - container.scrollTop < 180);
  if (isAtBottom) {
  setTimeout(() => {
- container.scrollTop = container.scrollHeight;
+ if (listRef.current) {
+ listRef.current.scrollTop = listRef.current.scrollHeight;
+ }
  }, 30);
  } else {
  setShowNewMessageIndicator(true);
  }
  }
+ }, [id, queryClient]);
+
+ const removeReplyFromState = useCallback((replyId) => {
+ if (!replyId) return;
+ setMessages(prev => prev.filter(m => String(m._id) !== String(replyId)));
+ queryClient.setQueryData(['thread', id], old => {
+ if (!old) return old;
+ const filtered = (old.replies || []).filter(m => String(m._id) !== String(replyId));
+ return {
+ ...old,
+ replies: filtered,
+ replyCount: Math.max(0, (old.replyCount || 1) - 1),
+ };
+ });
+ }, [id, queryClient]);
+
+ // Handle room joining, leaving, and real-time socket events
+ useEffect(() => {
+ const userEmail = user?.email;
+ const userName = user?.displayName || user?.email;
+ const userPhoto = user?.photoURL || null;
+
+ const joinRoom = () => {
+ if (!socket.connected) {
+ socket.connect();
+ }
+ if (userEmail) {
+ socket.emit("join_thread", {
+ threadId: id,
+ userEmail,
+ userName,
+ userPhoto
+ });
+ } else {
+ socket.emit("join_thread", { threadId: id });
  }
  };
 
- const handleReplyDeleted = ({ threadId, replyId }) => {
- if (threadId === id) {
- setMessages(prev => prev.filter(m => m._id !== replyId));
+ joinRoom();
+
+ setTypingUsers(new Map());
+ setShowNewMessageIndicator(false);
+
+ const handleNewMessage = ({ threadId, reply } = {}) => {
+ if (String(threadId) === String(id)) {
+ appendReplyToState(reply, false);
  }
  };
 
- const handleUserTyping = ({ userEmail, userName, isTyping }) => {
- if (userEmail === user?.email) return;
+ const handleReplyDeleted = ({ threadId, replyId } = {}) => {
+ if (String(threadId) === String(id)) {
+ removeReplyFromState(replyId);
+ }
+ };
+
+ const handleUserTyping = ({ userEmail: typingEmail, userName: typingName, isTyping } = {}) => {
+ if (!typingEmail || typingEmail === userEmail) return;
  setTypingUsers(prev => {
  const next = new Map(prev);
  if (isTyping) {
- next.set(userEmail, userName);
+ next.set(typingEmail, typingName);
  } else {
- next.delete(userEmail);
+ next.delete(typingEmail);
  }
  return next;
  });
@@ -262,30 +309,34 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  setOnlineUsers(users || []);
  };
 
- const handleThreadUpdated = ({ isPinned, isLocked }) => {
+ const handleThreadUpdated = (payload = {}) => {
+ if (payload.threadId && String(payload.threadId) !== String(id)) return;
  queryClient.setQueryData(['thread', id], old => {
  if (!old) return old;
- return { ...old, isPinned, isLocked };
+ return {
+ ...old,
+ ...(payload.isPinned !== undefined ? { isPinned: payload.isPinned } : {}),
+ ...(payload.isLocked !== undefined ? { isLocked: payload.isLocked } : {}),
+ ...(payload.upvoteCount !== undefined ? { upvoteCount: payload.upvoteCount } : {}),
+ ...(payload.upvotes !== undefined ? { upvotes: payload.upvotes } : {}),
+ };
  });
  };
 
- const handleThreadDeleted = () => {
- onBack();
+ const handleThreadDeleted = (payload = {}) => {
+ if (payload.threadId && String(payload.threadId) !== String(id)) return;
+ if (onBackRef.current) onBackRef.current();
  };
 
- const handleReconnect = () => {
- if (user) {
- socket.emit("join_thread", {
- threadId: id,
- userEmail: user.email,
- userName: user.displayName || user.email,
- userPhoto: user.photoURL || null
- });
- } else {
- socket.emit("join_thread", { threadId: id });
- }
+ const handleConnect = () => {
+ joinRoom();
  queryClient.invalidateQueries({ queryKey: ['thread', id] });
- toast.success('Reconnected successfully', { duration: 2000 });
+ };
+
+ const handleManagerReconnect = () => {
+ joinRoom();
+ queryClient.invalidateQueries({ queryKey: ['thread', id] });
+ toast.success('Reconnected successfully', { duration: 2000, id: 'socket-reconnect' });
  };
 
  socket.on("message_received", handleNewMessage);
@@ -293,8 +344,10 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  socket.on("user_typing", handleUserTyping);
  socket.on("room_users", handleRoomUsers);
  socket.on("thread_updated", handleThreadUpdated);
+ socket.on("thread_updated_global", handleThreadUpdated);
  socket.on("thread_deleted", handleThreadDeleted);
- socket.on("reconnect", handleReconnect);
+ socket.on("connect", handleConnect);
+ socket.io.on("reconnect", handleManagerReconnect);
 
  return () => {
  socket.emit("leave_thread", id);
@@ -303,10 +356,12 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  socket.off("user_typing", handleUserTyping);
  socket.off("room_users", handleRoomUsers);
  socket.off("thread_updated", handleThreadUpdated);
+ socket.off("thread_updated_global", handleThreadUpdated);
  socket.off("thread_deleted", handleThreadDeleted);
- socket.off("reconnect", handleReconnect);
+ socket.off("connect", handleConnect);
+ socket.io.off("reconnect", handleManagerReconnect);
  };
- }, [id, user, queryClient, onBack]);
+ }, [id, user?.email, user?.displayName, user?.photoURL, queryClient, appendReplyToState, removeReplyFromState]);
 
  const handleScrollToBottom = () => {
  setShowNewMessageIndicator(false);
@@ -485,7 +540,9 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  // Reply Delete Mutation
  const deleteReplyMutation = useMutation({
  mutationFn: (replyId) => axiosSecure.delete(`/forum/${id}/reply/${replyId}`),
- onSuccess: () => {
+ onSuccess: (_res, replyId) => {
+ removeReplyFromState(replyId);
+ queryClient.invalidateQueries({ queryKey: ['forum'] });
  toast.success('Reply deleted.');
  },
  onError: (err) => {
@@ -528,7 +585,11 @@ export default function ThreadDetails({ id, onBack, canPost = true }) {
  } : {})
  };
 
- await axiosSecure.post(`/forum/${id}/reply`, payload);
+ const res = await axiosSecure.post(`/forum/${id}/reply`, payload);
+ if (res.data?.reply) {
+ appendReplyToState(res.data.reply, true);
+ }
+ queryClient.invalidateQueries({ queryKey: ['forum'] });
  setMessageText("");
  setReplyingTo(null);
 

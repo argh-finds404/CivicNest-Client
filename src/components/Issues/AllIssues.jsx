@@ -26,46 +26,53 @@ const AllIssues = () => {
  const [page, setPage] = useState(1);
  const [totalPages, setTotalPages] = useState(1);
 
- const fetchIssues = useCallback(async () => {
- if (page === 1) setIsLoading(true);
+ const fetchIssues = useCallback(async (showLoader = true) => {
+ if (page === 1 && showLoader) setIsLoading(true);
  try {
- const queryParams = new URLSearchParams({ page, limit: 10 });
+ const effectiveLimit = !showLoader && page > 1 ? page * 10 : 10;
+ const effectivePage = !showLoader && page > 1 ? 1 : page;
+ const queryParams = new URLSearchParams({ page: effectivePage, limit: effectiveLimit });
  if (search) queryParams.append('search', search);
  if (category) queryParams.append('category', category);
  if (area) queryParams.append('area', area);
  if (sort !=='newest') queryParams.append('sort', sort);
+ queryParams.append('_t', Date.now());
 
  const res = await axiosPublic.get(`/issues?${queryParams.toString()}`);
  const data = res.data;
  
  if (!data.issues || data.issues.length === 0) {
- if (page === 1) setIssues([]);
+ if (page === 1 || !showLoader) setIssues([]);
  setTotalPages(1);
  } else {
- setIssues(prev => page === 1 ? data.issues : [...prev, ...data.issues]);
+ setIssues(prev => (page === 1 || !showLoader) ? data.issues : [...prev, ...data.issues]);
  setTotalPages(data.totalPages);
  }
  } catch (error) {
  console.error(error);
- if (page === 1) setIssues([]);
+ if (page === 1 && showLoader) setIssues([]);
  setTotalPages(1);
  } finally {
  setIsLoading(false);
  }
- }, [search, category, area, sort, page]);
+ }, [search, category, area, sort, page, axiosPublic]);
 
- useEffect(() => {
- const timer = setTimeout(() => fetchIssues(), 400);
- 
- socket.on('issueStatusUpdated', (data) => {
- fetchIssues(); // Refresh feed completely behind the scenes
- });
+  useEffect(() => {
+    const timer = setTimeout(() => fetchIssues(true), 400);
+    
+    const handleStatusUpdate = () => {
+      fetchIssues(false);
+    };
 
- return () => {
- clearTimeout(timer);
- socket.off('issueStatusUpdated');
- };
- }, [fetchIssues]);
+    socket.on('issueStatusUpdated', handleStatusUpdate);
+    socket.on('connect', handleStatusUpdate);
+
+    return () => {
+      clearTimeout(timer);
+      socket.off('issueStatusUpdated', handleStatusUpdate);
+      socket.off('connect', handleStatusUpdate);
+    };
+  }, [fetchIssues]);
 
  const categories = [
  { label:"Garbage & Waste", image:"/demo/issue-garbage.svg"},

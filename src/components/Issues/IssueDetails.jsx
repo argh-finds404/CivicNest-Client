@@ -17,6 +17,7 @@ import BackButton from'../common/BackButton';
 import { jsPDF } from'jspdf';
 import CommentList from'./CommentList';
 import SEO from'../common/SEO';
+import { socket } from'../../hooks/useSocket';
 
 const ImageCarousel = ({ images }) => {
  const [currentIndex, setCurrentIndex] = useState(0);
@@ -148,20 +149,33 @@ const IssueDetails = () => {
  };
 
  useEffect(() => {
- const fetchIssueData = async () => {
+ const fetchIssueData = async (showLoader = true) => {
+ if (showLoader) setIsLoading(true);
  try {
- const res = await axiosPublic.get(`/issues/${id}`);
+ const ts = Date.now();
+ const res = await axiosPublic.get(`/issues/${id}?_t=${ts}`);
  setIssue(res.data);
  
- const commentsRes = await axiosPublic.get(`/issues/${id}/comments`);
+ const commentsRes = await axiosPublic.get(`/issues/${id}/comments?_t=${ts}`);
  setComments(commentsRes.data);
  } catch (error) {
- toast.error(error.message);
+ if (showLoader) toast.error(error.message);
  } finally {
- setIsLoading(false);
+ if (showLoader) setIsLoading(false);
  }
  };
- fetchIssueData();
+ fetchIssueData(true);
+
+ const handleRealtimeUpdate = (data) => {
+ if (!data?.issueId || String(data.issueId) === String(id)) {
+ fetchIssueData(false);
+ }
+ };
+
+ socket.on('issueStatusUpdated', handleRealtimeUpdate);
+ return () => {
+ socket.off('issueStatusUpdated', handleRealtimeUpdate);
+ };
  }, [id, axiosPublic]);
 
  // Load user profile details for RTI draft

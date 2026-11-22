@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 import { Toaster } from 'react-hot-toast';
 import { motion } from 'framer-motion';
 import { socket } from '../../hooks/useSocket';
-import { useIsFetching } from '@tanstack/react-query';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 import TopProgressBar from '../common/TopProgressBar';
 import { useTheme } from '../../hooks/useTheme';
 import FloatingCivicBot from '../AI/FloatingCivicBot';
@@ -99,11 +99,45 @@ const Layout = () => {
  const location = useLocation();
  const outlet = useOutlet();
  const { isDark } = useTheme();
+ const queryClient = useQueryClient();
 
  useEffect(() => {
- socket.connect();
- return () => socket.disconnect();
- }, []);
+ if (!socket.connected) {
+   socket.connect();
+ }
+
+ const handleIssueRealtimeUpdate = () => {
+   queryClient.invalidateQueries({ queryKey: ['admin-queue'] });
+   queryClient.invalidateQueries({ queryKey: ['admin-queue-counts'] });
+   queryClient.invalidateQueries({ queryKey: ['admin-queue-count'] });
+   queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+   queryClient.invalidateQueries({ queryKey: ['pendingVerifications'] });
+   queryClient.invalidateQueries({ queryKey: ['publicStats'] });
+   queryClient.invalidateQueries({ queryKey: ['tickerFeed'] });
+   queryClient.invalidateQueries({ queryKey: ['notifications'] });
+ };
+
+ const handleForumRealtimeUpdate = () => {
+   queryClient.invalidateQueries({ queryKey: ['forum'] });
+   queryClient.invalidateQueries({ queryKey: ['admin-forum'] });
+   queryClient.invalidateQueries({ queryKey: ['tickerFeed'] });
+   queryClient.invalidateQueries({ queryKey: ['notifications'] });
+ };
+
+ socket.on('issueStatusUpdated', handleIssueRealtimeUpdate);
+ socket.on('thread_created', handleForumRealtimeUpdate);
+ socket.on('thread_updated_global', handleForumRealtimeUpdate);
+ socket.on('thread_reply_count_updated', handleForumRealtimeUpdate);
+ socket.on('thread_deleted_global', handleForumRealtimeUpdate);
+
+ return () => {
+   socket.off('issueStatusUpdated', handleIssueRealtimeUpdate);
+   socket.off('thread_created', handleForumRealtimeUpdate);
+   socket.off('thread_updated_global', handleForumRealtimeUpdate);
+   socket.off('thread_reply_count_updated', handleForumRealtimeUpdate);
+   socket.off('thread_deleted_global', handleForumRealtimeUpdate);
+ };
+ }, [queryClient]);
 
 
  return (

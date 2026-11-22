@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from"react";
+import React, { useState, useEffect, useCallback } from"react";
 import SEO from "../common/SEO";
 import { useParams, useNavigate } from"react-router";
 import { useQuery, useQueryClient } from"@tanstack/react-query";
@@ -88,9 +88,9 @@ export default function Forum() {
  queryClient.invalidateQueries({ queryKey: ["forum"] });
  };
 
- const handleThreadDeleted = ({ threadId }) => {
+ const handleThreadDeleted = ({ threadId } = {}) => {
  queryClient.invalidateQueries({ queryKey: ["forum"] });
- if (id === threadId) {
+ if (String(id) === String(threadId)) {
  navigate("/forum");
  setMobilePanelView("sidebar");
  toast("This thread was removed by a moderator.", { icon:"🗑"});
@@ -101,12 +101,14 @@ export default function Forum() {
  socket.on("thread_updated_global", handleThreadUpdated);
  socket.on("thread_reply_count_updated", handleReplyCountUpdated);
  socket.on("thread_deleted_global", handleThreadDeleted);
+ socket.on("connect", handleThreadUpdated);
 
  return () => {
  socket.off("thread_created", handleThreadCreated);
  socket.off("thread_updated_global", handleThreadUpdated);
  socket.off("thread_reply_count_updated", handleReplyCountUpdated);
  socket.off("thread_deleted_global", handleThreadDeleted);
+ socket.off("connect", handleThreadUpdated);
  };
  }, [id, queryClient, navigate]);
 
@@ -114,6 +116,11 @@ export default function Forum() {
  navigate(`/forum/${threadId}`);
  setMobilePanelView("chat");
  };
+
+ const handleBackToSidebar = useCallback(() => {
+ navigate("/forum");
+ setMobilePanelView("sidebar");
+ }, [navigate]);
 
  if (isRoleLoading) {
  return (
@@ -266,10 +273,7 @@ export default function Forum() {
  <ThreadDetails
  id={id}
  canPost={canPost}
- onBack={() => {
- navigate("/forum");
- setMobilePanelView("sidebar");
- }}
+ onBack={handleBackToSidebar}
  />
  ) : (
  /* Welcome Panel when no thread is selected */
