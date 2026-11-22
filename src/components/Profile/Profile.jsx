@@ -12,6 +12,7 @@ import { jsPDF } from"jspdf";
 import autoTable from"jspdf-autotable";
 
 import MyIssues from"../Issues/MyIssues";
+import MyAnimals from"../Animals/MyAnimals";
 import MyContributions from"../Contributions/MyContributions";
 import MyLostFound from"../LostFound/MyLostFound";
 import MyOrganizedEvents from"./MyOrganizedEvents";
@@ -1127,6 +1128,7 @@ const Profile = () => {
  const tabs = [
     { id:'overview', label:'Overview', icon:'ri-dashboard-line'},
     { id:'posts', label:'My Reports', icon:'ri-file-list-3-line'},
+    { id:'animals', label:'My Animals', icon:'ri-heart-pulse-line'},
     { id:'lostfound', label:'My Lost & Found', icon:'ri-search-eye-line'},
     { id:'contributions', label:'My Donations', icon:'ri-hand-coin-line'},
     { id:'cleanup', label:'Cleanup Events', icon:'ri-leaf-line'},
@@ -1263,6 +1265,16 @@ const Profile = () => {
  transition={{ duration: 0.3 }}
  className="w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100">
  <MyIssues />
+ </motion.div>
+ )}
+ {activeTab ==='animals'&& (
+ <motion.div 
+ key="animals"initial={{ opacity: 0, y: 10 }}
+ animate={{ opacity: 1, y: 0 }}
+ exit={{ opacity: 0, y: -10 }}
+ transition={{ duration: 0.3 }}
+ className="w-full bg-white dark:bg-[#0a120e] ring-1 ring-slate-100 dark:ring-[#14241d] rounded-xl p-4 shadow-sm border border-slate-100">
+ <MyAnimals />
  </motion.div>
  )}
  {activeTab ==='contributions'&& (

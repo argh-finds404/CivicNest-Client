@@ -639,6 +639,16 @@ const Navbar = () => {
  My Reports
  </Link>
  <Link 
+ to="/animals/my"target="_self"onClick={() => setMenuOpen(false)}
+ className="block w-full text-left px-4 py-2 text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors">
+ My Animals
+ </Link>
+ <Link 
+ to="/lost-found/my"target="_self"onClick={() => setMenuOpen(false)}
+ className="block w-full text-left px-4 py-2 text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors">
+ My Lost & Found
+ </Link>
+ <Link 
  to="/user-manual"target="_self"onClick={() => setMenuOpen(false)}
  className="block w-full text-left px-4 py-2 text-[13px] text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-slate-50 dark:bg-[#0b1215] dark:bg-[#0b1215] transition-colors">
  User Manual
@@ -771,6 +781,12 @@ const Navbar = () => {
  className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-[#0f766e]/10 hover:text-[#0f766e] transition-colors font-bold text-[13px] text-left shrink-0">
  <span className="material-symbols-outlined text-[20px] opacity-70">description</span>
  My Reports
+ </Link>
+ <Link
+ to="/animals/my"target="_self"onClick={() => setDrawerOpen(false)}
+ className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 dark:text-[#cbd5e1] dark:text-[#cbd5e1] hover:bg-[#0f766e]/10 hover:text-[#0f766e] transition-colors font-bold text-[13px] text-left shrink-0">
+ <span className="material-symbols-outlined text-[20px] opacity-70">pets</span>
+ My Animals
  </Link>
  <Link
  to="/lost-found/my"target="_self"onClick={() => setDrawerOpen(false)}

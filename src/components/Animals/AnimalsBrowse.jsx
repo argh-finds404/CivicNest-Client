@@ -155,6 +155,10 @@ export default function AnimalsBrowse() {
  <i className="ri-restaurant-2-line text-base" aria-hidden="true" />
  Organise a feeding drive
  </button>
+ <Link to="/animals/my" className="cn-btn cn-btn-on-dark">
+ <i className="ri-file-list-3-line text-base" aria-hidden="true" />
+ My animal reports
+ </Link>
  </>
  }
  meta={stats && (

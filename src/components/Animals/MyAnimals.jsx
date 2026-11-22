@@ -91,7 +91,7 @@ const MyAnimals = () => {
  };
 
  return (
- <div className="w-full py-12 px-4 dark:bg-[#0a1410] min-h-screen pt-24">
+ <div className="w-full pb-24 pt-8 px-4 md:px-8">
  <div className="max-w-7xl mx-auto">
  <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
  <div>
